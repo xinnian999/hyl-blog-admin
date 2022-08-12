@@ -39,7 +39,7 @@ const formRef = ref();
 const currentRecord = ref(null);
 const changePublish = (val, record) => {
   request
-    .put("/article/publish", { publish: val, id: record.id })
+    .put("/article/update", { publish: val, id: record.id })
     .then((res) => {
       if (res.status === 0) {
         tableRef.value.handleRefresh();
@@ -49,7 +49,7 @@ const changePublish = (val, record) => {
 
 const changeTopping = (val, record) => {
   request
-    .put("/article/topping", { topping: val, id: record.id })
+    .put("/article/update", { topping: val, id: record.id })
     .then((res) => {
       if (res.status === 0) {
         tableRef.value.handleRefresh();
@@ -98,18 +98,20 @@ const columns = [
   },
   {
     title: "发布时间",
+    width: 200,
     dataIndex: "creatTime",
     render: (record) => formatTime(record.creatTime),
   },
   {
     title: "更新时间",
     dataIndex: "updateTime",
+    render: (record) => formatTime(record.creatTime),
+    width: 200,
   },
   {
     title: "是否上架",
     dataIndex: "publish",
     fixed: "right",
-    // sortable: true,
     render: (record) => (
       <ElSwitch
         model-value={record.publish}

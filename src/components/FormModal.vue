@@ -31,7 +31,11 @@
             : null
         "
       >
-        <el-input v-model="form[value]" autocomplete="off" v-if="component === 'input'" />
+        <el-input
+          v-model="form[value]"
+          autocomplete="off"
+          v-if="component === 'input'"
+        />
 
         <el-input
           v-model="form[value]"
@@ -90,8 +94,8 @@
 
           <el-button v-else>
             <el-icon>
-              <Plus />
-            </el-icon>点击上传
+              <Plus /> </el-icon
+            >点击上传
           </el-button>
         </el-upload>
 
@@ -128,7 +132,7 @@ const props = defineProps({
   ok: {},
   width: {},
   title: {},
-  currentRecord: {}
+  currentRecord: {},
 });
 
 const form = reactive({ id: undefined });
@@ -138,11 +142,11 @@ const visible = ref(false);
 
 onMounted(() => {
   // 初始化v-model，不写会导致数据回显失败
-  props.formData.forEach(item => {
+  props.formData.forEach((item) => {
     form[item.value] = "";
     if (item.component === "select" && item.config.mode === "remote") {
       const { method, url } = item.config;
-      request[method](url).then(res => {
+      request[method](url).then((res) => {
         if (res.status === 0) {
           data[item.value] = res.data;
         }
@@ -151,7 +155,7 @@ onMounted(() => {
   });
 });
 
-const handleVisible = value => {
+const handleVisible = (value) => {
   visible.value = value;
 };
 
@@ -161,13 +165,13 @@ const handleUploadImage = (event, insertImage, files) => {
   request
     .post("/upload/articlePicture", formData, {
       headers: {
-        "Content-Type": "multipart/form-data;boundary=" + new Date().getTime()
-      }
+        "Content-Type": "multipart/form-data;boundary=" + new Date().getTime(),
+      },
     })
-    .then(res => {
+    .then((res) => {
       insertImage({
         url: `/api/articlePicture/${res.filename}`,
-        desc: "图片已失效"
+        desc: "图片已失效",
         // width: 'auto',
         // height: 'auto',
       });
@@ -175,12 +179,12 @@ const handleUploadImage = (event, insertImage, files) => {
 };
 
 const onSave = () => {
-  new Promise(resolve => {
+  new Promise((resolve) => {
     if (form.content.length < props.currentRecord.content.length) {
       ElMessageBox.confirm("此次保存内容少于之前内容，继续保存吗？", "删除", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       }).then(() => resolve());
     } else {
       resolve();
@@ -190,7 +194,7 @@ const onSave = () => {
   });
 };
 
-const onFullscreen = isFullscreen => {
+const onFullscreen = (isFullscreen) => {
   const el = document.querySelector(".v-md-editor__toolbar");
   let titleEl = document.querySelector(".md-title");
 
@@ -214,7 +218,7 @@ const onFullscreen = isFullscreen => {
 defineExpose({ handleVisible, form, formRef });
 </script>
 
-<style lang="less" >
+<style lang="less">
 .avatar-uploader .avatar {
   width: 278px;
   height: 178px;

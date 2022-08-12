@@ -1,9 +1,13 @@
 <template>
   <div class="grid-table">
-    <!-- <h2 v-if="title">{{ title }}</h2> -->
     <div class="toolbar">
       <div class="searchBar">
-        <el-select v-model="data.searchType" placeholder="搜索字段">
+        <el-select
+          v-model="data.searchType"
+          placeholder="搜索字段"
+          :clearable="true"
+          @clear="onClearSearch"
+        >
           <template v-for="item in columns">
             <el-option
               :key="item.dataIndex"
@@ -23,7 +27,8 @@
           :type="type"
           :icon="icon"
           @click="handle"
-        >{{ name }}</el-button>
+          >{{ name }}</el-button
+        >
         <el-button type="primary" :icon="Refresh" @click="handleRefresh" />
       </div>
     </div>
@@ -62,7 +67,8 @@
                   :type="status"
                   @click="handle(record.row)"
                   v-for="{ title, handle, status } in moreAction"
-                >{{ title }}</el-button>
+                  >{{ title }}</el-button
+                >
               </el-space>
             </template>
           </el-dropdown>
@@ -97,8 +103,8 @@ const props = defineProps({
   title: {},
   toolbarAction: {},
   remotePage: {
-    default: false
-  }
+    default: false,
+  },
 });
 
 const data = reactive({
@@ -108,7 +114,7 @@ const data = reactive({
   pageSize: 10,
   total: 0,
   search: "",
-  searchType: ""
+  searchType: "",
 });
 
 const handleRefresh = () => {
@@ -118,14 +124,13 @@ const handleRefresh = () => {
     requestData.pageNum = data.pageNum;
   }
   if (data.search) {
-    requestData.q = data.search;
-    requestData.searchType = data.searchType;
+    requestData.filters = { [data.searchType]: data.search };
   } else {
-    delete requestData.q;
+    delete requestData.filters;
   }
 
   data.isLoading = true;
-  request[methods](path, { params: requestData }).then(res => {
+  request[methods](path, { params: requestData }).then((res) => {
     data.dataSource = res.data;
     if (res.total) {
       data.total = res.total;
@@ -149,6 +154,12 @@ const handleSearch = () => {
   if (!data.searchType) {
     return ElMessage.error("请选择搜索字段");
   }
+  handleRefresh();
+};
+
+const onClearSearch = () => {
+  data.searchType = "";
+  data.search = "";
   handleRefresh();
 };
 

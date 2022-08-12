@@ -114,11 +114,6 @@ const toolbarBtn = [
     event: () => window.open("https://www.hyl999.co"),
   },
   {
-    name: "更新生产环境",
-    icon: "icon-fabu",
-    event: () => exec("/all/updateProductionCode"),
-  },
-  {
     name: "清理接口缓存",
     icon: "icon-yijianqingli",
     event: () => exec("/all/clearInterfaceCache"),
