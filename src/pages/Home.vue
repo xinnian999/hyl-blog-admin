@@ -80,8 +80,8 @@ onMounted(() => {
   request("/all/allDataCount").then((res) => {
     res.data.forEach((item) => {
       data.value.forEach((v) => {
-        if (v.key === item.table_name) {
-          v.value = item.table_rows;
+        if (v.key === item.TABLE_NAME) {
+          v.value = item.TABLE_ROWS;
         }
       });
     });
