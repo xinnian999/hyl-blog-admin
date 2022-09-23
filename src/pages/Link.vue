@@ -83,6 +83,53 @@ const moreAction = [
 
 const formData = [
   {
+    label: "导入",
+    value: "import",
+    component: "textarea",
+    required: true,
+    placeholder: "输入友链信息，脱离焦点后自动导入",
+    blur: () => {
+      let data = formRef.value.form.import;
+      data = data.split("\n");
+      let source = data.map((item) => item.split("：")[1]);
+      const reg = RegExp(/(.jpg|.png)/);
+
+      source.forEach((item) => {
+        // 检索图标
+        if (reg.test(item)) {
+          formRef.value.form.avator = item;
+
+          source.splice(source.indexOf(item), 1);
+        }
+        // 检索链接
+        if (item && !reg.test(item) && item.search("https") !== -1) {
+          formRef.value.form.link = item;
+          source.splice(source.indexOf(item), 1);
+        }
+      });
+
+      // 检索名称
+      data.forEach((item) => {
+        const [label, value] = item.split("：");
+        if (
+          (label.search("名") !== -1) |
+          (label.search("name") !== -1) |
+          (label.search("title") !== -1)
+        ) {
+          formRef.value.form.name = value;
+          source.splice(source.indexOf(value), 1);
+        }
+      });
+
+      // 检索描述
+      source.forEach((item) => {
+        if (item) {
+          formRef.value.form.autograph = item;
+        }
+      });
+    },
+  },
+  {
     label: "名字",
     value: "name",
     component: "input",
@@ -108,4 +155,3 @@ const formData = [
   },
 ];
 </script>
-

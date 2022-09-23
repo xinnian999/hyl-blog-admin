@@ -20,6 +20,8 @@
           config,
           required,
           multiple,
+          placeholder,
+          blur,
         } in formData"
         :key="value"
         :prop="value"
@@ -47,8 +49,11 @@
         <el-input
           v-model="form[value]"
           autocomplete="off"
+          :placeholder="placeholder"
+          autosize
           type="textarea"
           v-if="component === 'textarea'"
+          @blur="blur"
         />
 
         <el-select
@@ -93,9 +98,7 @@
           <audio v-if="form[value]" :src="form[value]" controls />
 
           <el-button v-else>
-            <el-icon>
-              <Plus /> </el-icon
-            >点击上传
+            <el-icon> <Plus /> </el-icon>点击上传
           </el-button>
         </el-upload>
 
