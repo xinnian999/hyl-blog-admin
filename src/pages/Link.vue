@@ -36,8 +36,8 @@ const columns = [
     dataIndex: "name",
   },
   {
-    title: "签名",
-    dataIndex: "autograph",
+    title: "简介",
+    dataIndex: "descr",
   },
   {
     title: "链接",
@@ -77,7 +77,7 @@ const moreAction = [
   {
     status: "danger",
     title: "删除",
-    handle: (record) => handleDelete("/lines/delete", record.id, tableRef),
+    handle: (record) => handleDelete("/link/delete", record.id, tableRef),
   },
 ];
 
@@ -89,42 +89,47 @@ const formData = [
     required: true,
     placeholder: "输入友链信息，脱离焦点后自动导入",
     blur: () => {
-      let data = formRef.value.form.import;
-      data = data.split("\n");
-      let source = data.map((item) => item.split("：")[1]);
-      const reg = RegExp(/(.jpg|.png)/);
+      let form = formRef.value.form;
+      form.import.split("\n").forEach((item) => {
+        // 判断用的中英文冒号
+        let f = "：";
+        if (item.search(f) === -1) {
+          f = ": ";
+        }
 
-      source.forEach((item) => {
+        const [label, value] = item.split(f);
+
+        console.log(label, value);
         // 检索图标
-        if (reg.test(item)) {
-          formRef.value.form.avator = item;
-
-          source.splice(source.indexOf(item), 1);
-        }
-        // 检索链接
-        if (item && !reg.test(item) && item.search("https") !== -1) {
-          formRef.value.form.link = item;
-          source.splice(source.indexOf(item), 1);
-        }
-      });
-
-      // 检索名称
-      data.forEach((item) => {
-        const [label, value] = item.split("：");
         if (
-          (label.search("名") !== -1) |
-          (label.search("name") !== -1) |
-          (label.search("title") !== -1)
+          label.search("图标") !== -1 ||
+          label.search("avatar") !== -1 ||
+          label.search("头像") !== -1
         ) {
-          formRef.value.form.name = value;
-          source.splice(source.indexOf(value), 1);
+          form.avator = value;
         }
-      });
 
-      // 检索描述
-      source.forEach((item) => {
-        if (item) {
-          formRef.value.form.autograph = item;
+        // 检索名称
+        if (label.search("名称") !== -1 || label.search("name") !== -1) {
+          form.name = value;
+        }
+
+        // 检索地址
+        if (
+          label.search("链接") !== -1 ||
+          label.search("地址") !== -1 ||
+          label.search("link") !== -1
+        ) {
+          form.link = value;
+        }
+
+        // 检索描述
+        if (
+          label.search("描述") !== -1 ||
+          label.search("简介") !== -1 ||
+          label.search("descr") !== -1
+        ) {
+          form.descr = value;
         }
       });
     },
@@ -136,8 +141,8 @@ const formData = [
     required: true,
   },
   {
-    label: "签名",
-    value: "autograph",
+    label: "简介",
+    value: "descr",
     component: "textarea",
     required: true,
   },
