@@ -99,7 +99,6 @@ const formData = [
 
         const [label, value] = item.split(f);
 
-        console.log(label, value);
         // 检索图标
         if (
           label.search("图标") !== -1 ||
