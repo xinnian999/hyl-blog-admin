@@ -117,6 +117,7 @@ const formData = [
         if (
           label.search("链接") !== -1 ||
           label.search("地址") !== -1 ||
+          label.search("网址") !== -1 ||
           label.search("link") !== -1
         ) {
           form.link = value;
