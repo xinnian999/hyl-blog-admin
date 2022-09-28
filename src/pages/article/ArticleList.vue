@@ -70,14 +70,17 @@ const columns = [
     title: "文章海报",
     dataIndex: "picture",
     width: 200,
-    render: (record) => (
-      <ElImage
-        preview-src-list={[record.picture]}
-        preview-teleported
-        src={record.picture}
-        style={{ height: "100px" }}
-      />
-    ),
+    render: (record) => {
+      const src = `https://cdn.hyl999.co/public/image/${record.picture}`;
+      return (
+        <ElImage
+          preview-src-list={[src]}
+          preview-teleported
+          src={src}
+          style={{ height: "100px" }}
+        />
+      );
+    },
   },
   {
     title: "标题",
@@ -194,7 +197,7 @@ const formData = [
     value: "picture",
     required: true,
     component: "uploadPicture",
-    uploadName: "articlePicture",
+    uploadName: "image",
   },
   {
     label: "文章内容",

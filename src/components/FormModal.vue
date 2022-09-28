@@ -77,11 +77,17 @@
           :name="uploadName"
           :show-file-list="false"
           :on-success="
-            (res) => (form.picture = `/api/${uploadName}/${res.filename}`)
+            (res) => {
+              form.picture = res.filename;
+            }
           "
           v-if="component === 'uploadPicture'"
         >
-          <img v-if="form[value]" :src="form[value]" class="avatar" />
+          <img
+            v-if="form[value]"
+            :src="`https://cdn.hyl999.co/public/image/${form[value]}`"
+            class="avatar"
+          />
           <el-icon v-else class="avatar-uploader-icon">
             <Plus />
           </el-icon>
