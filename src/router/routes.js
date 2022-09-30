@@ -55,9 +55,14 @@ export default [
     component: () => import("../pages/index.vue"),
     children: [
       {
-        title: "说说",
+        title: "说说管理",
         path: "mood",
         component: () => import("@/pages/Journal/mood.vue"),
+      },
+      {
+        title: "笔记管理",
+        path: "note",
+        component: () => import("@/pages/Journal/Note.vue"),
       },
     ],
   },
