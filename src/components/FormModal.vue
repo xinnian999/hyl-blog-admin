@@ -43,6 +43,7 @@
           v-model="form[value]"
           autocomplete="off"
           v-if="component === 'password'"
+          show-password
           type="password"
         />
 
@@ -85,7 +86,7 @@
         >
           <img
             v-if="form[value]"
-            :src="`https://cdn.hyl999.co/public/image/${form[value]}`"
+            :src="`${globalConfig.remoteStaticUrl}/public/image/${form[value]}`"
             class="avatar"
           />
           <el-icon v-else class="avatar-uploader-icon">
@@ -95,11 +96,16 @@
 
         <el-upload
           v-model="form[value]"
-          action="api/upload/any"
-          name="any"
+          action="api/upload/music"
+          name="music"
           :show-file-list="false"
-          :on-success="(res) => (form[value] = `api/any/${res.filename}`)"
-          v-if="component === 'upload'"
+          :on-success="
+            (res) =>
+              (form[
+                value
+              ] = `${globalConfig.remoteStaticUrl}/public/music/${res.filename}`)
+          "
+          v-if="component === 'uploadMusic'"
         >
           <audio v-if="form[value]" :src="form[value]" controls />
 
@@ -132,7 +138,7 @@
 import { reactive, ref, defineProps, defineExpose, onMounted } from "vue";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessageBox } from "element-plus";
-import { request } from "@/utils";
+import { request, globalConfig } from "@/utils";
 
 const formRef = ref();
 

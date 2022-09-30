@@ -19,7 +19,12 @@
 <script setup>
 import { ref } from "vue";
 import { Plus } from "@element-plus/icons-vue";
-import { handleAddOrUpdate, handleOk, handleDelete } from "@/utils";
+import {
+  handleAddOrUpdate,
+  handleOk,
+  handleDelete,
+  globalConfig,
+} from "@/utils";
 
 const tableRef = ref();
 const formRef = ref();
@@ -39,7 +44,7 @@ const columns = [
       <ElImage
         preview-src-list={[record.picture]}
         preview-teleported
-        src={record.picture}
+        src={`${globalConfig.remoteStaticUrl}/public/image/${record.picture}`}
         style={{ height: "100px" }}
       />
     ),
@@ -100,7 +105,7 @@ const formData = [
     label: "配图",
     value: "picture",
     component: "uploadPicture",
-    uploadName: "resourcePicture",
+    uploadName: "image",
   },
   {
     label: "链接",
@@ -109,4 +114,3 @@ const formData = [
   },
 ];
 </script>
-

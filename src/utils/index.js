@@ -2,6 +2,10 @@ import request from "./request";
 import { handleDelete, handleAddOrUpdate, handleOk } from "./handle";
 import { nowTime, formatTime } from "./timeUtils";
 
+const globalConfig = {
+  remoteStaticUrl: "https://cdn.hyl999.co",
+};
+
 export {
   request,
   handleDelete,
@@ -9,4 +13,5 @@ export {
   handleOk,
   nowTime,
   formatTime,
+  globalConfig,
 };

@@ -19,7 +19,12 @@
 <script setup>
 import { ref } from "vue";
 import { Plus } from "@element-plus/icons-vue";
-import { handleAddOrUpdate, handleOk, handleDelete } from "@/utils";
+import {
+  handleAddOrUpdate,
+  handleOk,
+  handleDelete,
+  globalConfig,
+} from "@/utils";
 
 const tableRef = ref();
 const formRef = ref();
@@ -54,7 +59,12 @@ const columns = [
   {
     title: "歌曲地址",
     dataIndex: "url",
-    render: (record) => <audio src={record.url} controls />,
+    render: (record) => (
+      <audio
+        src={`${globalConfig.remoteStaticUrl}/public/music/${record.url}`}
+        controls
+      />
+    ),
   },
 ];
 
@@ -99,11 +109,6 @@ const formData = [
     component: "textarea",
     required: true,
   },
-  // {
-  //   label: "在线上传",
-  //   value: "cover",
-  //   component: "upload",
-  // },
   {
     label: "歌曲地址",
     value: "url",
@@ -113,8 +118,7 @@ const formData = [
   {
     label: "在线上传",
     value: "url",
-    component: "upload",
+    component: "uploadMusic",
   },
 ];
 </script>
-
