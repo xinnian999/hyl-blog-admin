@@ -86,7 +86,7 @@ const moreAction = [
   {
     status: "danger",
     title: "删除",
-    handle: (record) => handleDelete("/mood/delete", record.id, tableRef),
+    handle: (record) => handleDelete("/works/delete", record.id, tableRef),
   },
 ];
 
