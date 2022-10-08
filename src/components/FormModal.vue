@@ -51,7 +51,7 @@
           v-model="form[value]"
           autocomplete="off"
           :placeholder="placeholder"
-          autosize
+          :autosize="{ minRows: 4, maxRows: 999 }"
           type="textarea"
           v-if="component === 'textarea'"
           @blur="blur"

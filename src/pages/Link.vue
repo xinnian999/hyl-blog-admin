@@ -87,7 +87,7 @@ const formData = [
     value: "import",
     component: "textarea",
     required: true,
-    placeholder: "输入友链信息，脱离焦点后自动导入",
+    placeholder: "输入友链信息，脱离焦点后自动识别导入",
     blur: () => {
       let form = formRef.value.form;
       form.import.split("\n").forEach((item) => {
