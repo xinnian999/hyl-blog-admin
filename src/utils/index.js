@@ -3,7 +3,7 @@ import { handleDelete, handleAddOrUpdate, handleOk } from "./handle";
 import { nowTime, formatTime } from "./timeUtils";
 
 const globalConfig = {
-  remoteStaticUrl: "https://cdn.hyl999.co",
+  remoteStaticUrl: "https://cdn.hyl999.co/public",
 };
 
 export {

@@ -74,7 +74,7 @@
         <el-upload
           v-model="form[value]"
           class="avatar-uploader"
-          :action="`api/upload/${uploadName}`"
+          :action="`/api/upload/${uploadName}`"
           :name="uploadName"
           :show-file-list="false"
           :on-success="
@@ -86,7 +86,7 @@
         >
           <img
             v-if="form[value]"
-            :src="`${globalConfig.remoteStaticUrl}/public/image/${form[value]}`"
+            :src="`${globalConfig.remoteStaticUrl}/image/${form[value]}`"
             class="avatar"
           />
           <el-icon v-else class="avatar-uploader-icon">
@@ -103,7 +103,7 @@
             (res) =>
               (form[
                 value
-              ] = `${globalConfig.remoteStaticUrl}/public/music/${res.filename}`)
+              ] = `${globalConfig.remoteStaticUrl}/music/${res.filename}`)
           "
           v-if="component === 'uploadMusic'"
         >
@@ -176,16 +176,16 @@ const handleVisible = (value) => {
 
 const handleUploadImage = (event, insertImage, files) => {
   const formData = new FormData();
-  formData.append("articlePicture", files[0], files[0].name);
+  formData.append("image", files[0], files[0].name);
   request
-    .post("/upload/articlePicture", formData, {
+    .post("/upload/image", formData, {
       headers: {
         "Content-Type": "multipart/form-data;boundary=" + new Date().getTime(),
       },
     })
     .then((res) => {
       insertImage({
-        url: `/api/articlePicture/${res.filename}`,
+        url: `/cdn/image/${res.filename}`,
         desc: "图片已失效",
         // width: 'auto',
         // height: 'auto',
