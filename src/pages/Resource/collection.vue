@@ -44,7 +44,7 @@ const columns = [
       <ElImage
         preview-src-list={[record.picture]}
         preview-teleported
-        src={`${globalConfig.remoteStaticUrl}/public/image/${record.picture}`}
+        src={`${globalConfig.remoteStaticUrl}/image/${record.picture}`}
         style={{ height: "100px" }}
       />
     ),
