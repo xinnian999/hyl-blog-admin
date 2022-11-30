@@ -102,13 +102,13 @@ const columns = [
   {
     title: "发布时间",
     width: 200,
-    dataIndex: "creatTime",
-    render: (record) => formatTime(record.creatTime),
+    dataIndex: "createTime",
+    render: (record) => formatTime(record.createTime),
   },
   {
     title: "更新时间",
     dataIndex: "updateTime",
-    render: (record) => formatTime(record.creatTime),
+    render: (record) => formatTime(record.updateTime),
     width: 200,
   },
   {

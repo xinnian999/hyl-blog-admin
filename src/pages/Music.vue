@@ -61,7 +61,7 @@ const columns = [
     dataIndex: "url",
     render: (record) => (
       <audio
-        src={`${globalConfig.remoteStaticUrl}/public/music/${record.url}`}
+        src={`${globalConfig.remoteStaticUrl}/music/${record.url}`}
         controls
       />
     ),
