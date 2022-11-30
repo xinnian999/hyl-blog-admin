@@ -1,19 +1,8 @@
 <template>
-  <GridTable
-    :params="params"
-    :moreAction="moreAction"
-    :toolbarAction="toolbarAction"
-    :columns="columns"
-    title="句子管理"
-    ref="tableRef"
-  />
-  <FormModal
-    title="新增句子"
-    width="40%"
-    :formData="formData"
-    :ok="() => handleOk('lines', formRef, tableRef)"
-    ref="formRef"
-  />
+  <GridTable :params="params" :moreAction="moreAction" :toolbarAction="toolbarAction" :columns="columns" title="句子管理"
+    ref="tableRef" />
+  <FormModal title="新增句子" width="40%" :formData="formData" :ok="() => handleOk('lines', formRef, tableRef)"
+    ref="formRef" />
 </template>
 
 <script setup>
@@ -38,6 +27,10 @@ const columns = [
   {
     title: "句子",
     dataIndex: "content",
+  },
+  {
+    title: "配图",
+    dataIndex: "picture",
   },
 ];
 
@@ -75,6 +68,13 @@ const formData = [
     value: "content",
     component: "textarea",
     required: true,
+  },
+  {
+    label: "配图",
+    value: "picture",
+    required: true,
+    component: "uploadPicture",
+    uploadName: "image",
   },
 ];
 </script>
