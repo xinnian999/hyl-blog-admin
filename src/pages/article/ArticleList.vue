@@ -145,7 +145,9 @@ const moreAction = [
     title: "编辑",
     status: "success",
     handle: (record) => {
-      currentRecord.value = record;
+
+      currentRecord.value =record ;
+     
       handleAddOrUpdate(record, formRef);
     },
   },

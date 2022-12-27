@@ -43,6 +43,7 @@ export const handleOk = (path, formRef, tableRef, data, closeModal = true) => {
       };
       if (params.content) {
         params.content = params.content.replace(/'/g, '"');
+         params.content = params.content.replaceAll('\\','\\\\');
       }
       if (!id) {
         params.creatTime = nowTime();
