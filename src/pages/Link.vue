@@ -1,19 +1,10 @@
 <template>
-  <GridTable
-    :params="params"
-    :moreAction="moreAction"
-    :toolbarAction="toolbarAction"
-    :columns="columns"
-    title="友情链接管理"
-    ref="tableRef"
-  />
-  <FormModal
-    title="新增友链"
-    width="40%"
-    :formData="formData"
-    :ok="() => handleOk('link', formRef, tableRef)"
-    ref="formRef"
-  />
+  <div>
+    <GridTable :params="params" :moreAction="moreAction" :toolbarAction="toolbarAction" :columns="columns"
+      title="友情链接管理" ref="tableRef" />
+    <FormModal title="新增友链" width="40%" :formData="formData" :ok="() => handleOk('link', formRef, tableRef)"
+      ref="formRef" />
+  </div>
 </template>
 
 <script setup>
@@ -81,6 +72,11 @@ const moreAction = [
   },
 ];
 
+const avatorReg = /\u56fe\u6807|\u5934\u50cf|avatar/;
+const nameReg = /\u540d\u79f0|name/;
+const linkReg = /\u94fe\u63a5|\u5730\u5740|\u7f51\u5740|link/;
+const descrReg = /\u63cf\u8ff0|\u7b80\u4ecb|descr/;
+
 const formData = [
   {
     label: "导入",
@@ -89,48 +85,20 @@ const formData = [
     required: true,
     placeholder: "输入友链信息，脱离焦点后自动识别导入",
     blur: () => {
-      let form = formRef.value.form;
+      const form = formRef.value.form;
+      let f = "：";
       form.import.split("\n").forEach((item) => {
+        const [label, value] = item.split(f);
+
         // 判断用的中英文冒号
-        let f = "：";
         if (item.search(f) === -1) {
           f = ": ";
         }
 
-        const [label, value] = item.split(f);
-
-        // 检索图标
-        if (
-          label.search("图标") !== -1 ||
-          label.search("avatar") !== -1 ||
-          label.search("头像") !== -1
-        ) {
-          form.avator = value;
-        }
-
-        // 检索名称
-        if (label.search("名称") !== -1 || label.search("name") !== -1) {
-          form.name = value;
-        }
-
-        // 检索地址
-        if (
-          label.search("链接") !== -1 ||
-          label.search("地址") !== -1 ||
-          label.search("网址") !== -1 ||
-          label.search("link") !== -1
-        ) {
-          form.link = value;
-        }
-
-        // 检索描述
-        if (
-          label.search("描述") !== -1 ||
-          label.search("简介") !== -1 ||
-          label.search("descr") !== -1
-        ) {
-          form.descr = value;
-        }
+        avatorReg.test(label) && (form.avator = value);
+        nameReg.test(label) && (form.name = value);
+        linkReg.test(label) && (form.link = value);
+        descrReg.test(label) && (form.descr = value);
       });
     },
   },
