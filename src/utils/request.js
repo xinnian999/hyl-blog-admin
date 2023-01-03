@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElMessageBox } from "element-plus";
 
 const request = axios.create({
   baseURL: "/api",
@@ -15,10 +15,7 @@ request.interceptors.request.use((config) => {
 request.interceptors.response.use(
   (res) => {
     if (res.data.message) {
-      ElMessage({
-        message: res.data.message,
-        type: "warning",
-      });
+      ElMessageBox.alert(res.data.message, "操作失败", { type: "error" });
     }
 
     return res?.data;

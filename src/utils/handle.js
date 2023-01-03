@@ -39,15 +39,15 @@ export const handleOk = (path, formRef, tableRef, data, closeModal = true) => {
       const id = formRef.form.id;
       const params = {
         ...formRef.form,
-        updateTime: nowTime(),
+        // updateTime: nowTime(),
       };
       if (params.content) {
         params.content = params.content.replace(/'/g, '"');
-         params.content = params.content.replaceAll('\\','\\\\');
+        params.content = params.content.replaceAll("\\", "\\\\");
       }
-      if (!id) {
-        params.creatTime = nowTime();
-      }
+      // if (!id) {
+      //   params.creatTime = nowTime();
+      // }
 
       if (data) Object.assign(params, data);
 

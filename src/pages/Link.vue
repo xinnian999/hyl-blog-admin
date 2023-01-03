@@ -1,10 +1,8 @@
 <template>
-  <div>
-    <GridTable :params="params" :moreAction="moreAction" :toolbarAction="toolbarAction" :columns="columns"
-      title="友情链接管理" ref="tableRef" />
-    <FormModal title="新增友链" width="40%" :formData="formData" :ok="() => handleOk('link', formRef, tableRef)"
-      ref="formRef" />
-  </div>
+  <GridTable :params="params" :moreAction="moreAction" :toolbarAction="toolbarAction" :columns="columns" title="友情链接管理"
+    ref="tableRef" />
+  <FormModal title="新增友链" width="40%" :formData="formData" :ok="() => handleOk('link', formRef, tableRef)"
+    ref="formRef" />
 </template>
 
 <script setup>
