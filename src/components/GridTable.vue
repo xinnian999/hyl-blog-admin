@@ -2,59 +2,30 @@
   <div class="grid-table">
     <div class="toolbar">
       <div class="searchBar">
-        <el-select
-          v-model="data.searchType"
-          placeholder="搜索字段"
-          :clearable="true"
-          @clear="onClearSearch"
-        >
+        <el-select v-model="data.searchType" placeholder="搜索字段" :clearable="true" @clear="onClearSearch">
           <template v-for="item in columns">
-            <el-option
-              :key="item.dataIndex"
-              :label="item.title"
-              :value="item.dataIndex"
-              v-if="item.filter"
-            />
+            <el-option :key="item.dataIndex" :label="item.title" :value="item.dataIndex" v-if="item.filter" />
           </template>
         </el-select>
-        <el-input v-model="data.search" placeholder="请输入搜索关键词" />
+        <el-input v-model="data.search" placeholder="请输入搜索关键词" @change="handleSearch" clearable />
         <el-button type="primary" :icon="Search" @click="handleSearch" />
       </div>
       <div class="toolButton">
-        <el-button
-          :key="name"
-          v-for="{ name, type, handle, icon } in toolbarAction"
-          :type="type"
-          :icon="icon"
-          @click="handle"
-          >{{ name }}</el-button
-        >
+        <el-button :key="name" v-for="{ name, type, handle, icon } in toolbarAction" :type="type" :icon="icon"
+          @click="handle">{{ name }}</el-button>
         <el-button type="primary" :icon="Refresh" @click="handleRefresh" />
       </div>
     </div>
-    <el-table
-      :data="
-        remotePage
-          ? data.dataSource
-          : data.dataSource.slice(
-              (data.pageNum - 1) * data.pageSize,
-              data.pageNum * data.pageSize
-            )
-      "
-      v-loading="data.isLoading"
-      height="100%"
-      stripe
-    >
-      <el-table-column
-        v-for="{ title, dataIndex, render, width, fixed, sortable } in columns"
-        :key="dataIndex"
-        :prop="dataIndex"
-        :label="title"
-        :formatter="render"
-        :width="width"
-        :fixed="fixed"
-        :sortable="sortable"
-      />
+    <el-table :data="
+  remotePage
+    ? data.dataSource
+    : data.dataSource.slice(
+      (data.pageNum - 1) * data.pageSize,
+      data.pageNum * data.pageSize
+    )
+" v-loading="data.isLoading" height="100%" stripe>
+      <el-table-column v-for="{ title, dataIndex, render, width, fixed, sortable } in columns" :key="dataIndex"
+        :prop="dataIndex" :label="title" :formatter="render" :width="width" :fixed="fixed" :sortable="sortable" />
 
       <el-table-column fixed="right" label width="150" v-if="moreAction">
         <template #default="record">
@@ -62,30 +33,17 @@
             <el-button type="primary" plain>操作</el-button>
             <template #dropdown>
               <el-space direction="vertical" style="padding: 10px 5px 0">
-                <el-button
-                  :key="title"
-                  :type="status"
-                  @click="handle(record.row)"
-                  v-for="{ title, handle, status } in moreAction"
-                  >{{ title }}</el-button
-                >
+                <el-button :key="title" :type="status" @click="handle(record.row)"
+                  v-for="{ title, handle, status } in moreAction">{{ title }}</el-button>
               </el-space>
             </template>
           </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      class="pagination"
-      background
-      layout="sizes, prev, pager, next"
-      :page-sizes="[5, 10, 20, 50, 100]"
-      :total="data.total"
-      v-model:page-size="data.pageSize"
-      v-model:currentPage="data.pageNum"
-      @current-change="paginationChange"
-      @size-change="paginationChange"
-    />
+    <el-pagination class="pagination" background layout="sizes, prev, pager, next" :page-sizes="[5, 10, 20, 50, 100]"
+      :total="data.total" v-model:page-size="data.pageSize" v-model:currentPage="data.pageNum"
+      @current-change="paginationChange" @size-change="paginationChange" />
     <span class="total">共{{ data.total }}条数据</span>
   </div>
 </template>
@@ -95,6 +53,8 @@ import { defineProps, defineExpose, reactive, onMounted } from "vue";
 import { Search, Refresh } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 import { request } from "@/utils";
+
+
 
 const props = defineProps({
   columns: {},
@@ -118,7 +78,12 @@ const data = reactive({
 });
 
 const handleRefresh = () => {
-  const { methods, path, data: requestData } = props.params;
+  const { path, data: requestData } = props.params;
+  const defaultRequestData = {
+    orderBys:
+      'id desc'
+  }
+
   if (props.remotePage) {
     requestData.pageSize = data.pageSize;
     requestData.pageNum = data.pageNum;
@@ -130,7 +95,7 @@ const handleRefresh = () => {
   }
 
   data.isLoading = true;
-  request[methods](path, { params: requestData }).then((res) => {
+  request(path, { params: { ...defaultRequestData, ...requestData } }).then((res) => {
     data.dataSource = res.data;
     if (res.total) {
       data.total = res.total;
@@ -165,6 +130,11 @@ const onClearSearch = () => {
 
 onMounted(() => {
   if (props.params) handleRefresh();
+
+  const defaultSearch = props.columns.filter(item => item.filter)
+  if (defaultSearch.length) {
+    data.searchType = defaultSearch[0].dataIndex
+  }
 });
 
 //  抛出方法
@@ -185,6 +155,7 @@ defineExpose({ handleRefresh });
   padding: 10px;
   box-sizing: border-box;
   border-radius: 5px;
+
   .pagination {
     margin-top: 15px;
     justify-content: right;
@@ -196,14 +167,17 @@ defineExpose({ handleRefresh });
 
   .toolbar {
     .flex;
+
     .searchBar {
       display: flex;
       flex: 1;
     }
+
     .toolButton {
       .flex;
       margin-left: 20px;
     }
+
     button {
       height: 100%;
     }

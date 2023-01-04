@@ -1,6 +1,6 @@
 import { pick } from "lodash";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { request, nowTime } from "@/utils";
+import { request } from "@/utils";
 
 export const handleAddOrUpdate = (record, formRef) => {
   if (record) {
@@ -37,17 +37,12 @@ export const handleOk = (path, formRef, tableRef, data, closeModal = true) => {
   formRef.formRef.validate((valid) => {
     if (valid) {
       const id = formRef.form.id;
-      const params = {
-        ...formRef.form,
-        // updateTime: nowTime(),
-      };
+      const params = formRef.form;
+
       if (params.content) {
         params.content = params.content.replace(/'/g, '"');
         params.content = params.content.replaceAll("\\", "\\\\");
       }
-      // if (!id) {
-      //   params.creatTime = nowTime();
-      // }
 
       if (data) Object.assign(params, data);
 

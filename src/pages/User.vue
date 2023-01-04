@@ -1,17 +1,6 @@
 <template>
-  <GridTable
-    :params="params"
-    :columns="columns"
-    :moreAction="moreAction"
-    title="用户管理"
-    ref="tableRef"
-  />
-  <FormModal
-    title="修改密码"
-    :formData="formData"
-    :ok="handleEditPassword"
-    ref="formRef"
-  />
+  <GridTable :params="params" :columns="columns" :moreAction="moreAction" title="用户管理" ref="tableRef" />
+  <FormModal title="修改密码" :formData="formData" :ok="handleEditPassword" ref="formRef" />
 </template>
 
 <script setup>
@@ -24,7 +13,6 @@ const tableRef = ref();
 const formRef = ref();
 
 const params = {
-  methods: "get",
   path: "/user/query",
   data: {},
 };

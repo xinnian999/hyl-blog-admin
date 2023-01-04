@@ -14,7 +14,6 @@ const tableRef = ref();
 const formRef = ref();
 
 const params = {
-  methods: "get",
   path: "/link/query",
   data: {},
 };

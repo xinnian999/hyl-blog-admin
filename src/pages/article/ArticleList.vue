@@ -1,24 +1,10 @@
 <template>
-  <GridTable
-    :params="params"
-    :remotePage="true"
-    :columns="columns"
-    :moreAction="moreAction"
-    :toolbarAction="toolbarAction"
-    title="所有文章"
-    search="/article/search"
-    ref="tableRef"
-  />
+  <GridTable :params="params" :remotePage="true" :columns="columns" :moreAction="moreAction"
+    :toolbarAction="toolbarAction" title="所有文章" search="/article/search" ref="tableRef" />
 
-  <FormModal
-    :title="currentRecord ? `编辑文章` : '写文章'"
-    :formData="formData"
-    :ok="
-      (closeModal) => handleOk('article', formRef, tableRef, null, closeModal)
-    "
-    :currentRecord="currentRecord"
-    ref="formRef"
-  />
+  <FormModal :title="currentRecord ? `编辑文章` : '写文章'" :formData="formData" :ok="
+  (closeModal) => handleOk('article', formRef, tableRef, null, closeModal)
+" :currentRecord="currentRecord" ref="formRef" />
 </template>
 
 <script setup>
@@ -58,7 +44,6 @@ const changeTopping = (val, record) => {
 };
 
 const params = {
-  methods: "get",
   path: "/article/query",
   data: {
     orderBys: "topping desc,id desc",
@@ -145,9 +130,9 @@ const moreAction = [
     title: "编辑",
     status: "success",
     handle: (record) => {
+      record.category = record.category.split(',')
+      currentRecord.value = record;
 
-      currentRecord.value =record ;
-     
       handleAddOrUpdate(record, formRef);
     },
   },

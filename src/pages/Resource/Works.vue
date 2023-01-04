@@ -1,19 +1,8 @@
 <template>
-  <GridTable
-    :params="params"
-    :moreAction="moreAction"
-    :toolbarAction="toolbarAction"
-    :columns="columns"
-    title="资源管理"
-    ref="tableRef"
-  />
-  <FormModal
-    title="新增资源"
-    width="40%"
-    :formData="formData"
-    :ok="() => handleOk('works', formRef, tableRef)"
-    ref="formRef"
-  />
+  <GridTable :params="params" :moreAction="moreAction" :toolbarAction="toolbarAction" :columns="columns" title="资源管理"
+    ref="tableRef" />
+  <FormModal title="新增资源" width="40%" :formData="formData" :ok="() => handleOk('works', formRef, tableRef)"
+    ref="formRef" />
 </template>
 
 <script setup>
@@ -30,7 +19,6 @@ const tableRef = ref();
 const formRef = ref();
 
 const params = {
-  methods: "get",
   path: "/works/query",
   data: {},
 };

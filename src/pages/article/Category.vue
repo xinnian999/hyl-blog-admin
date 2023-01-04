@@ -1,19 +1,8 @@
 <template>
-  <grid-table
-    :params="params"
-    :columns="columns"
-    :moreAction="moreAction"
-    :toolbarAction="toolbarAction"
-    title="分类管理"
-    search="/article/search"
-    ref="tableRef"
-  />
+  <grid-table :params="params" :columns="columns" :moreAction="moreAction" :toolbarAction="toolbarAction" title="分类管理"
+    search="/article/search" ref="tableRef" />
 
-  <FormModal
-    :formData="formData"
-    :ok="() => handleOk('category', formRef, tableRef)"
-    ref="formRef"
-  />
+  <FormModal :formData="formData" :ok="() => handleOk('category', formRef, tableRef)" ref="formRef" />
 </template>
 
 <script setup>
@@ -23,7 +12,6 @@ import { ElMessage } from "element-plus";
 import { handleAddOrUpdate, handleOk, handleDelete, request } from "@/utils";
 
 const params = {
-  methods: "get",
   path: "/category/query",
   data: {},
 };
@@ -84,4 +72,5 @@ const moreAction = [
 </script>
 
 <style>
+
 </style>

@@ -1,19 +1,8 @@
 <template>
-  <GridTable
-    :params="params"
-    :moreAction="moreAction"
-    :toolbarAction="toolbarAction"
-    :columns="columns"
-    title="更新日志管理"
-    ref="tableRef"
-  />
-  <FormModal
-    title="写日志"
-    width="40%"
-    :formData="formData"
-    :ok="() => handleOk('updateLog', formRef, tableRef)"
-    ref="formRef"
-  />
+  <GridTable :params="params" :moreAction="moreAction" :toolbarAction="toolbarAction" :columns="columns" title="更新日志管理"
+    ref="tableRef" />
+  <FormModal title="写日志" width="40%" :formData="formData" :ok="() => handleOk('updateLog', formRef, tableRef)"
+    ref="formRef" />
 </template>
 
 <script setup>
@@ -25,7 +14,6 @@ const tableRef = ref();
 const formRef = ref();
 
 const params = {
-  methods: "get",
   path: "/updateLog/query",
   data: {},
 };
