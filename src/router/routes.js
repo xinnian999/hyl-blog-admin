@@ -73,6 +73,12 @@ export default [
     component: () => import("../pages/Link.vue"),
   },
   {
+    title: "评论留言管理",
+    path: "/comment",
+    icon: Link,
+    component: () => import("../pages/Comment.vue"),
+  },
+  {
     title: "资源管理",
     path: "/resource",
     icon: MapLocation,
@@ -91,7 +97,6 @@ export default [
       },
     ],
   },
-
   {
     title: "其他管理",
     path: "/other",

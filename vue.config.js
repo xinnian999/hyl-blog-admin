@@ -21,6 +21,13 @@ module.exports = defineConfig({
         ws: true, //用于支持websocket
         changeOrigin: true, //用于控制请求头中host的值
       },
+      "/qqAvatar": {
+        //表示匹配所有以'/tree'开头的请求路径
+        target: "https://thirdqq.qlogo.cn", //代理目标的服务器的基础路径
+        pathRewrite: { "^/qqAvatar": "" }, //重写代理服务器的路径不然访问不到代理目标的服务器
+        ws: true, //用于支持websocket
+        changeOrigin: true, //用于控制请求头中host的值
+      },
     },
   },
   outputDir: "dist",

@@ -18,13 +18,13 @@ export const handleAddOrUpdate = (record, formRef) => {
   formRef.value.handleVisible(true);
 };
 
-export const handleDelete = (path, id, tableRef) => {
+export const handleDelete = (path, id, tableRef, params) => {
   ElMessageBox.confirm("确认删除吗？", "删除", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning",
   }).then(() => {
-    request.delete(path, { params: { id } }).then((res) => {
+    request.delete(path, { params: params || { id } }).then((res) => {
       if (res.status === 0) {
         ElMessage.success("删除成功");
         tableRef.value.handleRefresh();
