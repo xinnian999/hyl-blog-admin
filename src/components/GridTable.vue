@@ -16,14 +16,7 @@
         <el-button type="primary" :icon="Refresh" @click="handleRefresh" />
       </div>
     </div>
-    <el-table :data="
-  remotePage
-    ? data.dataSource
-    : data.dataSource.slice(
-      (data.pageNum - 1) * data.pageSize,
-      data.pageNum * data.pageSize
-    )
-" v-loading="data.isLoading" height="100%" stripe>
+    <el-table :data="data.dataSource" v-loading="data.isLoading" height="100%" stripe>
       <el-table-column v-for="{ title, dataIndex, render, width, fixed, sortable } in columns" :key="dataIndex"
         :prop="dataIndex" :label="title" :formatter="render" :width="width" :fixed="fixed" :sortable="sortable" />
 
@@ -41,9 +34,10 @@
         </template>
       </el-table-column>
     </el-table>
+
     <el-pagination class="pagination" background layout="sizes, prev, pager, next" :page-sizes="[5, 10, 20, 50, 100]"
       :total="data.total" v-model:page-size="data.pageSize" v-model:currentPage="data.pageNum"
-      @current-change="paginationChange" @size-change="paginationChange" />
+      @current-change="handleRefresh" @size-change="handleRefresh" />
     <span class="total">共{{ data.total }}条数据</span>
   </div>
 </template>
@@ -80,14 +74,12 @@ const data = reactive({
 const handleRefresh = () => {
   const { path, data: requestData } = props.params;
   const defaultRequestData = {
-    orderBys:
-      'id desc'
+    orderBys: 'id desc',
+    pageSize: data.pageSize,
+    pageNum: data.pageNum
   }
 
-  if (props.remotePage) {
-    requestData.pageSize = data.pageSize;
-    requestData.pageNum = data.pageNum;
-  }
+
   if (data.search) {
     requestData.filters = { [data.searchType]: data.search };
   } else {
@@ -106,11 +98,6 @@ const handleRefresh = () => {
   });
 };
 
-const paginationChange = () => {
-  if (props.remotePage) {
-    handleRefresh();
-  }
-};
 
 const handleSearch = () => {
   if (!data.search) {

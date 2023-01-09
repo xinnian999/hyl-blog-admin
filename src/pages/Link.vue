@@ -79,7 +79,6 @@ const formData = [
     label: "导入",
     value: "import",
     component: "textarea",
-    required: true,
     placeholder: "输入友链信息，脱离焦点后自动识别导入",
     blur: () => {
       const form = formRef.value.form;
