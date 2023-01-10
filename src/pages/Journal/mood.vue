@@ -71,6 +71,7 @@ const formData = [
     label: "分类",
     value: "category",
     component: "select",
+    defaultValue: "weizhi",
     selectData: [
       { name: "位置", value: "weizhi" },
       { name: "图片", value: "tupian" },
@@ -80,6 +81,8 @@ const formData = [
       mode: "static",
       label: "name",
       value: "value",
+
+
     },
   },
 ];

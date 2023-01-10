@@ -11,8 +11,18 @@ export const handleAddOrUpdate = (record, formRef) => {
     );
   } else {
     // 如果新增，将表单v-model所有键值赋为空
+    const defaultValueArr = formRef.value.formData.filter(
+      (item) => item.defaultValue
+    );
+
     Object.keys(formRef.value.form).forEach((key) => {
-      formRef.value.form[key] = "";
+      defaultValueArr.forEach((v) => {
+        if (v.value === key) {
+          formRef.value.form[key] = v.defaultValue;
+        } else {
+          formRef.value.form[key] = "";
+        }
+      });
     });
   }
   formRef.value.handleVisible(true);

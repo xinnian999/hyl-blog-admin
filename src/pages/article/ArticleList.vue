@@ -3,8 +3,8 @@
     :toolbarAction="toolbarAction" title="所有文章" search="/article/search" ref="tableRef" />
 
   <FormModal :title="currentRecord ? `编辑文章` : '写文章'" :formData="formData" :ok="
-  (closeModal) => handleOk('article', formRef, tableRef, null, closeModal)
-" :currentRecord="currentRecord" ref="formRef" />
+    (closeModal) => handleOk('article', formRef, tableRef, null, closeModal)
+  " :currentRecord="currentRecord" ref="formRef" />
 </template>
 
 <script setup>
@@ -130,7 +130,10 @@ const moreAction = [
     title: "编辑",
     status: "success",
     handle: (record) => {
-      record.category = record.category.split(',')
+      if (!Array.isArray(record.category)) {
+        record.category = record.category.split(',')
+
+      }
       currentRecord.value = record;
 
       handleAddOrUpdate(record, formRef);
@@ -171,12 +174,30 @@ const formData = [
     component: "select",
     required: true,
     multiple: true,
+    defaultValue: ["react"],
     config: {
       mode: "remote",
       url: "/category/query",
       method: "get",
       label: "name",
       value: "name",
+    },
+  },
+  {
+    label: "文章类型",
+    value: "type",
+    component: "radio",
+    required: true,
+    multiple: true,
+    defaultValue: 1,
+    selectData: [
+      { name: "原创", value: 1 },
+      { name: "转载", value: 2 },
+    ],
+    config: {
+      mode: "static",
+      label: "name",
+      value: "value",
     },
   },
   {
