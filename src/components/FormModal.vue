@@ -1,6 +1,6 @@
 <template>
   <el-dialog :center="true" v-model="visible" @close="handleVisible(false)" :title="title" :width="width" top="5vh"
-    custom-class="dialogForm" :append-to-body="true" @open="dialogOpen">
+    custom-class="dialogForm" :append-to-body="true">
     <el-form :model="form" ref="formRef">
       <el-form-item v-for="{
         label,
@@ -117,25 +117,7 @@ const handleVisible = (value) => {
   visible.value = value;
 };
 
-const dialogOpen = () => {
-  // 初始化v-model，不写会导致数据回显失败
-  // props.formData.forEach((item) => {
-  //   if (/select|radio/.test(item.component)) {
-  //     if (item.config.mode === "static") {
-  //       form[item.value] = item.config.defaultValue
-  //     }
 
-  //     if (item.config.mode === "remote") {
-  //       const { method, url } = item.config;
-  //       request[method](url).then((res) => {
-  //         if (res.status === 0) {
-  //           data[item.value] = res.data;
-  //         }
-  //       });
-  //     }
-  //   }
-  // });
-}
 
 const handleUploadImage = (event, insertImage, files) => {
   const formData = new FormData();
