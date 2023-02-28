@@ -36,8 +36,8 @@
             v-for="item in config.mode === 'static' ? selectData : data[value]" />
         </el-select>
 
-        <el-upload v-model="form[value]" class="avatar-uploader" :action="`/api/upload/${uploadName}`"
-          :name="uploadName" :show-file-list="false" :on-success="
+        <el-upload v-model="form[value]" class="avatar-uploader" :action="`/api/upload/${uploadName}`" :name="uploadName"
+          :show-file-list="false" :on-success="
             (res) => {
               form.picture = res.filename;
             }
@@ -52,9 +52,9 @@
           (res) =>
           (form[
             value
-          ] = `${globalConfig.remoteStaticUrl}/music/${res.filename}`)
+          ] = `${res.filename}`)
         " v-if="component === 'uploadMusic'">
-          <audio v-if="form[value]" :src="form[value]" controls />
+          <audio v-if="form[value]" :src="`${globalConfig.remoteStaticUrl}/music/${form[value]}`" controls />
 
           <el-button v-else>
             <el-icon>
