@@ -122,6 +122,12 @@ export default [
         component: () => import("@/pages/Lines.vue"),
       },
       {
+        title: "文案管理",
+        path: "experience",
+        icon: ChatRound,
+        component: () => import("@/pages/Experience.vue"),
+      },
+      {
         title: "用户管理",
         path: "user",
         icon: User,
