@@ -14,15 +14,13 @@ export const handleAddOrUpdate = (record, formRef) => {
     const defaultValueArr = formRef.value.formData.filter(
       (item) => item.defaultValue
     );
-
     Object.keys(formRef.value.form).forEach((key) => {
-      defaultValueArr.forEach((v) => {
-        if (v.value === key) {
-          formRef.value.form[key] = v.defaultValue;
-        } else {
-          formRef.value.form[key] = "";
-        }
-      });
+      const has = defaultValueArr.find(item => item.value === key)
+      if (has) {
+        formRef.value.form[key] = has.defaultValue;
+      } else {
+        formRef.value.form[key] = "";
+      }
     });
   }
   formRef.value.handleVisible(true);
