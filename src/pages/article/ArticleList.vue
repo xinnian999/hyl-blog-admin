@@ -33,6 +33,16 @@ const changePublish = (val, record) => {
     });
 };
 
+const changePublishBanner = (val, record) => {
+  request
+    .put("/article/update", { publishBanner: val, id: record.id })
+    .then((res) => {
+      if (res.status === 0) {
+        tableRef.value.handleRefresh();
+      }
+    });
+};
+
 const changeTopping = (val, record) => {
   request
     .put("/article/update", { topping: val, id: record.id })
@@ -110,9 +120,22 @@ const columns = [
     ),
   },
   {
+    title: "上架到轮播图",
+    dataIndex: "publishBanner",
+    fixed: "right",
+    width: 200,
+    render: (record) => (
+      <ElSwitch
+        model-value={record.publishBanner}
+        active-value={1}
+        inactive-value={0}
+        onChange={(val) => changePublishBanner(val, record)}
+      />
+    ),
+  },
+  {
     title: "是否置顶",
-    dataIndex: "publish",
-    // sortable: true,
+    dataIndex: "topping",
     fixed: "right",
     render: (record) => (
       <ElSwitch
@@ -123,6 +146,7 @@ const columns = [
       />
     ),
   },
+
 ];
 
 const moreAction = [
