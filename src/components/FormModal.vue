@@ -13,11 +13,10 @@
         multiple,
         placeholder,
         blur,
-      } in formData" :key="value" :prop="value" :label="label" label-width="80px" :rules="
-  required
+      } in formData" :key="value" :prop="value" :label="label" label-width="80px" :rules="required
     ? { required: true, message: `请输入${label}`, trigger: 'blur' }
     : null
-">
+  ">
         <el-input v-model="form[value]" autocomplete="off" v-if="component === 'input'" />
 
         <el-input v-model="form[value]" autocomplete="off" v-if="component === 'password'" show-password
@@ -37,23 +36,18 @@
         </el-select>
 
         <el-upload v-model="form[value]" class="avatar-uploader" :action="`/api/upload/${uploadName}`" :name="uploadName"
-          :show-file-list="false" :on-success="
-            (res) => {
+          :show-file-list="false" :on-success="(res) => {
               form.picture = res.filename;
             }
-          " v-if="component === 'uploadPicture'">
+            " v-if="component === 'uploadPicture'">
           <img v-if="form[value]" :src="`${globalConfig.remoteStaticUrl}/image/${form[value]}`" class="avatar" />
           <el-icon v-else class="avatar-uploader-icon">
             <Plus />
           </el-icon>
         </el-upload>
 
-        <el-upload v-model="form[value]" action="api/upload/music" name="music" :show-file-list="false" :on-success="
-          (res) =>
-          (form[
-            value
-          ] = `${res.filename}`)
-        " v-if="component === 'uploadMusic'">
+        <el-upload v-model="form[value]" action="api/upload/music" name="music" :show-file-list="false"
+          :on-success="(res) => (form[value] = `${res.filename}`)" v-if="component === 'uploadMusic'">
           <audio v-if="form[value]" :src="`${globalConfig.remoteStaticUrl}/music/${form[value]}`" controls />
 
           <el-button v-else>
@@ -113,11 +107,21 @@ onMounted(() => {
   });
 });
 
-const handleVisible = (value) => {
-  visible.value = value;
+const reset = () => {
+  props.formData.forEach(({ defaultValue, value }) => {
+    if (defaultValue) {
+      form[value] = defaultValue;
+    } else {
+      form[value] = "";
+    }
+  });
+  form.id = null
 };
 
-
+const handleVisible = (visi) => {
+  // if (!visi) reset();
+  visible.value = visi;
+};
 
 const handleUploadImage = (event, insertImage, files) => {
   const formData = new FormData();
@@ -175,7 +179,7 @@ const onFullscreen = (isFullscreen) => {
   }
 };
 
-defineExpose({ handleVisible, form, formRef, formData: props.formData });
+defineExpose({ handleVisible, reset, form, formRef, formData: props.formData });
 </script>
 
 <style lang="less">

@@ -39,11 +39,6 @@ export default [
         path: "articleCategory",
         component: () => import("../pages/article/Category.vue"),
       },
-      {
-        title: "文章回收站",
-        path: "recycleBin",
-        component: () => import("../pages/article/RecycleBin.vue"),
-      },
     ],
   },
 
@@ -71,6 +66,12 @@ export default [
     path: "/link",
     icon: Link,
     component: () => import("../pages/Link.vue"),
+  },
+  {
+    title: "标签管理",
+    path: "/tag",
+    icon: Link,
+    component: () => import("../pages/Tag.vue"),
   },
   {
     title: "评论留言管理",
