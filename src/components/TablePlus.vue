@@ -1,6 +1,8 @@
 <template>
   <div class="grid-table">
     <div class="toolbar">
+      <el-button class="selected" type="primary" :icon="Search" @click="handleSearch">已选 {{ data.selected.length
+      }}</el-button>
       <div class="searchBar">
         <el-select v-model="data.searchType" placeholder="搜索字段" :clearable="true" @clear="onClearSearch">
           <template v-for="item in columns">
@@ -9,7 +11,7 @@
         </el-select>
         <el-input v-model="data.search" :disabled="!data.searchType" placeholder="请输入搜索关键词" @input="handleSearch"
           clearable />
-        <!-- <el-button type="primary" :icon="Search" @click="handleSearch" /> -->
+
       </div>
 
       <div class="toolButton">
@@ -28,7 +30,8 @@
     </div>
 
     <el-table :data="data.dataSource" v-loading="data.isLoading" height="100%" stripe :default-sort="defaultSort"
-      @sort-change="handleSortChange">
+      @sort-change="handleSortChange" @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55" />
       <el-table-column v-for="{ title, dataIndex, render, width, fixed, sortable } in columns" :key="dataIndex"
         :prop="dataIndex" :label="title" :formatter="render" :width="width" :fixed="fixed" :sortable="sortable" />
 
@@ -89,7 +92,8 @@ const data = reactive({
   total: 0,
   search: "",
   searchType: "",
-  orderBys: {}
+  orderBys: {},
+  selected: []
 });
 
 
@@ -125,6 +129,10 @@ const handleSortChange = ({ prop, order }) => {
     data.orderBys = {}
   }
   handleRefresh()
+}
+
+const handleSelectionChange = (rows) => {
+  data.selected = rows
 }
 
 const onClearSearch = () => {
@@ -232,6 +240,11 @@ defineExpose({ handleRefresh });
 
   .toolbar {
     .flex;
+    margin-bottom: 5px;
+
+    .selected {
+      margin-right: 15px;
+    }
 
     .searchBar {
       display: flex;
