@@ -7,8 +7,9 @@
             <el-option :key="item.dataIndex" :label="item.title" :value="item.dataIndex" v-if="item.filter" />
           </template>
         </el-select>
-        <el-input v-model="data.search" placeholder="请输入搜索关键词" @change="handleSearch" clearable />
-        <el-button type="primary" :icon="Search" @click="handleSearch" />
+        <el-input v-model="data.search" :disabled="!data.searchType" placeholder="请输入搜索关键词" @input="handleSearch"
+          clearable />
+        <!-- <el-button type="primary" :icon="Search" @click="handleSearch" /> -->
       </div>
 
       <div class="toolButton">
@@ -25,7 +26,9 @@
         <el-button type="primary" :icon="Refresh" @click="handleRefresh" /> -->
       </div>
     </div>
-    <el-table :data="data.dataSource" v-loading="data.isLoading" height="100%" stripe>
+
+    <el-table :data="data.dataSource" v-loading="data.isLoading" height="100%" stripe :default-sort="defaultSort"
+      @sort-change="handleSortChange">
       <el-table-column v-for="{ title, dataIndex, render, width, fixed, sortable } in columns" :key="dataIndex"
         :prop="dataIndex" :label="title" :formatter="render" :width="width" :fixed="fixed" :sortable="sortable" />
 
@@ -52,7 +55,8 @@
 import { defineProps, defineExpose, reactive, onMounted, ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { request } from "@/utils";
-import { Plus, Refresh, Search } from "@element-plus/icons-vue";
+import { Plus, Refresh } from "@element-plus/icons-vue";
+import { pick, debounce } from 'lodash'
 
 const props = defineProps({
   rowAction: {
@@ -69,6 +73,10 @@ const props = defineProps({
     default: () => [],
     type: Array,
   },
+  defaultSort: {
+    default: () => ({ prop: 'createTime', order: 'descending' }),
+    type: Object,
+  }
 });
 
 const formModalRef = ref();
@@ -81,7 +89,9 @@ const data = reactive({
   total: 0,
   search: "",
   searchType: "",
+  orderBys: {}
 });
+
 
 const handleRefresh = async () => {
   data.isLoading = true;
@@ -90,12 +100,11 @@ const handleRefresh = async () => {
     status,
     data: dataSource,
     total,
-  } = await request("/current/query", {
+  } = await request(`/current/query/${props.table}`, {
     params: {
-      orderBys: {},
+      orderBys: data.orderBys,
       pageSize: data.pageSize,
       pageNum: data.pageNum,
-      table: props.table,
       filters: data.search ? { [data.searchType]: data.search } : {},
     },
   });
@@ -107,15 +116,16 @@ const handleRefresh = async () => {
   }
 };
 
-const handleSearch = () => {
-  if (!data.search) {
-    return ElMessage.error("请输入搜索词");
+const handleSearch = debounce(handleRefresh, 700);
+
+const handleSortChange = ({ prop, order }) => {
+  if (prop && order) {
+    data.orderBys = { [prop]: order.replace('ending', '') }
+  } else {
+    data.orderBys = {}
   }
-  if (!data.searchType) {
-    return ElMessage.error("请选择搜索字段");
-  }
-  handleRefresh();
-};
+  handleRefresh()
+}
 
 const onClearSearch = () => {
   data.searchType = "";
@@ -130,9 +140,16 @@ const handleAdd = () => {
 
 const handleUpdate = (rowData) => {
   formModalRef.value.handleVisible(true);
+
+  //数据回显
+  const formFields = props.formData.map(item => item.value)
   Object.assign(
     formModalRef.value.form,
-    rowData
+    pick(rowData, formFields)
+  );
+  Object.assign(
+    formModalRef.value.form,
+    { id: rowData.id }
   );
 };
 
@@ -146,10 +163,7 @@ const handleOk = () => {
 
   validate(async (valid) => {
     if (valid) {
-      const { status } = await request[form.id ? "put" : "post"](`/current/${form.id ? "update" : "add"}`, {
-        table: props.table,
-        ...form,
-      });
+      const { status } = await request[form.id ? "put" : "post"](`/current/${form.id ? "update" : "add"}/${props.table}`, form);
 
       if (status === 0) {
         handleRefresh();
@@ -182,12 +196,10 @@ const handleDelete = (id) => {
 };
 
 onMounted(() => {
+  data.orderBys[props.defaultSort.prop] = props.defaultSort.order.replace('ending', '')
+
   handleRefresh();
 
-  const defaultSearch = props.columns.filter((item) => item.filter);
-  if (defaultSearch.length) {
-    data.searchType = defaultSearch[0].dataIndex;
-  }
 });
 
 //  抛出方法
