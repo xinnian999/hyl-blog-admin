@@ -1,8 +1,29 @@
 <template>
   <div class="grid-table">
     <div class="toolbar">
-      <el-button class="selected" type="primary" :icon="Search" @click="handleSearch">已选 {{ data.selected.length
-      }}</el-button>
+
+      <el-popover placement="bottom-start" title="已选" width="70vw" trigger="click">
+        <template #reference>
+          <el-button class="selected" type="primary">已选 {{ data.selected.length
+          }}</el-button>
+        </template>
+        <div class="batchActions">
+          <el-button-group>
+            <!-- <el-button type="warning" @click="handleBatchUpdate(record.row)">批量修改</el-button> -->
+            <el-button type="danger" @click="handleBatchDelete">批量删除</el-button>
+          </el-button-group>
+        </div>
+        <el-table :data="data.selected">
+          <el-table-column v-for="{ title, dataIndex, render, width, fixed, sortable } in columns" :key="dataIndex"
+            :prop="dataIndex" :label="title" :formatter="render" :width="width" :fixed="fixed" :sortable="sortable" />
+          <el-table-column fixed="right" label width="150">
+            <template #default="record">
+              <el-button type="danger" @click="handleUnSelected(record.row.id)">移除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-popover>
+
       <div class="searchBar">
         <el-select v-model="data.searchType" placeholder="搜索字段" :clearable="true" @clear="onClearSearch">
           <template v-for="item in columns">
@@ -17,15 +38,6 @@
       <div class="toolButton">
         <el-button type="success" :icon="Plus" @click="handleAdd">新增</el-button>
         <el-button type="primary" :icon="Refresh" @click="handleRefresh" />
-        <!-- <el-button
-          :key="name"
-          v-for="{ name, type, handle, icon } in toolbarAction"
-          :type="type"
-          :icon="icon"
-          @click="handle"
-          >{{ name }}</el-button
-        >
-        <el-button type="primary" :icon="Refresh" @click="handleRefresh" /> -->
       </div>
     </div>
 
@@ -50,7 +62,8 @@
       @current-change="handleRefresh" @size-change="handleRefresh" />
     <span class="total">共{{ data.total }}条数据</span>
 
-    <FormModal title="新增" width="60%" :formData="formData" :ok="handleOk" ref="formModalRef" />
+    <FormModal2 :title="editId ? '修改' : '新增'" width="60%" :visible="formVisible" @close="closeFormModal"
+      :formData="formData" :ok="handleOk" ref="formModalRef" />
   </div>
 </template>
 
@@ -82,7 +95,11 @@ const props = defineProps({
   }
 });
 
-const formModalRef = ref();
+const formModalRef = ref(null);
+
+const formVisible = ref(false)
+
+const editId = ref(null)
 
 const data = reactive({
   isLoading: false,
@@ -93,7 +110,7 @@ const data = reactive({
   search: "",
   searchType: "",
   orderBys: {},
-  selected: []
+  selected: [],
 });
 
 
@@ -120,6 +137,11 @@ const handleRefresh = async () => {
   }
 };
 
+const closeFormModal = () => {
+  formVisible.value = false
+  editId.value = null
+}
+
 const handleSearch = debounce(handleRefresh, 700);
 
 const handleSortChange = ({ prop, order }) => {
@@ -135,6 +157,32 @@ const handleSelectionChange = (rows) => {
   data.selected = rows
 }
 
+const handleUnSelected = (id) => {
+  data.selected = data.selected.filter(item => item.id !== id)
+}
+
+const handleBatchDelete = async () => {
+  await ElMessageBox.confirm("确认删除吗？", "删除", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+
+  const {
+    status,
+  } = await request.delete(`/current/batchDelete/${props.table}`, {
+    params: {
+      ids: data.selected.map(item => item.id)
+    },
+  });
+
+  if (status === 0) {
+    ElMessage.success("批量删除成功");
+    handleRefresh();
+  }
+
+}
+
 const onClearSearch = () => {
   data.searchType = "";
   data.search = "";
@@ -142,12 +190,13 @@ const onClearSearch = () => {
 };
 
 const handleAdd = () => {
-  formModalRef.value.handleVisible(true);
+  formVisible.value = true
   formModalRef.value.reset()
 };
 
 const handleUpdate = (rowData) => {
-  formModalRef.value.handleVisible(true);
+  formVisible.value = true
+  editId.value = rowData.id
 
   //数据回显
   const formFields = props.formData.map(item => item.value)
@@ -155,35 +204,21 @@ const handleUpdate = (rowData) => {
     formModalRef.value.form,
     pick(rowData, formFields)
   );
-  Object.assign(
-    formModalRef.value.form,
-    { id: rowData.id }
-  );
+
 };
 
-const handleOk = () => {
-  const {
-    formRef: { validate },
-    form,
-    handleVisible,
-    reset,
-  } = formModalRef.value;
+const handleOk = async (values) => {
+  if (editId.value) {
+    Object.assign(values, { id: editId.value })
+  }
+  const { status } = await request[editId.value ? "put" : "post"](`/current/${editId.value ? "update" : "add"}/${props.table}`, values);
 
-  validate(async (valid) => {
-    if (valid) {
-      const { status } = await request[form.id ? "put" : "post"](`/current/${form.id ? "update" : "add"}/${props.table}`, form);
-
-      if (status === 0) {
-        handleRefresh();
-        handleVisible(false);
-        reset();
-        ElMessage.success(`${form.id ? "更新" : "新增"}成功`);
-      }
-    } else {
-      console.log("error submit!");
-      return false;
-    }
-  });
+  if (status === 0) {
+    ElMessage.success(`${editId.value ? "更新" : "新增"}成功`);
+    closeFormModal()
+    formModalRef.value.reset();
+    handleRefresh();
+  }
 };
 
 const handleDelete = (id) => {
@@ -193,7 +228,7 @@ const handleDelete = (id) => {
     type: "warning",
   }).then(() => {
     request
-      .delete("/current/delete", { params: { table: props.table, id } })
+      .delete(`/current/delete/${props.table}`, { params: { id } })
       .then((res) => {
         if (res.status === 0) {
           ElMessage.success("删除成功");
@@ -219,6 +254,11 @@ defineExpose({ handleRefresh });
   display: flex;
 }
 
+.batchActions {
+  display: flex;
+  justify-content: right;
+}
+
 .grid-table {
   display: flex;
   height: 100%;
@@ -238,6 +278,8 @@ defineExpose({ handleRefresh });
     margin: 0 15px 15px;
   }
 
+
+
   .toolbar {
     .flex;
     margin-bottom: 5px;
@@ -245,6 +287,8 @@ defineExpose({ handleRefresh });
     .selected {
       margin-right: 15px;
     }
+
+
 
     .searchBar {
       display: flex;

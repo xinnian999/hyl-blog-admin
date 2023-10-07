@@ -3,6 +3,14 @@ import { ElMessage, ElMessageBox } from "element-plus";
 
 const request = axios.create({
   baseURL: "/api",
+  paramsSerializer: (params) => {
+    return Object.keys(params)
+      .map((key) => {
+        if (typeof params[key] !== "object") return `${key}=${params[key]}`;
+        return `${key}=${encodeURI(JSON.stringify(params[key]))}`;
+      })
+      .join("&");
+  },
 });
 
 request.interceptors.request.use((config) => {

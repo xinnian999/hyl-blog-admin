@@ -2,9 +2,8 @@
   <GridTable :params="params" :remotePage="true" :columns="columns" :moreAction="moreAction"
     :toolbarAction="toolbarAction" title="所有文章" search="/article/search" ref="tableRef" />
 
-  <FormModal :title="currentRecord ? `编辑文章` : '写文章'" :formData="formData" :ok="
-    (closeModal) => handleOk('article', formRef, tableRef, null, closeModal)
-  " :currentRecord="currentRecord" ref="formRef" />
+  <FormModal :title="currentRecord ? `编辑文章` : '写文章'" :formData="formData" :ok="(closeModal) => handleOk('article', formRef, tableRef, null, closeModal)
+    " :currentRecord="currentRecord" ref="formRef" />
 </template>
 
 <script setup>
@@ -227,7 +226,6 @@ const formData = [
   {
     label: "文章海报",
     value: "picture",
-    required: true,
     component: "uploadPicture",
     uploadName: "image",
   },
