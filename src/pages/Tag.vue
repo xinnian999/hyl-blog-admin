@@ -7,8 +7,8 @@ const columns = [
   {
     title: "标签名称",
     dataIndex: "name",
-    sortable: 'custom',
-    filter: true
+    sortable: true,
+    search: true
   },
   {
     title: "关联数量",
@@ -17,7 +17,7 @@ const columns = [
   {
     title: "ID",
     dataIndex: "id",
-    sortable: 'custom',
+    sortable: true,
   },
 ];
 

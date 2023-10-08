@@ -8,7 +8,6 @@
           }}</el-button>
         </template>
         <el-button-group>
-          <!-- <el-button type="warning" @click="handleBatchUpdate(record.row)">批量修改</el-button> -->
           <el-button type="danger" @click="handleBatchDelete">批量删除</el-button>
         </el-button-group>
         <el-table :data="data.selected">
@@ -28,10 +27,10 @@
       <div class="searchBar">
         <el-select v-model="data.searchType" placeholder="搜索字段" :clearable="true" @clear="onClearSearch">
           <template v-for="item in columns">
-            <el-option :key="item.dataIndex" :label="item.title" :value="item.dataIndex" v-if="item.filter" />
+            <el-option :key="item.dataIndex" :label="item.title" :value="item.dataIndex" v-if="item.search" />
           </template>
         </el-select>
-        <el-input v-model="data.search" :disabled="!data.searchType" placeholder="请输入搜索关键词" @input="handleSearch"
+        <el-input v-model="data.searchQ" :disabled="!data.searchType" placeholder="请输入搜索关键词" @input="handleSearch"
           clearable />
 
       </div>
@@ -43,11 +42,13 @@
     </div>
 
     <el-table :data="data.dataSource" v-loading="data.isLoading" height="100%" stripe :default-sort="defaultSort"
-      @sort-change="handleSortChange" @selection-change="handleSelectionChange" row-key="id" empty-text="暂无数据"
-      ref="tableRef">
+      @sort-change="handleSortChange" @selection-change="handleSelectionChange" @filter-change="handleFilterChange"
+      row-key="id" empty-text="暂无数据" ref="tableRef">
       <el-table-column type="selection" width="55" :reserve-selection="true" />
-      <el-table-column v-for="{ title, dataIndex, render, width, fixed, sortable } in columns" :key="dataIndex"
-        :prop="dataIndex" :label="title" :formatter="render" :width="width" :fixed="fixed" :sortable="sortable" />
+
+      <el-table-column v-for="{ title, dataIndex, render, width, fixed, sortable, filters } in columns" :key="dataIndex"
+        :prop="dataIndex" :label="title" :formatter="render" :width="width" :fixed="fixed"
+        :sortable="sortable && 'custom'" :filters="filters" :column-key="dataIndex" :filter-multiple="false" />
 
       <el-table-column fixed="right" label width="150">
         <template #default="record">
@@ -81,7 +82,7 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
-  table: { type: String, default: "article" },
+  table: { type: String, required: true },
   columns: { default: () => [], type: Array },
   toolbarAction: {
     default: () => [],
@@ -111,10 +112,11 @@ const data = reactive({
   pageNum: 1,
   pageSize: 10,
   total: 0,
-  search: "",
+  searchQ: "",
   searchType: "",
   orderBys: {},
   selected: [],
+  filters: {}
 });
 
 
@@ -130,7 +132,7 @@ const handleRefresh = async () => {
       orderBys: data.orderBys,
       pageSize: data.pageSize,
       pageNum: data.pageNum,
-      filters: data.search ? { [data.searchType]: data.search } : {},
+      filters: data.filters,
     },
   });
 
@@ -146,7 +148,11 @@ const closeFormModal = () => {
   editId.value = null
 }
 
-const handleSearch = debounce(handleRefresh, 700);
+const handleSearch = debounce(() => {
+  data.filters = data.searchQ ? { [data.searchType]: data.searchQ } : {}
+  tableRef.value.clearFilter()
+  handleRefresh()
+}, 700);
 
 const handleSortChange = ({ prop, order }) => {
   if (prop && order) {
@@ -168,6 +174,13 @@ const handleUnSelected = (row) => {
 
 const clearSelected = () => {
   tableRef.value.clearSelection()
+}
+
+const handleFilterChange = (filters) => {
+  data.filters = filters
+  data.searchType = "";
+  data.searchQ = "";
+  handleRefresh()
 }
 
 const handleBatchDelete = async () => {
@@ -195,7 +208,7 @@ const handleBatchDelete = async () => {
 
 const onClearSearch = () => {
   data.searchType = "";
-  data.search = "";
+  data.searchQ = "";
   handleRefresh();
 };
 

@@ -1,27 +1,24 @@
 <template>
-  <GridTable :params="params" :remotePage="true" :columns="columns" :moreAction="moreAction"
-    :toolbarAction="toolbarAction" title="所有文章" search="/article/search" ref="tableRef" />
-
-  <FormModal :title="currentRecord ? `编辑文章` : '写文章'" :formData="formData" :ok="(closeModal) => handleOk('article', formRef, tableRef, null, closeModal)
-    " :currentRecord="currentRecord" ref="formRef" />
+  <TablePlus table="article" :columns="columns" :formData="formData" ref="tableRef" />
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { ElImage, ElSwitch } from "element-plus";
-import { Plus } from "@element-plus/icons-vue";
 import {
-  handleDelete,
-  handleAddOrUpdate,
-  handleOk,
   formatTime,
   request,
 } from "@/utils";
 
 const tableRef = ref();
-const formRef = ref();
 
-const currentRecord = ref(null);
+const categoryOptions = ref([]);
+
+onMounted(async () => {
+  const { data } = await request('/current/query/category')
+  categoryOptions.value = data.map(({ name }) => ({ text: name, value: name }))
+})
+
 const changePublish = (val, record) => {
   request
     .put("/article/update", { publish: val, id: record.id })
@@ -52,13 +49,6 @@ const changeTopping = (val, record) => {
     });
 };
 
-const params = {
-  path: "/article/query",
-  data: {
-    orderBys: "topping desc,id desc",
-  },
-};
-
 const columns = [
   {
     title: "文章海报",
@@ -79,25 +69,28 @@ const columns = [
   {
     title: "标题",
     dataIndex: "title",
-    filter: true,
+    search: true,
     width: 300,
   },
   {
     title: "分类",
     dataIndex: "category",
-    filter: true,
+    search: true,
     width: 150,
+    filters: categoryOptions
   },
   {
     title: "阅读次数",
     dataIndex: "visits",
-    width: 100,
+    width: 150,
+    sortable: true,
   },
   {
     title: "发布时间",
     width: 200,
     dataIndex: "createTime",
     render: (record) => formatTime(record.createTime),
+    sortable: true,
   },
   {
     title: "更新时间",
@@ -148,35 +141,6 @@ const columns = [
 
 ];
 
-const moreAction = [
-  {
-    title: "编辑",
-    status: "success",
-    handle: (record) => {
-      if (!Array.isArray(record.category)) {
-        record.category = record.category.split(',')
-
-      }
-      currentRecord.value = record;
-
-      handleAddOrUpdate(record, formRef);
-    },
-  },
-  {
-    status: "danger",
-    title: "删除",
-    handle: (record) => handleDelete("/article/delete", record.id, tableRef),
-  },
-];
-
-const toolbarAction = [
-  {
-    name: "写文章",
-    type: "success",
-    icon: Plus,
-    handle: () => handleAddOrUpdate(null, formRef),
-  },
-];
 
 const formData = [
   {
