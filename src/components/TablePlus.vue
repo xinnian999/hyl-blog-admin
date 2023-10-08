@@ -2,23 +2,24 @@
   <div class="grid-table">
     <div class="toolbar">
 
-      <el-popover placement="bottom-start" title="已选" width="70vw" trigger="click">
+      <el-popover placement="bottom-start" width="70vw" trigger="click">
         <template #reference>
           <el-button class="selected" type="primary">已选 {{ data.selected.length
           }}</el-button>
         </template>
-        <div class="batchActions">
-          <el-button-group>
-            <!-- <el-button type="warning" @click="handleBatchUpdate(record.row)">批量修改</el-button> -->
-            <el-button type="danger" @click="handleBatchDelete">批量删除</el-button>
-          </el-button-group>
-        </div>
+        <el-button-group>
+          <!-- <el-button type="warning" @click="handleBatchUpdate(record.row)">批量修改</el-button> -->
+          <el-button type="danger" @click="handleBatchDelete">批量删除</el-button>
+        </el-button-group>
         <el-table :data="data.selected">
           <el-table-column v-for="{ title, dataIndex, render, width, fixed, sortable } in columns" :key="dataIndex"
             :prop="dataIndex" :label="title" :formatter="render" :width="width" :fixed="fixed" :sortable="sortable" />
-          <el-table-column fixed="right" label width="150">
+          <el-table-column fixed="right" width="150">
+            <template #header>
+              <el-button type="danger" @click="clearSelected">清空</el-button>
+            </template>
             <template #default="record">
-              <el-button type="danger" @click="handleUnSelected(record.row.id)">移除</el-button>
+              <el-button type="primary" @click="handleUnSelected(record.row)">移除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -42,8 +43,9 @@
     </div>
 
     <el-table :data="data.dataSource" v-loading="data.isLoading" height="100%" stripe :default-sort="defaultSort"
-      @sort-change="handleSortChange" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" />
+      @sort-change="handleSortChange" @selection-change="handleSelectionChange" row-key="id" empty-text="暂无数据"
+      ref="tableRef">
+      <el-table-column type="selection" width="55" :reserve-selection="true" />
       <el-table-column v-for="{ title, dataIndex, render, width, fixed, sortable } in columns" :key="dataIndex"
         :prop="dataIndex" :label="title" :formatter="render" :width="width" :fixed="fixed" :sortable="sortable" />
 
@@ -96,6 +98,8 @@ const props = defineProps({
 });
 
 const formModalRef = ref(null);
+
+const tableRef = ref(null);
 
 const formVisible = ref(false)
 
@@ -157,8 +161,13 @@ const handleSelectionChange = (rows) => {
   data.selected = rows
 }
 
-const handleUnSelected = (id) => {
-  data.selected = data.selected.filter(item => item.id !== id)
+const handleUnSelected = (row) => {
+
+  tableRef.value.toggleRowSelection(row, false)
+}
+
+const clearSelected = () => {
+  tableRef.value.clearSelection()
 }
 
 const handleBatchDelete = async () => {
@@ -179,6 +188,7 @@ const handleBatchDelete = async () => {
   if (status === 0) {
     ElMessage.success("批量删除成功");
     handleRefresh();
+    clearSelected()
   }
 
 }
