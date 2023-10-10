@@ -1,27 +1,11 @@
 <template>
-  <GridTable :params="params" :moreAction="moreAction" :toolbarAction="toolbarAction" :columns="columns" title="收藏资源管理"
-    ref="tableRef" />
-  <FormModal title="新增收藏" width="40%" :formData="formData" :ok="() => handleOk('collection', formRef, tableRef)"
-    ref="formRef" />
+  <TablePlus table="collection" :columns="columns" :formData="formData" />
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { Plus } from "@element-plus/icons-vue";
-import {
-  handleAddOrUpdate,
-  handleOk,
-  handleDelete,
-  globalConfig,
-} from "@/utils";
 
-const tableRef = ref();
-const formRef = ref();
+import { globalConfig } from "@/utils";
 
-const params = {
-  path: "/collection/query",
-  data: {},
-};
 
 const columns = [
   {
@@ -56,27 +40,6 @@ const columns = [
   },
 ];
 
-const toolbarAction = [
-  {
-    name: "新增",
-    type: "success",
-    icon: Plus,
-    handle: () => handleAddOrUpdate(null, formRef),
-  },
-];
-
-const moreAction = [
-  {
-    title: "编辑",
-    status: "success",
-    handle: (record) => handleAddOrUpdate(record, formRef),
-  },
-  {
-    status: "danger",
-    title: "删除",
-    handle: (record) => handleDelete("/collection/delete", record.id, tableRef),
-  },
-];
 
 const formData = [
   {

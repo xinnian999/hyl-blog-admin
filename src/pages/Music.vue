@@ -1,27 +1,9 @@
 <template>
-  <GridTable :params="params" :moreAction="moreAction" :toolbarAction="toolbarAction" :columns="columns" title="歌曲管理"
-    ref="tableRef" />
-  <FormModal title="新增歌曲" width="40%" :formData="formData" :ok="() => handleOk('music', formRef, tableRef)"
-    ref="formRef" />
+  <TablePlus table="music" :columns="columns" :formData="formData" />
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { Plus } from "@element-plus/icons-vue";
-import {
-  handleAddOrUpdate,
-  handleOk,
-  handleDelete,
-  globalConfig,
-} from "@/utils";
-
-const tableRef = ref();
-const formRef = ref();
-
-const params = {
-  path: "/music/query",
-  data: {},
-};
+import { globalConfig } from "@/utils";
 
 const columns = [
   {
@@ -53,28 +35,6 @@ const columns = [
         controls
       />
     ),
-  },
-];
-
-const toolbarAction = [
-  {
-    name: "新增",
-    type: "success",
-    icon: Plus,
-    handle: () => handleAddOrUpdate(null, formRef),
-  },
-];
-
-const moreAction = [
-  {
-    title: "编辑",
-    status: "success",
-    handle: (record) => handleAddOrUpdate(record, formRef),
-  },
-  {
-    status: "danger",
-    title: "删除",
-    handle: (record) => handleDelete("/music/delete", record.id, tableRef),
   },
 ];
 

@@ -1,80 +1,181 @@
 <template>
   <div class="grid-table">
     <div class="toolbar">
-
       <el-popover placement="bottom-start" width="70vw" trigger="click">
         <template #reference>
-          <el-button class="selected" type="primary">已选 {{ data.selected.length
-          }}</el-button>
+          <el-button class="selected" type="primary"
+            >已选 {{ data.selected.length }}</el-button
+          >
         </template>
         <el-button-group>
-          <el-button type="danger" @click="handleBatchDelete">批量删除</el-button>
+          <el-button type="danger" @click="handleBatchDelete"
+            >批量删除</el-button
+          >
         </el-button-group>
         <el-table :data="data.selected">
-          <el-table-column v-for="{ title, dataIndex, render, width, fixed, sortable } in columns" :key="dataIndex"
-            :prop="dataIndex" :label="title" :formatter="render" :width="width" :fixed="fixed" :sortable="sortable" />
+          <el-table-column
+            v-for="{
+              title,
+              dataIndex,
+              render,
+              width,
+              fixed,
+              sortable,
+            } in columns"
+            :key="dataIndex"
+            :prop="dataIndex"
+            :label="title"
+            :formatter="render"
+            :width="width"
+            :fixed="fixed"
+            :sortable="sortable"
+          />
           <el-table-column fixed="right" width="150">
             <template #header>
               <el-button type="danger" @click="clearSelected">清空</el-button>
             </template>
             <template #default="record">
-              <el-button type="primary" @click="handleUnSelected(record.row)">移除</el-button>
+              <el-button type="primary" @click="handleUnSelected(record.row)"
+                >移除</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
       </el-popover>
 
       <div class="searchBar">
-        <el-select v-model="data.searchType" placeholder="搜索字段" :clearable="true" @clear="onClearSearch">
+        <el-select
+          v-model="data.searchType"
+          placeholder="搜索字段"
+          :clearable="true"
+          @clear="onClearSearch"
+        >
           <template v-for="item in columns">
-            <el-option :key="item.dataIndex" :label="item.title" :value="item.dataIndex" v-if="item.search" />
+            <el-option
+              :key="item.dataIndex"
+              :label="item.title"
+              :value="item.dataIndex"
+              v-if="item.search"
+            />
           </template>
         </el-select>
-        <el-input v-model="data.searchQ" :disabled="!data.searchType" placeholder="请输入搜索关键词" @input="handleSearch"
-          clearable />
-
+        <el-input
+          v-model="data.searchQ"
+          :disabled="!data.searchType"
+          placeholder="请输入搜索关键词"
+          @input="handleSearch"
+          clearable
+        />
       </div>
 
       <div class="toolButton">
-        <el-button type="success" size="small" :icon="Plus" @click="handleAdd">新增</el-button>
+        <el-button
+          type="success"
+          size="small"
+          :icon="Plus"
+          @click="handleAdd"
+          :disabled="disabled.includes('add')"
+          >新增</el-button
+        >
         <el-button type="primary" :icon="Refresh" @click="fetchData" />
       </div>
     </div>
 
-    <el-table :data="data.dataSource" v-loading="data.isLoading" height="100%" stripe :default-sort="defaultSort"
-      @sort-change="handleSortChange" @selection-change="handleSelectionChange" @filter-change="handleFilterChange"
-      row-key="id" empty-text="暂无数据" ref="tableRef">
+    <el-table
+      :data="data.dataSource"
+      v-loading="data.isLoading"
+      height="100%"
+      stripe
+      :default-sort="defaultSort"
+      @sort-change="handleSortChange"
+      @selection-change="handleSelectionChange"
+      @filter-change="handleFilterChange"
+      row-key="id"
+      empty-text="暂无数据"
+      ref="tableRef"
+    >
       <el-table-column type="selection" width="55" :reserve-selection="true" />
 
-      <el-table-column v-for="{ title, dataIndex, render, width, fixed, sortable, filters } in data.initColumns"
-        :key="dataIndex" :prop="dataIndex" :label="title" :formatter="render" :width="width" :fixed="fixed"
-        :sortable="sortable && 'custom'" :filters="filters" :column-key="dataIndex" :filter-multiple="false" />
+      <el-table-column
+        v-for="{
+          title,
+          dataIndex,
+          render,
+          width,
+          fixed,
+          sortable,
+          filters,
+        } in data.initColumns"
+        :key="dataIndex"
+        :prop="dataIndex"
+        :label="title"
+        :formatter="render"
+        :width="width"
+        :fixed="fixed"
+        :sortable="sortable && 'custom'"
+        :filters="filters"
+        :column-key="dataIndex"
+        :filter-multiple="false"
+      />
 
       <el-table-column fixed="right" label="操作" width="150">
         <template #default="record">
           <el-space>
-            <el-button type="warning" circle :icon="Edit" @click="handleUpdate(record.row)"></el-button>
-            <el-button type="danger" circle :icon="Delete" @click="handleDelete(record.row.id)"></el-button>
+            <el-button
+              type="warning"
+              circle
+              :icon="Edit"
+              :disabled="disabled.includes('edit')"
+              @click="handleUpdate(record.row)"
+            ></el-button>
+            <el-button
+              type="danger"
+              circle
+              :icon="Delete"
+              :disabled="disabled.includes('delete')"
+              @click="handleDelete(record.row.id)"
+            ></el-button>
           </el-space>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-pagination class="pagination" v-model:page-size="params.pageSize" v-model:currentPage="params.pageNum" background
-      layout="sizes, prev, pager, next" :page-sizes="[5, 10, 20, 50, 100]" :total="data.total" />
+    <el-pagination
+      class="pagination"
+      v-model:page-size="params.pageSize"
+      v-model:currentPage="params.pageNum"
+      background
+      layout="sizes, prev, pager, next"
+      :page-sizes="[5, 10, 20, 50, 100]"
+      :total="data.total"
+    />
     <span class="total">共{{ data.total }}条数据</span>
 
-    <FormModal2 :title="data.editId ? '修改' : '新增'" width="60%" :visible="formVisible" @close="closeFormModal"
-      :formData="formData" :ok="handleOk" ref="formModalRef" />
+    <FormModal2
+      :title="data.editId ? '修改' : '新增'"
+      width="60%"
+      :visible="formVisible"
+      @close="closeFormModal"
+      :formData="formData"
+      :ok="handleOk"
+      ref="formModalRef"
+    />
   </div>
 </template>
 
 <script setup>
-import { defineProps, defineExpose, watch, reactive, onMounted, ref } from "vue";
+import {
+  defineProps,
+  defineExpose,
+  watch,
+  reactive,
+  onMounted,
+  ref,
+} from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { request } from "@/utils";
 import { Plus, Refresh, Edit, Delete } from "@element-plus/icons-vue";
-import { pick, debounce } from 'lodash'
+import { pick, debounce } from "lodash";
 
 const props = defineProps({
   rowAction: {
@@ -92,17 +193,20 @@ const props = defineProps({
     type: Array,
   },
   defaultSort: {
-    default: () => ({ prop: 'createTime', order: 'descending' }),
+    default: () => ({ prop: "createTime", order: "descending" }),
     type: Object,
-  }
+  },
+  disabled: {
+    default: () => [],
+    type: Array,
+  },
 });
 
 const formModalRef = ref(null);
 
 const tableRef = ref(null);
 
-const formVisible = ref(false)
-
+const formVisible = ref(false);
 
 const data = reactive({
   isLoading: false,
@@ -112,7 +216,7 @@ const data = reactive({
   searchType: "",
   selected: [],
   initColumns: [],
-  editId: null
+  editId: null,
 });
 
 const params = reactive({
@@ -120,14 +224,11 @@ const params = reactive({
   pageSize: 10,
   filters: {},
   orderBys: {},
-})
+});
 
-watch(
-  params,
-  () => {
-    fetchData()
-  }
-);
+watch(params, () => {
+  fetchData();
+});
 
 const fetchData = async () => {
   data.isLoading = true;
@@ -137,7 +238,7 @@ const fetchData = async () => {
     data: dataSource,
     total,
   } = await request(`/current/query/${props.table}`, {
-    params
+    params,
   });
 
   if (status === 0) {
@@ -148,42 +249,40 @@ const fetchData = async () => {
 };
 
 const closeFormModal = () => {
-  formVisible.value = false
-  data.editId = null
-}
-
+  formVisible.value = false;
+  data.editId = null;
+};
 
 const handleFilterChange = (filters) => {
-  params.filters = filters
+  params.filters = filters;
   data.searchType = "";
   data.searchQ = "";
-}
+};
 
 const handleSortChange = ({ prop, order }) => {
   if (prop && order) {
-    params.orderBys = { [prop]: order.replace('ending', '') }
+    params.orderBys = { [prop]: order.replace("ending", "") };
   } else {
-    params.orderBys == {}
+    params.orderBys == {};
   }
-}
+};
 
 const handleSearch = debounce(() => {
-  params.filters = data.searchQ ? { [data.searchType]: data.searchQ } : {}
-  tableRef.value.clearFilter()
+  params.filters = data.searchQ ? { [data.searchType]: data.searchQ } : {};
+  tableRef.value.clearFilter();
 }, 700);
 
 const handleSelectionChange = (rows) => {
-  data.selected = rows
-}
+  data.selected = rows;
+};
 
 const handleUnSelected = (row) => {
-  tableRef.value.toggleRowSelection(row, false)
-}
+  tableRef.value.toggleRowSelection(row, false);
+};
 
 const clearSelected = () => {
-  tableRef.value.clearSelection()
-}
-
+  tableRef.value.clearSelection();
+};
 
 const onClearSearch = () => {
   data.searchType = "";
@@ -192,31 +291,31 @@ const onClearSearch = () => {
 };
 
 const handleAdd = () => {
-  formVisible.value = true
-  formModalRef.value.reset()
+  formVisible.value = true;
+  formModalRef.value.reset();
 };
 
 const handleUpdate = (rowData) => {
-  formVisible.value = true
-  data.editId = rowData.id
+  formVisible.value = true;
+  data.editId = rowData.id;
 
   //数据回显
-  const formFields = props.formData.map(item => item.value)
-  Object.assign(
-    formModalRef.value.form,
-    pick(rowData, formFields)
-  );
+  const formFields = props.formData.map((item) => item.value);
+  Object.assign(formModalRef.value.form, pick(rowData, formFields));
 };
 
 const handleOk = async (values) => {
   if (data.editId) {
-    Object.assign(values, { id: data.editId })
+    Object.assign(values, { id: data.editId });
   }
-  const { status } = await request[data.editId ? "put" : "post"](`/current/${data.editId ? "update" : "add"}/${props.table}`, values);
+  const { status } = await request[data.editId ? "put" : "post"](
+    `/current/${data.editId ? "update" : "add"}/${props.table}`,
+    values
+  );
 
   if (status === 0) {
     ElMessage.success(`${data.editId ? "更新" : "新增"}成功`);
-    closeFormModal()
+    closeFormModal();
     formModalRef.value.reset();
     fetchData();
   }
@@ -244,60 +343,67 @@ const handleBatchDelete = async () => {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning",
-  })
-
-  const {
-    status,
-  } = await request.delete(`/current/batchDelete/${props.table}`, {
-    params: {
-      ids: data.selected.map(item => item.id)
-    },
   });
+
+  const { status } = await request.delete(
+    `/current/batchDelete/${props.table}`,
+    {
+      params: {
+        ids: data.selected.map((item) => item.id),
+      },
+    }
+  );
 
   if (status === 0) {
     ElMessage.success("批量删除成功");
     fetchData();
-    clearSelected()
+    clearSelected();
   }
-
-}
+};
 
 onMounted(async () => {
   // 初始化筛选
-  params.orderBys[props.defaultSort.prop] = props.defaultSort.order.replace('ending', '')
+  params.orderBys[props.defaultSort.prop] = props.defaultSort.order.replace(
+    "ending",
+    ""
+  );
 
   // 初始化列
-  const asyncCols = props.columns.map(async item => {
-    const { dataIndex, filterKey, switchable } = item
+  const asyncCols = props.columns.map(async (item) => {
+    const { dataIndex, filterKey, switchable } = item;
     //开启过滤
     if (filterKey) {
-      const { data } = await request(`/current/query/${dataIndex}`)
+      const { data } = await request(`/current/query/${dataIndex}`);
       return {
         ...item,
-        filters: data.map(v => ({ text: v[filterKey], value: v[filterKey] }))
-      }
+        filters: data.map((v) => ({ text: v[filterKey], value: v[filterKey] })),
+      };
     }
     //开启切换
     if (switchable) {
       return {
         ...item,
-        render: (record) => <ElSwitch
-          model-value={record[dataIndex]}
-          active-value={1}
-          inactive-value={0}
-          onChange={async (val) => {
-            const { status } = await request.put(`/current/update/${props.table}`, { [dataIndex]: val, id: record.id })
-            if (status === 0) {
-              fetchData();
-            }
-          }}
-        />
-      }
+        render: (record) => (
+          <ElSwitch
+            model-value={record[dataIndex]}
+            active-value={1}
+            inactive-value={0}
+            onChange={async (val) => {
+              const { status } = await request.put(
+                `/current/update/${props.table}`,
+                { [dataIndex]: val, id: record.id }
+              );
+              if (status === 0) {
+                fetchData();
+              }
+            }}
+          />
+        ),
+      };
     }
-    return item
-  })
-  data.initColumns = await Promise.all(asyncCols)
-
+    return item;
+  });
+  data.initColumns = await Promise.all(asyncCols);
 });
 
 //  抛出方法
@@ -333,8 +439,6 @@ defineExpose({ fetchData });
     margin: 0 15px 15px;
   }
 
-
-
   .toolbar {
     .flex;
     margin-bottom: 5px;
@@ -342,8 +446,6 @@ defineExpose({ fetchData });
     .selected {
       margin-right: 15px;
     }
-
-
 
     .searchBar {
       display: flex;

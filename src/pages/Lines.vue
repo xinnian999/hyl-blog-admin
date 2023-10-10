@@ -1,23 +1,8 @@
 <template>
-  <GridTable :params="params" :moreAction="moreAction" :toolbarAction="toolbarAction" :columns="columns" title="句子管理"
-    ref="tableRef" />
-  <FormModal title="新增句子" width="40%" :formData="formData" :ok="() => handleOk('lines', formRef, tableRef)"
-    ref="formRef" />
+  <TablePlus table="linesDB" :columns="columns" :formData="formData" />
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { Plus } from "@element-plus/icons-vue";
-import { handleAddOrUpdate, handleOk, handleDelete } from "@/utils";
-
-const tableRef = ref();
-const formRef = ref();
-
-const params = {
-  path: "/lines/query",
-  data: {},
-};
-
 const columns = [
   {
     title: "名字",
@@ -30,28 +15,6 @@ const columns = [
   {
     title: "配图",
     dataIndex: "picture",
-  },
-];
-
-const toolbarAction = [
-  {
-    name: "新增",
-    type: "success",
-    icon: Plus,
-    handle: () => handleAddOrUpdate(null, formRef),
-  },
-];
-
-const moreAction = [
-  {
-    title: "编辑",
-    status: "success",
-    handle: (record) => handleAddOrUpdate(record, formRef),
-  },
-  {
-    status: "danger",
-    title: "删除",
-    handle: (record) => handleDelete("/lines/delete", record.id, tableRef),
   },
 ];
 

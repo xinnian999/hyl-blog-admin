@@ -1,22 +1,9 @@
 <template>
-  <GridTable :params="params" :moreAction="moreAction" :toolbarAction="toolbarAction" :columns="columns" title="说说管理"
-    ref="tableRef" />
-  <FormModal title="发说说" width="40%" :formData="formData" :ok="() => handleOk('mood', formRef, tableRef)"
-    ref="formRef" />
+  <TablePlus table="mood" :columns="columns" :formData="formData" />
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { Plus } from "@element-plus/icons-vue";
-import { handleAddOrUpdate, handleOk, handleDelete } from "@/utils";
 
-const tableRef = ref();
-const formRef = ref();
-
-const params = {
-  path: "/mood/query",
-  data: {},
-};
 
 const columns = [
   {
@@ -33,27 +20,7 @@ const columns = [
   },
 ];
 
-const toolbarAction = [
-  {
-    name: "新增",
-    type: "success",
-    icon: Plus,
-    handle: () => handleAddOrUpdate(null, formRef),
-  },
-];
 
-const moreAction = [
-  {
-    title: "编辑",
-    status: "success",
-    handle: (record) => handleAddOrUpdate(record, formRef),
-  },
-  {
-    status: "danger",
-    title: "删除",
-    handle: (record) => handleDelete("/mood/delete", record.id, tableRef),
-  },
-];
 
 const formData = [
   {
