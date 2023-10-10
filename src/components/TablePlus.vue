@@ -46,8 +46,8 @@
       row-key="id" empty-text="暂无数据" ref="tableRef">
       <el-table-column type="selection" width="55" :reserve-selection="true" />
 
-      <el-table-column v-for="{ title, dataIndex, render, width, fixed, sortable, filters } in columns" :key="dataIndex"
-        :prop="dataIndex" :label="title" :formatter="render" :width="width" :fixed="fixed"
+      <el-table-column v-for="{ title, dataIndex, render, width, fixed, sortable, filters } in initColumns"
+        :key="dataIndex" :prop="dataIndex" :label="title" :formatter="render" :width="width" :fixed="fixed"
         :sortable="sortable && 'custom'" :filters="filters" :column-key="dataIndex" :filter-multiple="false" />
 
       <el-table-column fixed="right" label="操作" width="150">
@@ -71,7 +71,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineExpose, reactive, onMounted, ref } from "vue";
+import { defineProps, defineExpose, watch, reactive, onMounted, ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { request } from "@/utils";
 import { Plus, Refresh, Edit, Delete } from "@element-plus/icons-vue";
@@ -106,6 +106,8 @@ const formVisible = ref(false)
 
 const editId = ref(null)
 
+const initColumns = ref([])
+
 
 const data = reactive({
   isLoading: false,
@@ -119,6 +121,20 @@ const data = reactive({
   selected: [],
   filters: {}
 });
+
+const params = reactive({
+  pageNum: 1,
+  pageSize: 10,
+  filters: {},
+  orderBys: {},
+})
+
+watch(
+  params,
+  () => {
+    console.log('paramsChange', params);
+  }
+);
 
 
 const handleRefresh = async () => {
@@ -158,8 +174,10 @@ const handleSearch = debounce(() => {
 const handleSortChange = ({ prop, order }) => {
   if (prop && order) {
     data.orderBys = { [prop]: order.replace('ending', '') }
+    params.orderBys = { [prop]: order.replace('ending', '') }
   } else {
     data.orderBys = {}
+    params.orderBys == {}
   }
   handleRefresh()
 }
@@ -262,18 +280,19 @@ const handleDelete = (id) => {
   });
 };
 
-onMounted(() => {
+onMounted(async () => {
   // 初始化筛选
   data.orderBys[props.defaultSort.prop] = props.defaultSort.order.replace('ending', '')
-  //查询过滤选项
-  props.columns.forEach(async item => {
+  // 初始化列
+  const asyncCols = props.columns.map(async item => {
     if (item.filterKey) {
       const { dataIndex, filterKey } = item
       const { data } = await request(`/current/query/${dataIndex}`)
-      const options = data.map(item => ({ text: item[filterKey], value: item[filterKey] }))
-      item.filters = options
+      return { ...item, filters: data.map(item => ({ text: item[filterKey], value: item[filterKey] })) }
     }
+    return item
   })
+  initColumns.value = await Promise.all(asyncCols)
 
   handleRefresh();
 
