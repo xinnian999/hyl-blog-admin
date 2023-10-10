@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { ElImage, ElSwitch } from "element-plus";
 import {
   formatTime,
@@ -12,12 +12,6 @@ import {
 
 const tableRef = ref();
 
-const categoryOptions = ref([]);
-
-onMounted(async () => {
-  const { data } = await request('/current/query/category')
-  categoryOptions.value = data.map(({ name }) => ({ text: name, value: name }))
-})
 
 const changePublish = (val, record) => {
   request
@@ -77,7 +71,7 @@ const columns = [
     dataIndex: "category",
     search: true,
     width: 150,
-    filters: categoryOptions
+    filterKey: 'name'
   },
   {
     title: "阅读次数",
@@ -115,7 +109,7 @@ const columns = [
     title: "上架到轮播图",
     dataIndex: "publishBanner",
     fixed: "right",
-    width: 200,
+    width: 120,
     render: (record) => (
       <ElSwitch
         model-value={record.publishBanner}

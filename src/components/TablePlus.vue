@@ -36,7 +36,7 @@
       </div>
 
       <div class="toolButton">
-        <el-button type="success" :icon="Plus" @click="handleAdd">新增</el-button>
+        <el-button type="success" size="small" :icon="Plus" @click="handleAdd">新增</el-button>
         <el-button type="primary" :icon="Refresh" @click="handleRefresh" />
       </div>
     </div>
@@ -50,11 +50,11 @@
         :prop="dataIndex" :label="title" :formatter="render" :width="width" :fixed="fixed"
         :sortable="sortable && 'custom'" :filters="filters" :column-key="dataIndex" :filter-multiple="false" />
 
-      <el-table-column fixed="right" label width="150">
+      <el-table-column fixed="right" label="操作" width="150">
         <template #default="record">
           <el-space>
-            <el-button type="warning" @click="handleUpdate(record.row)">修改</el-button>
-            <el-button type="danger" @click="handleDelete(record.row.id)">删除</el-button>
+            <el-button type="warning" circle :icon="Edit" @click="handleUpdate(record.row)"></el-button>
+            <el-button type="danger" circle :icon="Delete" @click="handleDelete(record.row.id)"></el-button>
           </el-space>
         </template>
       </el-table-column>
@@ -74,7 +74,7 @@
 import { defineProps, defineExpose, reactive, onMounted, ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { request } from "@/utils";
-import { Plus, Refresh } from "@element-plus/icons-vue";
+import { Plus, Refresh, Edit, Delete } from "@element-plus/icons-vue";
 import { pick, debounce } from 'lodash'
 
 const props = defineProps({
@@ -105,6 +105,7 @@ const tableRef = ref(null);
 const formVisible = ref(false)
 
 const editId = ref(null)
+
 
 const data = reactive({
   isLoading: false,
@@ -262,7 +263,17 @@ const handleDelete = (id) => {
 };
 
 onMounted(() => {
+  // 初始化筛选
   data.orderBys[props.defaultSort.prop] = props.defaultSort.order.replace('ending', '')
+  //查询过滤选项
+  props.columns.forEach(async item => {
+    if (item.filterKey) {
+      const { dataIndex, filterKey } = item
+      const { data } = await request(`/current/query/${dataIndex}`)
+      const options = data.map(item => ({ text: item[filterKey], value: item[filterKey] }))
+      item.filters = options
+    }
+  })
 
   handleRefresh();
 
