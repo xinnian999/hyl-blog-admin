@@ -1,47 +1,10 @@
 <template>
-  <TablePlus table="article" :columns="columns" :formData="formData" ref="tableRef" />
+  <TablePlus table="article" :columns="columns" :formData="formData" />
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { ElImage, ElSwitch } from "element-plus";
-import {
-  formatTime,
-  request,
-} from "@/utils";
-
-const tableRef = ref();
-
-
-const changePublish = (val, record) => {
-  request
-    .put("/article/update", { publish: val, id: record.id })
-    .then((res) => {
-      if (res.status === 0) {
-        tableRef.value.handleRefresh();
-      }
-    });
-};
-
-const changePublishBanner = (val, record) => {
-  request
-    .put("/article/update", { publishBanner: val, id: record.id })
-    .then((res) => {
-      if (res.status === 0) {
-        tableRef.value.handleRefresh();
-      }
-    });
-};
-
-const changeTopping = (val, record) => {
-  request
-    .put("/article/update", { topping: val, id: record.id })
-    .then((res) => {
-      if (res.status === 0) {
-        tableRef.value.handleRefresh();
-      }
-    });
-};
+import { ElImage } from "element-plus";
+import { formatTime } from "@/utils";
 
 const columns = [
   {
@@ -96,43 +59,21 @@ const columns = [
     title: "是否上架",
     dataIndex: "publish",
     fixed: "right",
-    render: (record) => (
-      <ElSwitch
-        model-value={record.publish}
-        active-value={1}
-        inactive-value={0}
-        onChange={(val) => changePublish(val, record)}
-      />
-    ),
+    switchable: true,
   },
   {
     title: "上架到轮播图",
     dataIndex: "publishBanner",
     fixed: "right",
     width: 120,
-    render: (record) => (
-      <ElSwitch
-        model-value={record.publishBanner}
-        active-value={1}
-        inactive-value={0}
-        onChange={(val) => changePublishBanner(val, record)}
-      />
-    ),
+    switchable: true,
   },
   {
     title: "是否置顶",
     dataIndex: "topping",
     fixed: "right",
-    render: (record) => (
-      <ElSwitch
-        model-value={record.topping}
-        active-value={1}
-        inactive-value={0}
-        onChange={(val) => changeTopping(val, record)}
-      />
-    ),
+    switchable: true,
   },
-
 ];
 
 

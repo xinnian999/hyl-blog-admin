@@ -37,7 +37,7 @@
 
       <div class="toolButton">
         <el-button type="success" size="small" :icon="Plus" @click="handleAdd">新增</el-button>
-        <el-button type="primary" :icon="Refresh" @click="handleRefresh" />
+        <el-button type="primary" :icon="Refresh" @click="fetchData" />
       </div>
     </div>
 
@@ -46,7 +46,7 @@
       row-key="id" empty-text="暂无数据" ref="tableRef">
       <el-table-column type="selection" width="55" :reserve-selection="true" />
 
-      <el-table-column v-for="{ title, dataIndex, render, width, fixed, sortable, filters } in initColumns"
+      <el-table-column v-for="{ title, dataIndex, render, width, fixed, sortable, filters } in data.initColumns"
         :key="dataIndex" :prop="dataIndex" :label="title" :formatter="render" :width="width" :fixed="fixed"
         :sortable="sortable && 'custom'" :filters="filters" :column-key="dataIndex" :filter-multiple="false" />
 
@@ -60,12 +60,11 @@
       </el-table-column>
     </el-table>
 
-    <el-pagination class="pagination" background layout="sizes, prev, pager, next" :page-sizes="[5, 10, 20, 50, 100]"
-      :total="data.total" v-model:page-size="data.pageSize" v-model:currentPage="data.pageNum"
-      @current-change="handleRefresh" @size-change="handleRefresh" />
+    <el-pagination class="pagination" v-model:page-size="params.pageSize" v-model:currentPage="params.pageNum" background
+      layout="sizes, prev, pager, next" :page-sizes="[5, 10, 20, 50, 100]" :total="data.total" />
     <span class="total">共{{ data.total }}条数据</span>
 
-    <FormModal2 :title="editId ? '修改' : '新增'" width="60%" :visible="formVisible" @close="closeFormModal"
+    <FormModal2 :title="data.editId ? '修改' : '新增'" width="60%" :visible="formVisible" @close="closeFormModal"
       :formData="formData" :ok="handleOk" ref="formModalRef" />
   </div>
 </template>
@@ -104,22 +103,16 @@ const tableRef = ref(null);
 
 const formVisible = ref(false)
 
-const editId = ref(null)
-
-const initColumns = ref([])
-
 
 const data = reactive({
   isLoading: false,
   dataSource: [],
-  pageNum: 1,
-  pageSize: 10,
   total: 0,
   searchQ: "",
   searchType: "",
-  orderBys: {},
   selected: [],
-  filters: {}
+  initColumns: [],
+  editId: null
 });
 
 const params = reactive({
@@ -132,12 +125,11 @@ const params = reactive({
 watch(
   params,
   () => {
-    console.log('paramsChange', params);
+    fetchData()
   }
 );
 
-
-const handleRefresh = async () => {
+const fetchData = async () => {
   data.isLoading = true;
 
   const {
@@ -145,12 +137,7 @@ const handleRefresh = async () => {
     data: dataSource,
     total,
   } = await request(`/current/query/${props.table}`, {
-    params: {
-      orderBys: data.orderBys,
-      pageSize: data.pageSize,
-      pageNum: data.pageNum,
-      filters: data.filters,
-    },
+    params
   });
 
   if (status === 0) {
@@ -162,32 +149,34 @@ const handleRefresh = async () => {
 
 const closeFormModal = () => {
   formVisible.value = false
-  editId.value = null
+  data.editId = null
 }
 
-const handleSearch = debounce(() => {
-  data.filters = data.searchQ ? { [data.searchType]: data.searchQ } : {}
-  tableRef.value.clearFilter()
-  handleRefresh()
-}, 700);
+
+const handleFilterChange = (filters) => {
+  params.filters = filters
+  data.searchType = "";
+  data.searchQ = "";
+}
 
 const handleSortChange = ({ prop, order }) => {
   if (prop && order) {
-    data.orderBys = { [prop]: order.replace('ending', '') }
     params.orderBys = { [prop]: order.replace('ending', '') }
   } else {
-    data.orderBys = {}
     params.orderBys == {}
   }
-  handleRefresh()
 }
+
+const handleSearch = debounce(() => {
+  params.filters = data.searchQ ? { [data.searchType]: data.searchQ } : {}
+  tableRef.value.clearFilter()
+}, 700);
 
 const handleSelectionChange = (rows) => {
   data.selected = rows
 }
 
 const handleUnSelected = (row) => {
-
   tableRef.value.toggleRowSelection(row, false)
 }
 
@@ -195,12 +184,60 @@ const clearSelected = () => {
   tableRef.value.clearSelection()
 }
 
-const handleFilterChange = (filters) => {
-  data.filters = filters
+
+const onClearSearch = () => {
   data.searchType = "";
   data.searchQ = "";
-  handleRefresh()
-}
+  fetchData();
+};
+
+const handleAdd = () => {
+  formVisible.value = true
+  formModalRef.value.reset()
+};
+
+const handleUpdate = (rowData) => {
+  formVisible.value = true
+  data.editId = rowData.id
+
+  //数据回显
+  const formFields = props.formData.map(item => item.value)
+  Object.assign(
+    formModalRef.value.form,
+    pick(rowData, formFields)
+  );
+};
+
+const handleOk = async (values) => {
+  if (data.editId) {
+    Object.assign(values, { id: data.editId })
+  }
+  const { status } = await request[data.editId ? "put" : "post"](`/current/${data.editId ? "update" : "add"}/${props.table}`, values);
+
+  if (status === 0) {
+    ElMessage.success(`${data.editId ? "更新" : "新增"}成功`);
+    closeFormModal()
+    formModalRef.value.reset();
+    fetchData();
+  }
+};
+
+const handleDelete = (id) => {
+  ElMessageBox.confirm("确认删除吗？", "删除", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  }).then(() => {
+    request
+      .delete(`/current/delete/${props.table}`, { params: { id } })
+      .then((res) => {
+        if (res.status === 0) {
+          ElMessage.success("删除成功");
+          fetchData();
+        }
+      });
+  });
+};
 
 const handleBatchDelete = async () => {
   await ElMessageBox.confirm("确认删除吗？", "删除", {
@@ -219,87 +256,52 @@ const handleBatchDelete = async () => {
 
   if (status === 0) {
     ElMessage.success("批量删除成功");
-    handleRefresh();
+    fetchData();
     clearSelected()
   }
 
 }
 
-const onClearSearch = () => {
-  data.searchType = "";
-  data.searchQ = "";
-  handleRefresh();
-};
-
-const handleAdd = () => {
-  formVisible.value = true
-  formModalRef.value.reset()
-};
-
-const handleUpdate = (rowData) => {
-  formVisible.value = true
-  editId.value = rowData.id
-
-  //数据回显
-  const formFields = props.formData.map(item => item.value)
-  Object.assign(
-    formModalRef.value.form,
-    pick(rowData, formFields)
-  );
-
-};
-
-const handleOk = async (values) => {
-  if (editId.value) {
-    Object.assign(values, { id: editId.value })
-  }
-  const { status } = await request[editId.value ? "put" : "post"](`/current/${editId.value ? "update" : "add"}/${props.table}`, values);
-
-  if (status === 0) {
-    ElMessage.success(`${editId.value ? "更新" : "新增"}成功`);
-    closeFormModal()
-    formModalRef.value.reset();
-    handleRefresh();
-  }
-};
-
-const handleDelete = (id) => {
-  ElMessageBox.confirm("确认删除吗？", "删除", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  }).then(() => {
-    request
-      .delete(`/current/delete/${props.table}`, { params: { id } })
-      .then((res) => {
-        if (res.status === 0) {
-          ElMessage.success("删除成功");
-          handleRefresh();
-        }
-      });
-  });
-};
-
 onMounted(async () => {
   // 初始化筛选
-  data.orderBys[props.defaultSort.prop] = props.defaultSort.order.replace('ending', '')
+  params.orderBys[props.defaultSort.prop] = props.defaultSort.order.replace('ending', '')
+
   // 初始化列
   const asyncCols = props.columns.map(async item => {
-    if (item.filterKey) {
-      const { dataIndex, filterKey } = item
+    const { dataIndex, filterKey, switchable } = item
+    //开启过滤
+    if (filterKey) {
       const { data } = await request(`/current/query/${dataIndex}`)
-      return { ...item, filters: data.map(item => ({ text: item[filterKey], value: item[filterKey] })) }
+      return {
+        ...item,
+        filters: data.map(v => ({ text: v[filterKey], value: v[filterKey] }))
+      }
+    }
+    //开启切换
+    if (switchable) {
+      return {
+        ...item,
+        render: (record) => <ElSwitch
+          model-value={record[dataIndex]}
+          active-value={1}
+          inactive-value={0}
+          onChange={async (val) => {
+            const { status } = await request.put(`/current/update/${props.table}`, { [dataIndex]: val, id: record.id })
+            if (status === 0) {
+              fetchData();
+            }
+          }}
+        />
+      }
     }
     return item
   })
-  initColumns.value = await Promise.all(asyncCols)
-
-  handleRefresh();
+  data.initColumns = await Promise.all(asyncCols)
 
 });
 
 //  抛出方法
-defineExpose({ handleRefresh });
+defineExpose({ fetchData });
 </script>
 
 <style lang="less">
