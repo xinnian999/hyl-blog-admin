@@ -34,7 +34,7 @@ const columns = [
     dataIndex: "category",
     search: true,
     width: 150,
-    filterKey: 'name'
+    filterKey: "name",
   },
   {
     title: "阅读次数",
@@ -46,13 +46,13 @@ const columns = [
     title: "发布时间",
     width: 200,
     dataIndex: "createTime",
-    render: (record) => formatTime(record.createTime),
+    timeParse: true,
     sortable: true,
   },
   {
     title: "更新时间",
     dataIndex: "updateTime",
-    render: (record) => formatTime(record.updateTime),
+    timeParse: true,
     width: 200,
   },
   {
@@ -75,7 +75,6 @@ const columns = [
     switchable: true,
   },
 ];
-
 
 const formData = [
   {

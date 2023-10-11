@@ -3,8 +3,6 @@
 </template>
 
 <script setup>
-
-
 const columns = [
   {
     title: "更新内容",
@@ -15,8 +13,6 @@ const columns = [
     dataIndex: "creatTime",
   },
 ];
-
-
 
 const formData = [
   {

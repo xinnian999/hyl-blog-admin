@@ -3,8 +3,6 @@
 </template>
 
 <script setup>
-
-
 const columns = [
   {
     title: "说说",
@@ -16,11 +14,10 @@ const columns = [
   },
   {
     title: "时间",
-    dataIndex: "creatTime",
+    dataIndex: "createTime",
+    timeParse: true,
   },
 ];
-
-
 
 const formData = [
   {
@@ -48,8 +45,6 @@ const formData = [
       mode: "static",
       label: "name",
       value: "value",
-
-
     },
   },
 ];

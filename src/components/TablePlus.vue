@@ -135,6 +135,15 @@
               :disabled="disabled.includes('delete')"
               @click="handleDelete(record.row.id)"
             ></el-button>
+            <el-button
+              v-for="{ title, type, icon, onClick } in rowAction"
+              :key="title"
+              :type="type"
+              circle
+              :icon="icon"
+              :disabled="disabled.includes('delete')"
+              @click="onClick(record.row)"
+            ></el-button>
           </el-space>
         </template>
       </el-table-column>
@@ -173,7 +182,7 @@ import {
   ref,
 } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { request } from "@/utils";
+import { request, formatTime } from "@/utils";
 import { Plus, Refresh, Edit, Delete } from "@element-plus/icons-vue";
 import { pick, debounce } from "lodash";
 
@@ -370,13 +379,20 @@ onMounted(async () => {
 
   // 初始化列
   const asyncCols = props.columns.map(async (item) => {
-    const { dataIndex, filterKey, switchable } = item;
+    const { dataIndex, filterKey, switchable, timeParse } = item;
     //开启过滤
     if (filterKey) {
       const { data } = await request(`/current/query/${dataIndex}`);
       return {
         ...item,
         filters: data.map((v) => ({ text: v[filterKey], value: v[filterKey] })),
+      };
+    }
+    //格式化时间
+    if (timeParse) {
+      return {
+        ...item,
+        render: (record) => formatTime(record[dataIndex]),
       };
     }
     //开启切换

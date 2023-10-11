@@ -2,26 +2,32 @@
   <TablePlus
     table="comment"
     :columns="columns"
+    :rowAction="rowAction"
     :defaultSort="{ prop: 'datetime', order: 'descending' }"
-    :disabled="['edit', 'add']"
+    :formData="editFormData"
+    :disabled="['add']"
+    ref="tableRef"
   />
 
-  <FormModal
+  <FormModal2
     :title="`回复 ${currentInfo.author}`"
     width="40%"
-    :formData="formData"
-    :ok="handleOk"
+    :formData="replyFormData"
+    :ok="handleSendReply"
+    :visible="formVisible"
+    @close="() => (formVisible = false)"
     ref="formRef"
   />
 </template>
 
 <script setup>
 import { ref } from "vue";
-import { handleAddOrUpdate, request } from "@/utils";
+import { request } from "@/utils";
 import { ElMessage } from "element-plus";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import updateLocale from "dayjs/plugin/updateLocale";
+import { ChatLineRound } from "@element-plus/icons-vue";
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
 
@@ -29,7 +35,7 @@ dayjs.updateLocale("en", {
   relativeTime: {
     future: "in %s",
     past: "%s前",
-    s: "a few seconds",
+    s: "几秒",
     m: "1分钟",
     mm: "%d分钟",
     h: "1小时",
@@ -44,7 +50,11 @@ dayjs.updateLocale("en", {
 });
 
 const tableRef = ref();
+
 const formRef = ref();
+
+const formVisible = ref(false);
+
 const currentInfo = ref({});
 
 const columns = [
@@ -60,15 +70,20 @@ const columns = [
   {
     title: "昵称",
     dataIndex: "author",
-    filter: true,
+    search: true,
   },
   {
     title: "评论内容",
     dataIndex: "content",
+    search: true,
   },
   {
     title: "类型",
-    dataIndex: "type",
+    dataIndex: "article_id",
+    filters: [
+      { text: "留言板", value: "99999" },
+      // { text: "文章回复", value: "<99999" },
+    ],
     render: (record) => {
       if (record.article_id === "99999")
         return <el-tag>留言板{record.reply_id && "[回复]"}</el-tag>;
@@ -86,18 +101,28 @@ const columns = [
   },
 ];
 
-const moreAction = [
+const rowAction = [
   {
     title: "回复",
-    status: "success",
-    handle: (record) => {
+    type: "success",
+    icon: ChatLineRound,
+    onClick: (record) => {
       currentInfo.value = record;
-      handleAddOrUpdate(null, formRef);
+      formVisible.value = true;
     },
   },
 ];
 
-const formData = [
+const editFormData = [
+  {
+    label: `内容`,
+    value: "content",
+    component: "textarea",
+    required: true,
+  },
+];
+
+const replyFormData = [
   {
     label: `回复内容`,
     value: "content",
@@ -106,35 +131,28 @@ const formData = [
   },
 ];
 
-const handleOk = () => {
-  formRef.value.formRef.validate((valid) => {
-    if (valid) {
-      const { content } = formRef.value.form;
-      const { id, author, email, article_id } = currentInfo.value;
-      const data = {
-        content,
-        author: "hyl",
-        author_id: 30,
-        reply_Email: email,
-        reply_id: id,
-        reply_name: author,
-        email: "3307578337@qq.com",
-        avatar: "/api/headPicture/1650613539084.jpeg",
-        article_id,
-      };
-      request.post("/comment/add", data).then((res) => {
-        if (res.status === 0) {
-          ElMessage.success(`回复成功`);
-          formRef.value.handleVisible(false);
-          tableRef.value.handleRefresh();
-        } else {
-          ElMessage.error(`回复失败`);
-        }
-      });
-    } else {
-      console.log("error submit!");
-      return false;
-    }
-  });
+const handleSendReply = async (values) => {
+  const { content } = values;
+  const { reply_id, author, email, article_id } = currentInfo.value;
+  const data = {
+    content,
+    author: "hyl",
+    author_id: 30,
+    reply_Email: email,
+    reply_id,
+    reply_name: author,
+    email: "3307578337@qq.com",
+    avatar: "/api/headPicture/1650613539084.jpeg",
+    article_id,
+  };
+  const { status } = await request.post("/comment/add", data);
+
+  if (status === 0) {
+    ElMessage.success(`回复成功`);
+    formVisible.value = false;
+    tableRef.value.fetchData();
+  } else {
+    ElMessage.error(`回复失败`);
+  }
 };
 </script>
