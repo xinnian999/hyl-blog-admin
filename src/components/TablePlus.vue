@@ -160,7 +160,7 @@
     />
     <span class="total">共{{ data.total }}条数据</span>
 
-    <FormModal2
+    <FormModal
       :title="data.editId ? '修改' : '新增'"
       width="60%"
       :visible="formVisible"

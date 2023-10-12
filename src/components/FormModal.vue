@@ -1,71 +1,150 @@
 <template>
-  <el-dialog :center="true" v-model="visible" @close="handleVisible(false)" :title="title" :width="width" top="5vh"
-    custom-class="dialogForm" :append-to-body="true">
+  <el-dialog
+    :center="true"
+    :model-value="visible"
+    @close="close"
+    :title="title"
+    :width="width"
+    top="5vh"
+    custom-class="dialogForm"
+    :append-to-body="true"
+  >
     <el-form :model="form" ref="formRef">
-      <el-form-item v-for="{
-        label,
-        value,
-        component,
-        selectData,
-        uploadName,
-        config,
-        required,
-        multiple,
-        placeholder,
-        blur,
-      } in formData" :key="value" :prop="value" :label="label" label-width="80px" :rules="required
-    ? { required: true, message: `请输入${label}`, trigger: 'blur' }
-    : null
-  ">
-        <el-input v-model="form[value]" autocomplete="off" v-if="component === 'input'" />
+      <el-form-item
+        v-for="{
+          label,
+          value,
+          component,
+          selectData,
+          uploadName,
+          config,
+          required,
+          multiple,
+          placeholder,
+          blur,
+        } in formData"
+        :key="value"
+        :prop="value"
+        :label="label"
+        label-width="80px"
+        :rules="
+          required
+            ? { required: true, message: `请输入${label}`, trigger: 'blur' }
+            : null
+        "
+      >
+        <el-input
+          v-model="form[value]"
+          autocomplete="off"
+          v-if="component === 'input'"
+        />
 
-        <el-input v-model="form[value]" autocomplete="off" v-if="component === 'password'" show-password
-          type="password" />
+        <el-input
+          v-model="form[value]"
+          autocomplete="off"
+          v-if="component === 'password'"
+          show-password
+          type="password"
+        />
 
-        <el-input v-model="form[value]" autocomplete="off" :placeholder="placeholder"
-          :autosize="{ minRows: 4, maxRows: 999 }" type="textarea" v-if="component === 'textarea'" @blur="blur" />
+        <el-input
+          v-model="form[value]"
+          autocomplete="off"
+          :placeholder="placeholder"
+          :autosize="{ minRows: 4, maxRows: 999 }"
+          type="textarea"
+          v-if="component === 'textarea'"
+          @blur="blur"
+        />
 
         <el-radio-group v-model="form[value]" v-if="component === 'radio'">
-          <el-radio :label="item[config.value]" :key="item[config.value]" size="large"
-            v-for="item in config.mode === 'static' ? selectData : data[value]">{{ item[config.label] }}</el-radio>
+          <el-radio
+            :label="item[config.value]"
+            :key="item[config.value]"
+            size="large"
+            v-for="item in config.mode === 'static' ? selectData : data[value]"
+            >{{ item[config.label] }}</el-radio
+          >
         </el-radio-group>
 
-        <el-select v-model="form[value]" placeholder="请选择分类" v-if="component === 'select'" :multiple="multiple">
-          <el-option :key="item[config.value]" :label="item[config.label]" :value="item[config.value]"
-            v-for="item in config.mode === 'static' ? selectData : data[value]" />
+        <el-select
+          v-model="form[value]"
+          placeholder="请选择分类"
+          v-if="component === 'select'"
+          :multiple="multiple"
+        >
+          <el-option
+            :key="item[config.value]"
+            :label="item[config.label]"
+            :value="item[config.value]"
+            v-for="item in config.mode === 'static'
+              ? selectData.value || selectData
+              : data[value]"
+          />
         </el-select>
 
-        <el-upload v-model="form[value]" class="avatar-uploader" :action="`/api/upload/${uploadName}`" :name="uploadName"
-          :show-file-list="false" :on-success="(res) => {
+        <el-upload
+          v-model="form[value]"
+          class="avatar-uploader"
+          :action="`/api/upload/${uploadName}`"
+          :name="uploadName"
+          :show-file-list="false"
+          :on-success="
+            (res) => {
               form.picture = res.filename;
             }
-            " v-if="component === 'uploadPicture'">
-          <img v-if="form[value]" :src="`${globalConfig.remoteStaticUrl}/image/${form[value]}`" class="avatar" />
+          "
+          v-if="component === 'uploadPicture'"
+        >
+          <img
+            v-if="form[value]"
+            :src="`${globalConfig.remoteStaticUrl}/image/${form[value]}`"
+            class="avatar"
+          />
           <el-icon v-else class="avatar-uploader-icon">
             <Plus />
           </el-icon>
         </el-upload>
 
-        <el-upload v-model="form[value]" action="api/upload/music" name="music" :show-file-list="false"
-          :on-success="(res) => (form[value] = `${res.filename}`)" v-if="component === 'uploadMusic'">
-          <audio v-if="form[value]" :src="`${globalConfig.remoteStaticUrl}/music/${form[value]}`" controls />
+        <el-upload
+          v-model="form[value]"
+          action="api/upload/music"
+          name="music"
+          :show-file-list="false"
+          :on-success="(res) => (form[value] = `${res.filename}`)"
+          v-if="component === 'uploadMusic'"
+        >
+          <audio
+            v-if="form[value]"
+            :src="`${globalConfig.remoteStaticUrl}/music/${form[value]}`"
+            controls
+          />
 
           <el-button v-else>
-            <el-icon>
-              <Plus />
-            </el-icon>点击上传
+            <el-icon> <Plus /> </el-icon>点击上传
           </el-button>
         </el-upload>
 
-        <v-md-editor v-model="form[value]"
+        <v-md-editor
+          v-model="form[value]"
           left-toolbar="undo redo clear | h bold italic strikethrough quote | ul ol table  hr | link image code | save "
-          height="400px" v-if="component === 'markdown'" :disabled-menus="[]" @upload-image="handleUploadImage"
-          @save="onSave" @fullscreen-change="onFullscreen" />
+          height="400px"
+          v-if="component === 'markdown'"
+          :disabled-menus="[]"
+          @upload-image="handleUploadImage"
+          @save="onSave"
+          @fullscreen-change="onFullscreen"
+        />
+
+        <el-color-picker
+          v-model="form[value]"
+          v-if="component === 'colorPicker'"
+        />
       </el-form-item>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button type="primary" @click="ok">提交</el-button>
+        <el-button type="primary" @click="handleOk">提交</el-button>
       </span>
     </template>
   </el-dialog>
@@ -85,12 +164,13 @@ const props = defineProps({
   width: {},
   title: {},
   currentRecord: {},
+  visible: {},
+  close: {},
+  initialValues: {},
 });
 
-const form = reactive({ id: undefined });
+const form = reactive({});
 const data = reactive({});
-
-const visible = ref(false);
 
 onMounted(() => {
   // 初始化v-model，不写会导致数据回显失败
@@ -115,12 +195,6 @@ const reset = () => {
       form[value] = "";
     }
   });
-  form.id = null
-};
-
-const handleVisible = (visi) => {
-  // if (!visi) reset();
-  visible.value = visi;
 };
 
 const handleUploadImage = (event, insertImage, files) => {
@@ -179,7 +253,19 @@ const onFullscreen = (isFullscreen) => {
   }
 };
 
-defineExpose({ handleVisible, reset, form, formRef, formData: props.formData });
+const handleOk = async () => {
+  const { validate } = formRef.value;
+  console.log(props);
+  try {
+    await validate();
+    props.ok(form);
+  } catch (e) {
+    console.log(e);
+    console.log("error submit!");
+  }
+};
+
+defineExpose({ reset, form, formRef });
 </script>
 
 <style lang="less">

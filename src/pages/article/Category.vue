@@ -1,8 +1,23 @@
 <template>
-  <TablePlus table="category" :columns="columns" :formData="formData" :disabled="['edit', 'delete']" />
+  <TablePlus
+    table="category"
+    :columns="columns"
+    :formData="formData"
+    :disabled="['delete']"
+  />
 </template>
 
 <script setup>
+import { onMounted, ref } from "vue";
+import { request } from "@/utils";
+import { ElButton } from "element-plus";
+
+const tableNames = ref([]);
+
+onMounted(async () => {
+  const { data } = await request("/all/getTableNames");
+  tableNames.value = data.map((name) => ({ text: name, value: name }));
+});
 
 const columns = [
   {
@@ -10,8 +25,16 @@ const columns = [
     dataIndex: "name",
   },
   {
-    title: "文章数",
-    dataIndex: "count",
+    title: "所属表",
+    dataIndex: "belong",
+    filters: tableNames,
+  },
+  {
+    title: "背景色",
+    dataIndex: "bg",
+    render: ({ bg }) => {
+      return <ElButton style={{ background: bg }}></ElButton>;
+    },
   },
 ];
 
@@ -21,19 +44,25 @@ const formData = [
     value: "name",
     component: "input",
   },
+  {
+    label: "所属表",
+    value: "belong",
+    component: "select",
+    selectData: tableNames,
+    multiple: true,
+    config: {
+      mode: "static",
+      label: "value",
+      value: "value",
+    },
+  },
+  {
+    label: "背景色",
+    value: "bg",
+    component: "colorPicker",
+    defaultValue: "red",
+  },
 ];
-
-// const handleUpdateCount = () => {
-//   request("/category/updateCount").then((res) => {
-//     if (res.status === 0) {
-//       ElMessage.success("更新成功");
-//       tableRef.value.handleRefresh();
-//     }
-//   });
-// };
-
-
-
 </script>
 
 <style></style>

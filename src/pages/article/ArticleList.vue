@@ -4,7 +4,6 @@
 
 <script setup>
 import { ElImage } from "element-plus";
-import { formatTime } from "@/utils";
 
 const columns = [
   {

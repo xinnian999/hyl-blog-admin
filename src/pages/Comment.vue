@@ -9,7 +9,7 @@
     ref="tableRef"
   />
 
-  <FormModal2
+  <FormModal
     :title="`回复 ${currentInfo.author}`"
     width="40%"
     :formData="replyFormData"
