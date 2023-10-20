@@ -10,7 +10,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { request } from "@/utils";
-import { ElButton } from "element-plus";
+import { ElButton, ElTag } from "element-plus";
 
 const tableNames = ref([]);
 
@@ -23,18 +23,18 @@ const columns = [
   {
     title: "名称",
     dataIndex: "name",
+    render: ({ bg, name }) => {
+      return (
+        <ElTag color={bg} effect="dark" type="info">
+          {name}
+        </ElTag>
+      );
+    },
   },
   {
     title: "所属表",
     dataIndex: "belong",
     filters: tableNames,
-  },
-  {
-    title: "背景色",
-    dataIndex: "bg",
-    render: ({ bg }) => {
-      return <ElButton style={{ background: bg }}></ElButton>;
-    },
   },
 ];
 
