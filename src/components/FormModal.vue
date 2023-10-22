@@ -69,7 +69,7 @@
 
         <el-select
           v-model="form[value]"
-          placeholder="请选择分类"
+          :placeholder="`请选择${label}`"
           v-if="component === 'select'"
           :multiple="multiple"
         >
@@ -177,8 +177,7 @@ onMounted(() => {
   props.formData.forEach((item) => {
     form[item.value] = "";
     if (item.config?.mode === "remote") {
-      const { method, url } = item.config;
-      request[method](url).then((res) => {
+      request(item.config).then((res) => {
         if (res.status === 0) {
           data[item.value] = res.data;
         }

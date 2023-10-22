@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { ElImage } from "element-plus";
+import { ElImage, ElTag } from "element-plus";
 
 const columns = [
   {
@@ -29,11 +29,24 @@ const columns = [
     width: 300,
   },
   {
-    title: "分类",
-    dataIndex: "category",
+    title: "标签",
+    dataIndex: "tag",
     search: true,
     width: 150,
     filterKey: "name",
+    render: ({ tag }) => {
+      return (
+        <ul>
+          {tag.split(",").map((t) => (
+            <li className="tag">
+              <ElTag effect="dark" type="info">
+                {t}
+              </ElTag>
+            </li>
+          ))}
+        </ul>
+      );
+    },
   },
   {
     title: "阅读次数",
@@ -89,16 +102,18 @@ const formData = [
     required: true,
   },
   {
-    label: "文章分类",
-    value: "category",
+    label: "标签",
+    value: "tag",
     component: "select",
     required: true,
     multiple: true,
-    defaultValue: ["react"],
     config: {
       mode: "remote",
-      url: "/category/query",
+      url: "/current/query/tag",
       method: "get",
+      params: {
+        filters: { belong: "article" },
+      },
       label: "name",
       value: "name",
     },
@@ -108,7 +123,6 @@ const formData = [
     value: "type",
     component: "radio",
     required: true,
-    multiple: true,
     defaultValue: 1,
     selectData: [
       { name: "原创", value: 1 },
@@ -134,3 +148,10 @@ const formData = [
   },
 ];
 </script>
+
+<style lang="less" >
+.tag {
+  margin-bottom: 5px;
+  list-style: none;
+}
+</style>

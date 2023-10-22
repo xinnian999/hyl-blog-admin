@@ -309,8 +309,14 @@ const handleUpdate = (rowData) => {
   data.editId = rowData.id;
 
   //数据回显
-  const formFields = props.formData.map((item) => item.value);
-  Object.assign(formModalRef.value.form, pick(rowData, formFields));
+  props.formData.forEach((item) => {
+    let val = rowData[item.value];
+    // 回显格式化处理
+    if (item.multiple) {
+      val = rowData[item.value].split(",");
+    }
+    Object.assign(formModalRef.value.form, { [item.value]: val });
+  });
 };
 
 const handleOk = async (values) => {
@@ -395,7 +401,7 @@ onMounted(async () => {
         render: (record) => formatTime(record[dataIndex]),
       };
     }
-    //开启切换
+    //开启切换，开启后，value会在0和1切换
     if (switchable) {
       return {
         ...item,

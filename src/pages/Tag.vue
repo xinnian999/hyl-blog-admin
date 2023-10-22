@@ -8,30 +8,52 @@
 </template>
 
 <script setup>
+import { onMounted, ref } from "vue";
+import { request } from "@/utils";
+import { ElTag } from "element-plus";
+const tableNames = ref([]);
+
+onMounted(async () => {
+  const { data } = await request("/all/getTableNames");
+  tableNames.value = data.map((name) => ({ text: name, value: name }));
+});
+
 const columns = [
   {
-    title: "标签名称",
+    title: "名称",
     dataIndex: "name",
-    sortable: true,
-    search: true,
+    render: ({ bg, name }) => {
+      return (
+        <ElTag effect="dark" type="info">
+          {name}
+        </ElTag>
+      );
+    },
   },
   {
-    title: "关联数量",
-    dataIndex: "count",
-  },
-  {
-    title: "ID",
-    dataIndex: "id",
-    sortable: true,
+    title: "所属表",
+    dataIndex: "belong",
+    // filters: tableNames,
   },
 ];
 
 const formData = [
   {
-    label: "标签名",
+    label: "分类名称",
     value: "name",
     component: "input",
-    required: true,
+  },
+  {
+    label: "所属表",
+    value: "belong",
+    component: "select",
+    selectData: tableNames,
+    multiple: true,
+    config: {
+      mode: "static",
+      label: "value",
+      value: "value",
+    },
   },
 ];
 </script>

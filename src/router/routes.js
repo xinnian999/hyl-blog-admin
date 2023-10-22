@@ -34,11 +34,6 @@ export default [
         path: "articleList",
         component: () => import("@/pages/article/ArticleList.vue"),
       },
-      {
-        title: "分类管理",
-        path: "articleCategory",
-        component: () => import("../pages/article/Category.vue"),
-      },
     ],
   },
 
