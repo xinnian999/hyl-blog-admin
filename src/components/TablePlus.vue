@@ -77,6 +77,15 @@
           :disabled="disabled.includes('add')"
           >新增</el-button
         >
+        <el-button
+          :type="type"
+          size="small"
+          :icon="icon"
+          @click="onClick"
+          :key="name"
+          v-for="{ name, type, icon, onClick } in toolbarAction"
+          >{{ name }}</el-button
+        >
         <el-button type="primary" :icon="Refresh" @click="fetchData" />
       </div>
     </div>
@@ -141,7 +150,6 @@
               :type="type"
               circle
               :icon="icon"
-              :disabled="disabled.includes('delete')"
               @click="onClick(record.row)"
             ></el-button>
           </el-space>

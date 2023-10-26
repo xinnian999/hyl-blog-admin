@@ -111,9 +111,6 @@ const formData = [
       mode: "remote",
       url: "/current/query/tag",
       method: "get",
-      params: {
-        filters: { belong: "article" },
-      },
       label: "name",
       value: "name",
     },

@@ -4,25 +4,23 @@
     table="tag"
     :formData="formData"
     :defaultSort="{ prop: 'id', order: 'descending' }"
+    :toolbarAction="toolbarAction"
+    ref="tableRef"
   />
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { ElTag, ElMessage } from "element-plus";
 import { request } from "@/utils";
-import { ElTag } from "element-plus";
-const tableNames = ref([]);
+import { ref } from "vue";
 
-onMounted(async () => {
-  const { data } = await request("/all/getTableNames");
-  tableNames.value = data.map((name) => ({ text: name, value: name }));
-});
+const tableRef = ref();
 
 const columns = [
   {
-    title: "名称",
+    title: "标签名",
     dataIndex: "name",
-    render: ({ bg, name }) => {
+    render: ({ name }) => {
       return (
         <ElTag effect="dark" type="info">
           {name}
@@ -31,31 +29,30 @@ const columns = [
     },
   },
   {
-    title: "所属表",
-    dataIndex: "belong",
-    // filters: tableNames,
+    title: "关联数量",
+    dataIndex: "count",
   },
 ];
 
 const formData = [
   {
-    label: "分类名称",
+    label: "标签名",
     value: "name",
     component: "input",
   },
+];
+
+const toolbarAction = [
   {
-    label: "所属表",
-    value: "belong",
-    component: "select",
-    selectData: tableNames,
-    multiple: true,
-    config: {
-      mode: "static",
-      label: "value",
-      value: "value",
+    name: "更新关联数量",
+    type: "warning",
+    onClick: async () => {
+      const { status } = await request.put("/tag/updateAllTagCount");
+      if (status === 0) {
+        ElMessage.success("更新成功");
+        tableRef.value.fetchData();
+      }
     },
   },
 ];
 </script>
-
-<style></style>

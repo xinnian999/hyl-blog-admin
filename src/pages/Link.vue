@@ -32,35 +32,35 @@ const columns = [
   },
 ];
 
-const avatorReg = /\u56fe\u6807|\u5934\u50cf|avatar/;
-const nameReg = /\u540d\u79f0|name/;
-const linkReg = /\u94fe\u63a5|\u5730\u5740|\u7f51\u5740|link/;
-const descrReg = /\u63cf\u8ff0|\u7b80\u4ecb|descr/;
+// const avatorReg = /\u56fe\u6807|\u5934\u50cf|avatar/;
+// const nameReg = /\u540d\u79f0|name/;
+// const linkReg = /\u94fe\u63a5|\u5730\u5740|\u7f51\u5740|link/;
+// const descrReg = /\u63cf\u8ff0|\u7b80\u4ecb|descr/;
 
 const formData = [
-  {
-    label: "导入",
-    value: "import",
-    component: "textarea",
-    placeholder: "输入友链信息，脱离焦点后自动识别导入",
-    // blur: () => {
-    //   const form = formRef.value.form;
-    //   let f = "：";
-    //   form.import.split("\n").forEach((item) => {
-    //     const [label, value] = item.split(f);
+  // {
+  //   label: "导入",
+  //   value: "import",
+  //   component: "textarea",
+  //   placeholder: "输入友链信息，脱离焦点后自动识别导入",
+  //   // blur: () => {
+  //   //   const form = formRef.value.form;
+  //   //   let f = "：";
+  //   //   form.import.split("\n").forEach((item) => {
+  //   //     const [label, value] = item.split(f);
 
-    //     // 判断用的中英文冒号
-    //     if (item.search(f) === -1) {
-    //       f = ": ";
-    //     }
+  //   //     // 判断用的中英文冒号
+  //   //     if (item.search(f) === -1) {
+  //   //       f = ": ";
+  //   //     }
 
-    //     avatorReg.test(label) && (form.avator = value);
-    //     nameReg.test(label) && (form.name = value);
-    //     linkReg.test(label) && (form.link = value);
-    //     descrReg.test(label) && (form.descr = value);
-    //   });
-    // },
-  },
+  //   //     avatorReg.test(label) && (form.avator = value);
+  //   //     nameReg.test(label) && (form.name = value);
+  //   //     linkReg.test(label) && (form.link = value);
+  //   //     descrReg.test(label) && (form.descr = value);
+  //   //   });
+  //   // },
+  // },
   {
     label: "名字",
     value: "name",

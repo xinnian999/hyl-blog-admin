@@ -14,7 +14,7 @@
               }}</span
               >！
             </h1>
-            <p>{{ lines.content }} --{{ lines.name }}</p>
+            <p>{{ lines.content }}</p>
           </article>
         </div>
       </el-col>
@@ -71,7 +71,7 @@ onMounted(() => {
   echarts.init(document.querySelector("#allEcharts")).dispose();
   echarts.init(document.querySelector("#categoryEcharts")).dispose();
 
-  request.get("/lines/queryRandOne").then(({ data, status }) => {
+  request.get("/experience/queryRandOne").then(({ data, status }) => {
     if (status === 0) {
       lines.value = data[0];
     }
@@ -119,43 +119,44 @@ onMounted(() => {
     });
   });
 
-  request.get("/category/query").then((res) => {
-    res.data.forEach((item) => {
-      item.value = item.count;
-    });
-    // 基于准备好的dom，初始化echarts实例
-    const myChart = echarts.init(document.querySelector("#categoryEcharts"));
-    // 绘制图表
-    myChart.setOption({
-      title: {
-        text: "文章概览",
-        subtext: "Fake Data",
-        left: "center",
-      },
-      tooltip: {
-        trigger: "item",
-      },
-      legend: {
-        orient: "vertical",
-        left: "left",
-      },
-      series: [
-        {
-          name: "Access From",
-          type: "pie",
-          radius: "50%",
-          data: res.data,
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: "rgba(0, 0, 0, 0.5)",
-            },
-          },
-        },
-      ],
-    });
-  });
+  // request.get("/category/query").then((res) => {
+  //   res.data.forEach((item) => {
+  //     item.value = item.count;
+  //   });
+  //   // 基于准备好的dom，初始化echarts实例
+  //   const myChart = echarts.init(document.querySelector("#categoryEcharts"));
+  //   // 绘制图表
+  //   myChart.setOption({
+  //     title: {
+  //       text: "文章概览",
+  //       subtext: "Fake Data",
+  //       left: "center",
+  //     },
+  //     tooltip: {
+  //       trigger: "item",
+  //     },
+  //     legend: {
+  //       orient: "vertical",
+  //       left: "left",
+  //     },
+  //     series: [
+  //       {
+  //         name: "Access From",
+  //         type: "pie",
+  //         radius: "50%",
+  //         data: res.data,
+  //         emphasis: {
+  //           itemStyle: {
+  //             shadowBlur: 10,
+  //             shadowOffsetX: 0,
+  //             shadowColor: "rgba(0, 0, 0, 0.5)",
+  //           },
+  //         },
+  //       },
+  //     ],
+  //   });
+
+  // });
 });
 </script>
 
