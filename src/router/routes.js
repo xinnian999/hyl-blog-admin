@@ -5,6 +5,7 @@ import {
   ChatRound,
   MapLocation,
   Link,
+  CollectionTag
 } from "@element-plus/icons-vue";
 
 export default [
@@ -57,6 +58,12 @@ export default [
     ],
   },
   {
+    title: "分类管理",
+    path: "/category",
+    icon: Link,
+    component: () => import("../pages/Category.vue"),
+  },
+  {
     title: "友链管理",
     path: "/link",
     icon: Link,
@@ -65,7 +72,7 @@ export default [
   {
     title: "标签管理",
     path: "/tag",
-    icon: Link,
+    icon: CollectionTag,
     component: () => import("../pages/Tag.vue"),
   },
   {
