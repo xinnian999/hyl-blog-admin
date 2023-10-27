@@ -1,5 +1,4 @@
 import request from "./request";
-import { handleDelete, handleAddOrUpdate, handleOk } from "./handle";
 import { nowTime, formatTime } from "./timeUtils";
 
 const globalConfig = {
@@ -8,9 +7,6 @@ const globalConfig = {
 
 export {
   request,
-  handleDelete,
-  handleAddOrUpdate,
-  handleOk,
   nowTime,
   formatTime,
   globalConfig,

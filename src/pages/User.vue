@@ -1,12 +1,4 @@
 <template>
-  <!-- <GridTable :params="params" :columns="columns" :moreAction="moreAction" title="用户管理" ref="tableRef" /> -->
-  <!-- <FormModal
-    title="修改密码"
-    :formData="formData"
-    :ok="handleEditPassword"
-    ref="formRef"
-  /> -->
-
   <TablePlus
     :columns="columns"
     :rowActions="moreAction"
@@ -20,11 +12,9 @@
 <script setup>
 import { ref } from "vue";
 import { ElMessage } from "element-plus";
-import md5 from "js-md5";
-import { handleDelete, request } from "@/utils";
+import { handleDelete } from "@/utils";
 
 const tableRef = ref();
-// const formRef = ref();
 
 const columns = [
   {
@@ -50,37 +40,7 @@ const columns = [
   },
 ];
 
-// const handleUpdatePassword = (record) => {
-//   Object.assign(formRef.value.form, {
-//     id: record.id,
-//     password: record.password,
-//   });
-//   formRef.value.handleVisible(true);
-// };
-
-// const handleEditPassword = () => {
-//   const { password, oldPassword, id, newPassword } = formRef.value.form;
-
-//   if (password === md5(oldPassword)) {
-//     request
-//       .put("/user/updatePassword", { newPassword: md5(newPassword), id })
-//       .then((res) => {
-//         if (res.status === 0) {
-//           formRef.value.handleVisible(false);
-//           ElMessage.success("修改成功");
-//         }
-//       });
-//   } else {
-//     ElMessage.error("两次密码输入不一致");
-//   }
-// };
-
 const moreAction = [
-  // {
-  //   title: "修改密码",
-  //   status: "warning",
-  //   handle: (record) => handleUpdatePassword(record),
-  // },
   {
     status: "danger",
     title: "删除",
@@ -122,20 +82,5 @@ const formData = [
     ],
   },
 ];
-
-// const formData = [
-//   {
-//     label: "旧密码",
-//     value: "oldPassword",
-//     component: "password",
-//     required: true,
-//   },
-//   {
-//     label: "新密码",
-//     value: "newPassword",
-//     component: "password",
-//     required: true,
-//   },
-// ];
 </script>
 
