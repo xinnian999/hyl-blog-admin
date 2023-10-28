@@ -10,12 +10,6 @@
 <script setup>
 import { Tickets } from "@element-plus/icons-vue";
 
-const belongData = [
-  { name: "文章", value: "article" },
-  { name: "笔记", value: "note" },
-  { name: "作品", value: "works" },
-];
-
 const columns = [
   {
     title: "名称",
@@ -24,21 +18,7 @@ const columns = [
   {
     title: "归属表",
     dataIndex: "belong",
-    render: ({ belong }) => {
-      const list = belong.split(",");
-      return (
-        <ul>
-          {list.map((item) => {
-            const name = belongData.find((v) => v.value === item).name;
-            return (
-              <li class="tag">
-                <IconTag icon={Tickets}>{name}</IconTag>
-              </li>
-            );
-          })}
-        </ul>
-      );
-    },
+    render: ({ belong }) => <TagList list={belong.split(",")} icon={Tickets} />,
   },
 ];
 
@@ -55,7 +35,11 @@ const formData = [
     component: "select",
     multiple: true,
     required: true,
-    selectData: belongData,
+    selectData: [
+      { name: "article", value: "article" },
+      { name: "note", value: "note" },
+      { name: "works", value: "works" },
+    ],
     config: {
       mode: "static",
       label: "name",

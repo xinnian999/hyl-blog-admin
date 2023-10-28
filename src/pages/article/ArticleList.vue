@@ -3,7 +3,8 @@
 </template>
 
 <script setup>
-import { ElImage, ElTag } from "element-plus";
+import { ElImage } from "element-plus";
+import { CollectionTag } from "@element-plus/icons-vue";
 
 const columns = [
   {
@@ -29,24 +30,18 @@ const columns = [
     width: 300,
   },
   {
+    title: "分类",
+    dataIndex: "category",
+    search: true,
+    width: 150,
+  },
+  {
     title: "标签",
     dataIndex: "tag",
     search: true,
     width: 150,
     filterKey: "name",
-    render: ({ tag }) => {
-      return (
-        <ul>
-          {tag.split(",").map((t) => (
-            <li className="tag">
-              <ElTag effect="dark" type="info">
-                {t}
-              </ElTag>
-            </li>
-          ))}
-        </ul>
-      );
-    },
+    render: ({ tag }) => <TagList list={tag.split(",")} icon={CollectionTag} />,
   },
   {
     title: "阅读次数",
@@ -100,6 +95,19 @@ const formData = [
     value: "introduce",
     component: "textarea",
     required: true,
+  },
+  {
+    label: "分类",
+    value: "category",
+    component: "select",
+    required: true,
+    config: {
+      mode: "remote",
+      url: "/current/query/category",
+      method: "get",
+      label: "name",
+      value: "name",
+    },
   },
   {
     label: "标签",
