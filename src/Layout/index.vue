@@ -48,7 +48,7 @@
     </el-aside>
 
     <el-container>
-      <el-header id="header">
+      <!-- <el-header id="header">
         <h2 id="title">{{ title }}</h2>
         <el-space class="headToolbar" :size="20">
           <el-tooltip
@@ -64,7 +64,7 @@
             </span>
           </el-tooltip>
         </el-space>
-      </el-header>
+      </el-header> -->
       <el-main id="main">
         <router-view></router-view>
       </el-main>
@@ -75,7 +75,7 @@
   <router-view v-else />
 </template>
 
-<script setup>
+<script setup lang="jsx">
 import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import cookie from "cookies-js";
@@ -90,7 +90,7 @@ const route = useRoute();
 const router = useRouter();
 const store = useStore();
 
-const isCollapse = ref(false);
+const isCollapse = ref(true);
 const title = ref("名称");
 
 const exec = (url) => {

@@ -2,7 +2,7 @@
   <TablePlus table="experience" :columns="columns" :formData="formData" />
 </template>
 
-<script setup>
+<script setup lang="jsx">
 const columns = [
   {
     title: "句子",
@@ -19,4 +19,3 @@ const formData = [
   },
 ];
 </script>
-

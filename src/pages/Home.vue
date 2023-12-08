@@ -52,7 +52,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="jsx">
 import { onMounted, ref } from "vue";
 import { request } from "@/utils";
 import * as echarts from "echarts";

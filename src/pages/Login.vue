@@ -39,7 +39,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="jsx">
 import { reactive, ref } from "vue";
 import { ElMessage } from "element-plus";
 import { request } from "@/utils";
@@ -125,4 +125,3 @@ const visitor = () => {
   }
 }
 </style>
-

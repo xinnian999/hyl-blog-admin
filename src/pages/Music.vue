@@ -2,7 +2,7 @@
   <TablePlus table="music" :columns="columns" :formData="formData" />
 </template>
 
-<script setup>
+<script setup lang="jsx">
 import { globalConfig } from "@/utils";
 
 const columns = [

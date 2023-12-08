@@ -9,7 +9,7 @@
   />
 </template>
 
-<script setup>
+<script setup lang="jsx">
 import { ElTag, ElMessage } from "element-plus";
 import { request } from "@/utils";
 import { ref } from "vue";

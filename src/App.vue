@@ -2,7 +2,7 @@
   <Layout />
 </template>
 
-<script setup>
+<script setup lang="jsx">
 import { watch, onMounted } from "vue";
 import { useStore } from "vuex";
 import Layout from "./Layout/index.vue";
@@ -30,7 +30,6 @@ onMounted(() => {
   }
 });
 </script>
-
 
 <style>
 #app {

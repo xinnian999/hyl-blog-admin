@@ -9,6 +9,7 @@
     "deploy": "npm run build && node ./deploy.js"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
     "@kangc/v-md-editor": "^2.3.12",
     "axios": "^0.26.1",
     "cookies-js": "^1.2.3",
@@ -18,11 +19,13 @@
     "element-plus": "^2.1.10",
     "highlight.js": "^11.5.1",
     "js-md5": "^0.7.3",
+    "json-editor-vue3": "^1.0.9",
     "less": "^4.1.2",
     "lodash": "^4.17.21",
     "ora": "^5.1.0",
     "vue": "^3.2.13",
     "vue-router": "^4.0.14",
+    "vuedraggable": "^4.1.0",
     "vuex": "^4.0.2"
   },
   "devDependencies": {

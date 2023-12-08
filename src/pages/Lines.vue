@@ -2,7 +2,7 @@
   <TablePlus table="linesDB" :columns="columns" :formData="formData" />
 </template>
 
-<script setup>
+<script setup lang="jsx">
 const columns = [
   {
     title: "名字",
@@ -40,4 +40,3 @@ const formData = [
   },
 ];
 </script>
-

@@ -180,7 +180,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="jsx">
 import {
   defineProps,
   defineExpose,

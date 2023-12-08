@@ -2,7 +2,7 @@
   <TablePlus table="updateLog" :columns="columns" :formData="formData" />
 </template>
 
-<script setup>
+<script setup lang="jsx">
 const columns = [
   {
     title: "更新内容",
@@ -22,4 +22,3 @@ const formData = [
   },
 ];
 </script>
-

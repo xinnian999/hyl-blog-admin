@@ -5,7 +5,7 @@ import {
   ChatRound,
   MapLocation,
   Link,
-  CollectionTag
+  CollectionTag,
 } from "@element-plus/icons-vue";
 
 export default [
@@ -137,5 +137,12 @@ export default [
         component: () => import("@/pages/User.vue"),
       },
     ],
+  },
+
+  {
+    title: "表单设计器",
+    path: "/formDesign",
+    icon: MapLocation,
+    component: () => import("../pages/formDesign"),
   },
 ];

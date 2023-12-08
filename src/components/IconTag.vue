@@ -11,7 +11,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="jsx">
 import { defineProps } from "vue";
 defineProps({
   icon: {},
@@ -35,4 +35,5 @@ defineProps({
     margin-left: 5px;
   }
 }
-</style>>
+</style>
+>

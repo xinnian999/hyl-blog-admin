@@ -150,7 +150,7 @@
   </el-dialog>
 </template>
 
-<script setup>
+<script setup lang="jsx">
 import { reactive, ref, defineProps, defineExpose, onMounted } from "vue";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessageBox } from "element-plus";

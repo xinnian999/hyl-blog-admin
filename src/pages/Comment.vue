@@ -20,7 +20,7 @@
   />
 </template>
 
-<script setup>
+<script setup lang="jsx">
 import { ref } from "vue";
 import { request } from "@/utils";
 import { ElMessage } from "element-plus";

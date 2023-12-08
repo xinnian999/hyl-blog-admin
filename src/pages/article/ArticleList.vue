@@ -2,7 +2,7 @@
   <TablePlus table="article" :columns="columns" :formData="formData" />
 </template>
 
-<script setup>
+<script setup lang="jsx">
 import { ElImage, ElTag } from "element-plus";
 
 const columns = [
@@ -146,7 +146,7 @@ const formData = [
 ];
 </script>
 
-<style lang="less" >
+<style lang="less">
 .tag {
   margin-bottom: 5px;
   list-style: none;

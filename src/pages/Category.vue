@@ -6,8 +6,8 @@
     :formData="formData"
   />
 </template>
-  
-<script setup>
+
+<script setup lang="jsx">
 import { Tickets } from "@element-plus/icons-vue";
 
 const belongData = [
@@ -64,8 +64,8 @@ const formData = [
   },
 ];
 </script>
-  
-<style lang="less" >
+
+<style lang="less">
 .tag {
   margin-bottom: 5px;
   list-style: none;

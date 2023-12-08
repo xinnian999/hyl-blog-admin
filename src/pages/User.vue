@@ -9,7 +9,7 @@
   />
 </template>
 
-<script setup>
+<script setup lang="jsx">
 import { ref } from "vue";
 import { ElMessage } from "element-plus";
 import { handleDelete } from "@/utils";
@@ -83,4 +83,3 @@ const formData = [
   },
 ];
 </script>
-
