@@ -98,7 +98,7 @@
 </template>
 
 <script setup lang="jsx">
-import { computed, defineProps, defineEmits, onMounted } from "vue";
+import { computed, defineProps, defineEmits, onMounted, inject } from "vue";
 import {
   ItemGroup,
   NumberInput,
@@ -113,12 +113,13 @@ const props = defineProps({
   component: String,
   required: Boolean,
   componentProps: Object,
-  labelWidth: String,
   modelValue: null,
   initialValue: null,
 });
 
 const emit = defineEmits(["update:modelValue"]);
+
+const labelWidth = inject("labelWidth");
 
 const value = computed({
   get() {
@@ -143,7 +144,6 @@ onMounted(() => {
 #form-item {
   .el-form-item__label {
     font-weight: bold;
-    justify-content: flex-start;
     &::before {
       display: none;
     }

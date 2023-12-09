@@ -31,6 +31,7 @@ const current = ref({});
 
 const schema = reactive({
   labelWidth: "150px",
+  labelAlign: "right",
   items: [],
 });
 

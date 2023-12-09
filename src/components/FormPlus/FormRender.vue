@@ -4,7 +4,6 @@
       v-if="item.children"
       :label="item.label"
       :component="item.component"
-      :label-width="labelWidth"
       :componentProps="item.props"
       :key="item.name"
     >
@@ -13,23 +12,16 @@
           v-if="c.children"
           :label="c.label"
           :component="c.component"
-          :label-width="labelWidth"
           :key="c.name"
           :componentProps="c.props"
         >
-          <FormRender
-            :labelWidth="labelWidth"
-            v-model="form"
-            :formItems="c.children"
-            :key="c.label"
-          />
+          <FormRender v-model="form" :formItems="c.children" :key="c.label" />
         </form-group>
 
         <form-item
           v-else
           v-model="formValues[c.name]"
           v-bind="c"
-          :label-width="labelWidth"
           :componentProps="c.props"
           :key="c.label"
         />
@@ -40,7 +32,6 @@
       v-else
       v-model="formValues[item.name]"
       v-bind="item"
-      :label-width="labelWidth"
       :componentProps="item.props"
       :key="item.label"
     />
@@ -53,7 +44,6 @@ import FormItem from "./FormItem.vue";
 import FormGroup from "./FormGroup.vue";
 
 const props = defineProps({
-  labelWidth: String,
   modelValue: Object,
   formItems: Array,
 });

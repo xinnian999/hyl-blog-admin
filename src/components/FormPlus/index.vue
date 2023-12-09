@@ -2,13 +2,10 @@
   <el-form
     :model="form"
     :style="`max-width: ${schema.formWidth}`"
+    :label-position="props.schema?.labelAlign"
     ref="formRef"
   >
-    <FormRender
-      :labelWidth="schema.labelWidth"
-      v-model="form"
-      :formItems="formItems"
-    />
+    <FormRender v-model="form" :formItems="formItems" />
   </el-form>
 </template>
 
@@ -57,8 +54,6 @@ const form = computed({
 
 const selectData = reactive({});
 
-provide("$selectData", selectData);
-
 // 转换为动态配置
 const formItems = computed(() => {
   const context = {
@@ -89,6 +84,8 @@ watch(
   },
   { deep: true }
 );
+
+provide("labelWidth", props.schema?.labelWidth);
 
 defineExpose({ submit, selectData });
 </script>

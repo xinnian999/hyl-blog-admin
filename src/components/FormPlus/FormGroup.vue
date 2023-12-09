@@ -26,14 +26,15 @@
 </template>
 
 <script setup lang="jsx">
-import { defineProps } from "vue";
+import { defineProps, inject } from "vue";
 
 defineProps({
   component: String,
   label: String,
-  labelWidth: String,
   componentProps: Object,
 });
+
+const labelWidth = inject("labelWidth");
 </script>
 
 <style lang="less" scoped>
