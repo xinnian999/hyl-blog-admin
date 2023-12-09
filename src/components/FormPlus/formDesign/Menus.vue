@@ -1,9 +1,26 @@
 <template>
   <div>
-    <h4>基础字段</h4>
+    <h4 class="type-title">基础字段</h4>
     <draggable
       class="list"
-      :list="components"
+      :list="basic"
+      :group="{ name: 'form', pull: 'clone', put: false }"
+      :sort="false"
+      ghost-class="ghost"
+      drag-class="drag"
+      fallback-class="fallback"
+    >
+      <template #item="{ element }">
+        <li class="form-item-btn">
+          {{ element.label }}
+        </li>
+      </template>
+    </draggable>
+
+    <h4 class="type-title">布局字段</h4>
+    <draggable
+      class="list"
+      :list="layout"
       :group="{ name: 'form', pull: 'clone', put: false }"
       :sort="false"
       ghost-class="ghost"
@@ -23,6 +40,9 @@
 import { ref } from "vue";
 import draggable from "vuedraggable";
 import components from "./components";
+
+const basic = components.filter((item) => item.type === "basic");
+const layout = components.filter((item) => item.type === "layout");
 </script>
 
 <style scoped lang="less">
@@ -30,6 +50,11 @@ import components from "./components";
 .fallback,
 .drag {
   list-style: none;
+}
+
+.type-title {
+  margin-bottom: 10px;
+  margin-top: 20px;
 }
 .list {
   display: flex;
@@ -43,7 +68,7 @@ import components from "./components";
     margin-bottom: 10px;
 
     background-color: aliceblue;
-    width: 45%;
+    width: 40%;
     text-align: center;
   }
 }

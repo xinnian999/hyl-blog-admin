@@ -9,6 +9,7 @@
       width="70%"
       class="dialog"
       center
+      destroy-on-close
     >
       <json-editor-vue
         class="editor"
@@ -26,6 +27,7 @@
       title="预览表单"
       width="70%"
       class="dialog"
+      destroy-on-close
       center
     >
       <form-plus v-model="form" :schema="schema" />
@@ -45,6 +47,7 @@ const emit = defineEmits(["update:schema"]);
 
 const json = computed({
   get() {
+    console.log(props.schema);
     return props.schema;
   },
   set(value) {
@@ -64,6 +67,7 @@ const handlePreviewExec = () => {
 };
 
 const handlePreviewForm = () => {
+  form.value = {};
   formVisible.value = true;
 };
 

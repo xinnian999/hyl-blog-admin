@@ -37,7 +37,7 @@
             :label="child.label"
             labelWidth="120px"
             :component="child.component"
-            :componentProps="child.props"
+            :componentProps="checkProps(child.props)"
           />
         </div>
       </template>
@@ -49,7 +49,7 @@
     :label="element.label"
     labelWidth="120px"
     :component="element.component"
-    :componentProps="element.props"
+    :componentProps="checkProps(element.props)"
     class="form-item-btn"
   />
 </template>
@@ -57,6 +57,7 @@
 <script setup lang="jsx">
 import { defineProps, defineEmits, inject } from "vue";
 import draggable from "vuedraggable";
+import { omit, pick } from "lodash";
 import { Delete } from "@element-plus/icons-vue";
 import FormGroup from "../FormGroup.vue";
 import FormItem from "../FormItem.vue";
@@ -80,6 +81,10 @@ const handleSelect = (element) => {
 
 const handleDelete = (element) => {
   emit("handleDelete", element);
+};
+
+const checkProps = (props) => {
+  return omit(props, ["multiple"]);
 };
 </script>
 

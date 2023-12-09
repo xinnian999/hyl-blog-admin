@@ -30,7 +30,7 @@ const store = useStore();
 const current = ref({});
 
 const schema = reactive({
-  labelWidth: "100px",
+  labelWidth: "150px",
   items: [],
 });
 

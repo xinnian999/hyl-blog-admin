@@ -5,17 +5,18 @@
     :disabled="disabled"
     @change="selectChange"
   >
-    <template v-if="optionType === 'circle'">
+    <template v-if="optionType === 'circle' || optionType === 'border'">
       <el-radio
         v-for="item in selectOptions"
         :key="item[valueKey]"
         :label="item[valueKey]"
         size="large"
+        :border="optionType === 'border'"
         >{{ item[labelKey] }}</el-radio
       >
     </template>
 
-    <el-space v-if="optionType === 'button'" wrap>
+    <el-space v-if="optionType === 'button'" wrap :size="[space, space]">
       <el-radio-button
         v-for="item in selectOptions"
         :key="item[valueKey]"
@@ -36,9 +37,10 @@ import {
   watch,
   inject,
   onMounted,
-} from 'vue';
-import { isString, isEqual } from 'lodash';
-import request from '@/utils/request';
+} from "vue";
+import { isString, isEqual } from "lodash";
+import request from "@/utils/request";
+import { number } from "echarts";
 
 const props = defineProps({
   modelValue: {},
@@ -48,7 +50,7 @@ const props = defineProps({
   },
   placeholder: {
     type: String,
-    default: '请选择',
+    default: "请选择",
   },
   disabled: {
     type: Boolean,
@@ -56,15 +58,15 @@ const props = defineProps({
   },
   mode: {
     type: String,
-    default: 'static',
+    default: "static",
   },
   labelKey: {
     type: String,
-    default: 'label',
+    default: "label",
   },
   valueKey: {
     type: String,
-    default: 'value',
+    default: "value",
   },
   autoSelectedFirst: {
     type: Boolean,
@@ -74,18 +76,22 @@ const props = defineProps({
   name: String,
   optionType: {
     type: String,
-    default: 'circle',
+    default: "circle",
+  },
+  space: {
+    type: Number,
+    default: 0,
   },
 });
 
-const emits = defineEmits(['update:modelValue', 'onChangeSelect']);
+const emits = defineEmits(["update:modelValue", "onChangeSelect"]);
 
 const selectVal = computed({
   get() {
     return props.modelValue;
   },
   set(val) {
-    emits('update:modelValue', val);
+    emits("update:modelValue", val);
   },
 });
 
@@ -93,7 +99,7 @@ const selectOptions = ref([]);
 
 const loading = ref(false);
 
-const $selectData = inject('$selectData');
+const $selectData = inject("$selectData");
 
 const fetchData = async () => {
   const { baseURL, url, method, data = {} } = props.api;
@@ -117,10 +123,10 @@ const fetchData = async () => {
 
 onMounted(() => {
   const { mode, options } = props;
-  if (mode === 'static') {
+  if (mode === "static") {
     selectOptions.value = options;
   }
-  if (mode === 'remote') {
+  if (mode === "remote") {
     fetchData();
   }
 });
@@ -132,7 +138,7 @@ watch(
     if (!isEqual(newVal, oldVal)) {
       fetchData();
     }
-  },
+  }
 );
 
 watch(selectOptions, (newVal) => {
@@ -140,7 +146,7 @@ watch(selectOptions, (newVal) => {
 
   // 自动选中第一项
   if (autoSelectedFirst && newVal.length && !modelValue) {
-    emits('update:modelValue', newVal[0][valueKey]);
+    emits("update:modelValue", newVal[0][valueKey]);
     selectChange(newVal[0][valueKey]);
   }
 });
@@ -148,10 +154,10 @@ watch(selectOptions, (newVal) => {
 watch(
   () => props.options,
   (newVal) => {
-    if (props.mode === 'static') {
+    if (props.mode === "static") {
       selectOptions.value = newVal;
     }
-  },
+  }
 );
 
 const selectChange = (val) => {

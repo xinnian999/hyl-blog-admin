@@ -2,8 +2,6 @@ export default {
   items: [
     { label: "字段label", component: "input", name: "label" },
     { label: "字段name", component: "input", name: "name" },
-    { label: "默认值", component: "input", name: "initialValue" },
-    { label: "是否必填", component: "switch", name: "required" },
     {
       label: "",
       component: "itemGroup",
@@ -12,10 +10,21 @@ export default {
         items: [
           { label: "是否禁用", component: "switch", name: "disabled" },
           {
-            label: "占位提示",
+            label: "最小值",
+            component: "inputNumber",
+            name: "min",
+            initialValue: 1,
+          },
+          {
+            label: "最大值",
+            component: "inputNumber",
+            name: "max",
+            initialValue: 9999,
+          },
+          {
+            label: "单位",
             component: "input",
-            name: "placeholder",
-            initialValue: "请输入...",
+            name: "unit",
           },
         ],
       },

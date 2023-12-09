@@ -14,8 +14,9 @@ import { defineProps, defineEmits, computed } from "vue";
 const props = defineProps({
   modelValue: Number,
   unit: String,
-  min: Number,
+  min: { type: Number, default: 0 },
   max: Number,
+  disabled: Boolean,
 });
 
 const emits = defineEmits(["update:modelValue"]);

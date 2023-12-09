@@ -1,23 +1,25 @@
 <template>
   <div id="formList">
     <el-form-item v-for="item in list" :key="item.key" class="list-item">
-      <el-space>
-        <form-item
-          v-for="field in fields"
-          v-model="item[field.name]"
-          v-bind="field"
-          :componentProps="field.props"
-          :key="field.label"
-        />
-      </el-space>
-      <el-button
-        v-if="allowReduce"
-        @click="reduce(item)"
-        :icon="Minus"
-        circle
-        type="primary"
-        class="list-btn"
-      ></el-button>
+      <div class="list-item-content">
+        <el-space>
+          <form-item
+            v-for="field in fields"
+            v-model="item[field.name]"
+            v-bind="field"
+            :componentProps="field.props"
+            :key="field.label"
+          />
+        </el-space>
+        <el-button
+          v-if="allowReduce"
+          @click="reduce(item)"
+          :icon="Minus"
+          circle
+          type="primary"
+          class="list-btn"
+        ></el-button>
+      </div>
     </el-form-item>
     <div>
       <el-button
@@ -106,6 +108,9 @@ const reduce = (item) => {
   position: relative;
   .list-item {
     margin-bottom: 10px;
+    .list-item-content {
+      display: flex;
+    }
   }
   .list-btn {
     margin-left: 10px;

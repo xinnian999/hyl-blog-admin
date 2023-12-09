@@ -31,9 +31,9 @@ import {
   watch,
   onMounted,
   inject,
-} from 'vue';
-import { isEqual, isPlainObject, debounce } from 'lodash';
-import request from '@/utils/request';
+} from "vue";
+import { isEqual, isPlainObject, debounce } from "lodash";
+import request from "@/utils/request";
 
 const props = defineProps({
   modelValue: {},
@@ -43,7 +43,7 @@ const props = defineProps({
   },
   placeholder: {
     type: String,
-    default: '请选择',
+    default: "请选择",
   },
   disabled: {
     type: Boolean,
@@ -55,15 +55,15 @@ const props = defineProps({
   },
   mode: {
     type: String,
-    default: 'static',
+    default: "static",
   },
   labelKey: {
     type: String,
-    default: 'label',
+    default: "label",
   },
   valueKey: {
     type: String,
-    default: 'value',
+    default: "value",
   },
   autoSelectedFirst: {
     type: Boolean,
@@ -73,22 +73,22 @@ const props = defineProps({
   name: String,
   size: {
     type: String,
-    default: 'default',
+    default: "default",
   },
   style: null,
-  filterKey: { default: 'filter', type: String },
+  filterKey: { default: "filter", type: String },
   formatter: Function,
   sort: Boolean,
 });
 
-const emits = defineEmits(['update:modelValue', 'onChangeSelect']);
+const emits = defineEmits(["update:modelValue", "onChangeSelect"]);
 
 const selectVal = computed({
   get() {
     return props.modelValue;
   },
   set(val) {
-    emits('update:modelValue', val);
+    emits("update:modelValue", val);
   },
 });
 
@@ -126,10 +126,10 @@ const fetchData = debounce(async () => {
 
 onMounted(() => {
   const { mode, options } = props;
-  if (mode === 'static') {
+  if (mode === "static") {
     selectOptions.value = options;
   }
-  if (mode === 'remote') {
+  if (mode === "remote") {
     fetchData();
   }
 });
@@ -142,7 +142,7 @@ watch(
       // console.log(newVal, oldVal);
       fetchData();
     }
-  },
+  }
 );
 
 watch(selectOptions, (newVal) => {
@@ -151,8 +151,8 @@ watch(selectOptions, (newVal) => {
   // 自动选中第一项
   if (autoSelectedFirst && newVal.length && !modelValue?.length) {
     emits(
-      'update:modelValue',
-      multiple ? [newVal[0][valueKey]] : newVal[0][valueKey],
+      "update:modelValue",
+      multiple ? [newVal[0][valueKey]] : newVal[0][valueKey]
     );
     selectChange(multiple ? [newVal[0][valueKey]] : newVal[0][valueKey]);
   }
@@ -165,13 +165,13 @@ watch(selectOptions, (newVal) => {
 watch(
   () => props.options,
   (newVal) => {
-    if (props.mode === 'static') {
+    if (props.mode === "static") {
       selectOptions.value = newVal;
     }
-  },
+  }
 );
 
-const $selectData = inject('$selectData');
+const $selectData = inject("$selectData");
 
 const selectChange = (val) => {
   const { name, valueKey, multiple } = props;
@@ -192,7 +192,7 @@ const selectChange = (val) => {
   if ($selectData) {
     $selectData[name] = selectData;
   }
-  emits('onChangeSelect', selectData);
+  emits("onChangeSelect", selectData);
 };
 </script>
 

@@ -132,7 +132,7 @@ const value = computed({
 onMounted(() => {
   //TODO：初始值：这里由于onMounted时v-model还没有挂载完成，所以转为异步更新暂时解决
   setTimeout(() => {
-    if (props.initialValue) {
+    if (!value.value && props.initialValue) {
       emit("update:modelValue", props.initialValue);
     }
   });
@@ -154,4 +154,3 @@ onMounted(() => {
   }
 }
 </style>
-../elements
