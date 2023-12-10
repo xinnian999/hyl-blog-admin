@@ -86,6 +86,7 @@ watch(
 );
 
 provide("labelWidth", props.schema?.labelWidth);
+provide("$selectData", selectData);
 
 defineExpose({ submit, selectData });
 </script>

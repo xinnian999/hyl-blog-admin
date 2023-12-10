@@ -14,7 +14,7 @@
     <el-input
       v-model="value"
       autocomplete="off"
-      v-if="component === 'input'"
+      v-if="currentComponent === 'input'"
       v-bind="componentProps"
       class="form-item-input"
     />
@@ -22,7 +22,7 @@
     <el-input
       v-model="value"
       autocomplete="off"
-      v-if="component === 'password'"
+      v-if="currentComponent === 'password'"
       show-password
       v-bind="componentProps"
       type="password"
@@ -35,63 +35,63 @@
       v-bind="componentProps"
       :autosize="{ minRows: 4, maxRows: 999 }"
       type="textarea"
-      v-if="component === 'textarea'"
+      v-if="currentComponent === 'textarea'"
       class="form-item-input"
     />
 
     <number-input
       v-model="value"
       v-bind="componentProps"
-      v-if="component === 'inputNumber'"
+      v-if="currentComponent === 'inputNumber'"
     />
 
     <select-plus
       v-model="value"
       v-bind="componentProps"
-      v-if="component === 'select'"
+      v-if="currentComponent === 'select'"
       :name="name"
     />
 
     <radio-plus
       v-model="value"
       v-bind="componentProps"
-      v-if="component === 'radio'"
+      v-if="currentComponent === 'radio'"
       :name="name"
     />
 
     <el-color-picker
       v-model="value"
-      v-if="component === 'colorPicker'"
+      v-if="currentComponent === 'colorPicker'"
       v-bind="componentProps"
     />
 
     <form-list
       v-model="value"
-      v-if="component === 'formList'"
+      v-if="currentComponent === 'formList'"
       v-bind="componentProps"
     />
 
     <Table-plus
       v-model="value"
-      v-if="component === 'selectTable'"
+      v-if="currentComponent === 'selectTable'"
       v-bind="componentProps"
       :name="name"
     />
 
     <el-switch
       v-model="value"
-      v-if="component === 'switch'"
+      v-if="currentComponent === 'switch'"
       v-bind="componentProps"
     />
 
     <item-group
       v-model="value"
-      v-if="component === 'itemGroup'"
+      v-if="currentComponent === 'itemGroup'"
       :labelWidth="labelWidth"
       v-bind="componentProps"
     />
 
-    <div v-if="component === 'text'">
+    <div v-if="currentComponent === 'text'">
       {{ componentProps.formatter || value }}
     </div>
   </el-form-item>
@@ -99,6 +99,7 @@
 
 <script setup lang="jsx">
 import { computed, defineProps, defineEmits, onMounted, inject } from "vue";
+import { isString } from "lodash";
 import {
   ItemGroup,
   NumberInput,
@@ -128,6 +129,14 @@ const value = computed({
   set(val) {
     emit("update:modelValue", val);
   },
+});
+
+const currentComponent = computed(() => {
+  if (isString(value.value) && /^{{\s*(.*?)\s*}}$/.test(value.value)) {
+    return "input";
+  }
+
+  return props.component;
 });
 
 onMounted(() => {
