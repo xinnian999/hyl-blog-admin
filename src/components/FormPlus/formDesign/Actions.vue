@@ -31,6 +31,9 @@
       center
     >
       <form-plus v-model="form" :schema="schema" />
+      <div>
+        <el-button @click="handlePush">模拟提交</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -38,6 +41,7 @@
 <script setup lang="jsx">
 import { ref, defineProps, computed, defineEmits } from "vue";
 import JsonEditorVue from "json-editor-vue3";
+import { ElMessageBox } from "element-plus";
 
 const props = defineProps({
   schema: Object,
@@ -79,6 +83,10 @@ const onBlur = async (editor) => {
     json.value = parse;
   }
 };
+
+const handlePush = () => {
+  ElMessageBox.alert(JSON.stringify(form.value), "模拟提交");
+};
 </script>
 
 <style>
@@ -87,6 +95,6 @@ const onBlur = async (editor) => {
   text-align: right;
 }
 .dialog {
-  top: 8vh;
+  /* top: 8vh; */
 }
 </style>

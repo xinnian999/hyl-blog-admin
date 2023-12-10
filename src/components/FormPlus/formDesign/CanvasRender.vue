@@ -38,6 +38,7 @@
             labelWidth="120px"
             :component="child.component"
             :componentProps="checkProps(child.props)"
+            :required="child.required"
           />
         </div>
       </template>
@@ -50,6 +51,7 @@
     labelWidth="120px"
     :component="element.component"
     :componentProps="checkProps(element.props)"
+    :required="element.required"
     class="form-item-btn"
   />
 </template>
@@ -84,7 +86,7 @@ const handleDelete = (element) => {
 };
 
 const checkProps = (props) => {
-  return omit(props, ["multiple"]);
+  return omit(props, ["multiple", "autoSelectedFirst"]);
 };
 </script>
 

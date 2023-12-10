@@ -154,7 +154,7 @@ onMounted(() => {
   .el-form-item__label {
     font-weight: bold;
     &::before {
-      display: none;
+      // display: none;
     }
   }
 

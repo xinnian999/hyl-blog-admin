@@ -122,6 +122,7 @@ const handleSelect = (element) => {
   border: 1px dashed #999;
   .canvas-item {
     border: 2px solid transparent;
+
     padding: 10px;
     position: relative;
     #form-item {
