@@ -1,4 +1,5 @@
 <template>
+  <!-- <IconFont /> -->
   <TablePlus table="article" :columns="columns" :formData="formData" />
 </template>
 
