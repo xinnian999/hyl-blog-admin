@@ -35,9 +35,9 @@
 </template>
 
 <script setup lang="jsx">
-import { computed, defineProps, defineEmits, onMounted } from "vue";
+import { computed, defineProps, defineEmits } from "vue";
 import { Plus, Minus } from "@element-plus/icons-vue";
-import { getRandomId } from "@/utils";
+import { getRandomId } from "../utils";
 import FormItem from "../FormItem.vue";
 
 const props = defineProps({

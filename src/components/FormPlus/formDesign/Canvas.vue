@@ -3,7 +3,6 @@
     class="canvas"
     :list="list"
     :group="{ name: 'form', pull: true, put: true }"
-    @change="log"
     itemKey="name"
     chooseClass="choose"
     ghost-class="ghost"
@@ -13,10 +12,10 @@
   >
     <template #item="{ element, index }">
       <div
-        :class="['canvas-item', element.path === current.path && 'active']"
+        :class="['canvas-item', element.id === current.id && 'active']"
         @click="handleSelect(element)"
       >
-        <div class="actions" v-if="element.path === current.path">
+        <div class="actions" v-if="element.id === current.id">
           <el-button
             :icon="Delete"
             size="small"
@@ -31,7 +30,6 @@
           @handleSelect="handleSelect"
           @handleDelete="handleDelete"
           :index="index"
-          :current="current"
         />
       </div>
     </template>
@@ -42,7 +40,7 @@
 import { defineProps, defineEmits, computed, inject } from "vue";
 import draggable from "vuedraggable";
 import { Delete } from "@element-plus/icons-vue";
-import { getRandomId } from "@/utils";
+import { getRandomId } from "../utils";
 import CanvasRender from "./CanvasRender.vue";
 
 const props = defineProps({
@@ -62,44 +60,34 @@ const list = computed({
 
 const current = inject("$current");
 
-// 拖拽排序事件
-const log = (e) => {
-  if (e.moved) {
-  }
-};
-
-const setPath = (items, fatherPath) => {
-  return items.map((item, index) => {
-    if (item.children) {
-      return {
-        ...item,
-        path: `${fatherPath}-${index}`,
-        name: item.name || getRandomId(6),
-        children: setPath(item.children, `${fatherPath}-${index}`),
-      };
-    }
-    return {
-      ...item,
-      path: `${fatherPath}-${index}`,
-      name: item.name || getRandomId(6),
-    };
-  });
-};
-
 const handleAdd = () => {
-  list.value = setPath(list.value, 0);
+  const setNameId = (items) => {
+    return items.map((item) => {
+      const data = {
+        ...item,
+        id: item.id || `form-${getRandomId(4)}`,
+        name: item.name || getRandomId(6),
+      };
+      if (item.children) {
+        data.children = setNameId(item.children);
+      }
+      delete data.type;
+      return data;
+    });
+  };
+  list.value = setNameId(list.value, 0);
 };
 
-const filterPath = (items, elementPath) => {
+const filterId = (items, elementId) => {
   const data = items.filter((item) => {
-    return item.path !== elementPath;
+    return item.id !== elementId;
   });
 
   return data.map((item) => {
     if (item.children) {
       return {
         ...item,
-        children: filterPath(item.children, elementPath),
+        children: filterId(item.children, elementId),
       };
     }
     return item;
@@ -107,7 +95,7 @@ const filterPath = (items, elementPath) => {
 };
 
 const handleDelete = (element) => {
-  list.value = filterPath(list.value, element.path);
+  list.value = filterId(list.value, element.id);
 };
 
 const handleSelect = (element) => {

@@ -12,9 +12,9 @@
       <template #item="{ element: child, index }">
         <div
           @click.stop="handleSelect(child)"
-          :class="['canvas-item', child.path === current.path && 'active']"
+          :class="['canvas-item', child.id === current.id && 'active']"
         >
-          <div class="actions" v-if="child.path === current.path">
+          <div class="actions" v-if="child.id === current.id">
             <el-button
               :icon="Delete"
               size="small"
@@ -30,7 +30,6 @@
             @handleSelect="handleSelect"
             @handleDelete="handleDelete"
             :index="index"
-            :current="current"
           />
           <form-item
             v-else

@@ -40,7 +40,7 @@ const setCurrent = (value) => {
 
   const set = (items) => {
     return items.map((item) => {
-      if (item.path === value.path) {
+      if (item.id === value.id) {
         return value;
       }
       if (item.children) {

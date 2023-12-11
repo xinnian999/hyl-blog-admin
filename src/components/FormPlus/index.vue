@@ -22,7 +22,7 @@ import {
 } from "vue";
 import { ElMessage } from "element-plus";
 import { useStore } from "vuex";
-import { parseFormItems, handleLinkages } from "./utils";
+import { handleLinkages, deepParse } from "./utils";
 import FormRender from "./FormRender.vue";
 
 const formRef = ref(null);
@@ -63,7 +63,7 @@ const formItems = computed(() => {
     $utils: {},
     $global: store.state.global,
   };
-  return parseFormItems(props.schema.items, context);
+  return deepParse(props.schema.items, context);
 });
 
 const submit = async () => {
