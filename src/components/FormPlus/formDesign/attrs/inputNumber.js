@@ -3,6 +3,12 @@ export default {
     { label: "字段label", component: "input", name: "label" },
     { label: "字段name", component: "input", name: "name" },
     {
+      label: "默认值",
+      component: "input",
+      name: "initialValue",
+      initialValue: 1,
+    },
+    {
       label: "",
       component: "itemGroup",
       name: "props",
