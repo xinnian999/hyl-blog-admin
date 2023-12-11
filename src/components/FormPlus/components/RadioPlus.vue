@@ -40,7 +40,6 @@ import {
 } from "vue";
 import { isString, isEqual } from "lodash";
 import request from "@/utils/request";
-import { number } from "echarts";
 
 const props = defineProps({
   modelValue: {},

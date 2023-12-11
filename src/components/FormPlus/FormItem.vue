@@ -106,7 +106,7 @@ import {
   SelectPlus,
   RadioPlus,
   FormList,
-} from "./elements";
+} from "./components";
 
 const props = defineProps({
   label: String,
@@ -163,3 +163,4 @@ onMounted(() => {
   }
 }
 </style>
+./components
