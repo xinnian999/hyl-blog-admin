@@ -1,58 +1,49 @@
 <template>
-  <form-group v-if="element.children" v-bind="element">
-    <draggable
-      :list="element.children"
-      group="form"
-      itemKey="name"
-      chosenClass="active"
-      ghost-class="ghost"
-      class="childContainer"
-      @add="handleAdd"
-    >
-      <template #item="{ element: child, index }">
-        <div
-          @click.stop="handleSelect(child)"
-          :class="['canvas-item', child.id === current.id && 'active']"
-        >
-          <div class="actions" v-if="child.id === current.id">
-            <el-button
-              :icon="Delete"
-              size="small"
-              type="primary"
-              @click.stop="handleDelete(child)"
-            ></el-button>
-          </div>
+  <div
+    :class="['canvas-item', element.id === current.id && 'active']"
+    @click="handleSelect(element)"
+  >
+    <div class="actions" v-if="element.id === current.id">
+      <el-button
+        :icon="Delete"
+        size="small"
+        type="primary"
+        @click.stop="handleDelete(element)"
+      ></el-button>
+    </div>
 
+    <form-group v-if="element.children" v-bind="element">
+      <draggable
+        :list="element.children"
+        group="form"
+        itemKey="name"
+        chosenClass="active"
+        ghost-class="ghost"
+        class="childContainer"
+        @add="handleAdd"
+      >
+        <template #item="{ element: child, index }">
           <CanvasRender
-            v-if="child.children"
             :element="child"
             @handleAdd="handleAdd"
             @handleSelect="handleSelect"
             @handleDelete="handleDelete"
             :index="index"
           />
-          <form-item
-            v-else
-            :label="child.label"
-            labelWidth="120px"
-            :component="child.component"
-            :componentProps="checkProps(child.props)"
-            :required="child.required"
-          />
-        </div>
-      </template>
-    </draggable>
-  </form-group>
+        </template>
+      </draggable>
+    </form-group>
 
-  <form-item
-    v-else
-    :label="element.label"
-    labelWidth="120px"
-    :component="element.component"
-    :componentProps="checkProps(element.props)"
-    :required="element.required"
-    class="form-item-btn"
-  />
+    <form-item
+      v-else
+      :label="element.label"
+      labelWidth="120px"
+      :component="element.component"
+      :componentProps="checkProps(element.props)"
+      :required="element.required"
+      class="form-item-btn"
+    />
+  </div>
 </template>
 
 <script setup lang="jsx">

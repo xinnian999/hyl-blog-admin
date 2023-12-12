@@ -11,27 +11,13 @@
     fallback-class="fallback"
   >
     <template #item="{ element, index }">
-      <div
-        :class="['canvas-item', element.id === current.id && 'active']"
-        @click="handleSelect(element)"
-      >
-        <div class="actions" v-if="element.id === current.id">
-          <el-button
-            :icon="Delete"
-            size="small"
-            type="primary"
-            @click.stop="handleDelete(element)"
-          ></el-button>
-        </div>
-
-        <CanvasRender
-          :element="element"
-          @handleAdd="handleAdd"
-          @handleSelect="handleSelect"
-          @handleDelete="handleDelete"
-          :index="index"
-        />
-      </div>
+      <CanvasRender
+        :element="element"
+        @handleAdd="handleAdd"
+        @handleSelect="handleSelect"
+        @handleDelete="handleDelete"
+        :index="index"
+      />
     </template>
   </draggable>
 </template>
