@@ -26,7 +26,7 @@ export default [
     },
     type: "basic",
   },
-  { label: "数字输入框", component: "inputNumber", type: "basic" },
+  { label: "计数器", component: "inputNumber", type: "basic" },
   {
     label: "卡片",
     component: "card",

@@ -1,4 +1,6 @@
 const { defineConfig } = require("@vue/cli-service");
+const path = require("path");
+
 module.exports = defineConfig({
   transpileDependencies: true,
   lintOnSave: false,
@@ -30,5 +32,21 @@ module.exports = defineConfig({
       args[0].title = "心念blog后台管理";
       return args;
     });
+    // 内置的svg处理排除指定目录下的文件
+    config.module
+      .rule("svg")
+      .exclude.add(path.resolve("src/assets/icons"))
+      .end();
+
+    config.module
+      .rule("svg-sprite-loader")
+      .test(/\.svg$/)
+      .include.add(path.resolve("src/assets/icons"))
+      .end()
+      .use("svg-sprite-loader")
+      .loader("svg-sprite-loader")
+      .options({
+        symbolId: "icon-[name]",
+      });
   },
 });

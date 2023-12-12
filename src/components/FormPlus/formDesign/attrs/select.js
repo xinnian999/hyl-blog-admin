@@ -15,7 +15,7 @@ export default {
             label: "占位提示",
             component: "input",
             name: "placeholder",
-            initialValue: "请输入...",
+            initialValue: "请选择...",
           },
           {
             label: "选择模式",

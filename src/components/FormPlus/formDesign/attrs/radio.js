@@ -34,7 +34,9 @@ export default {
             label: "选项间距",
             component: "inputNumber",
             name: "space",
-            props: {},
+            props: {
+              min: 0,
+            },
             initialValue: 0,
           },
           {
