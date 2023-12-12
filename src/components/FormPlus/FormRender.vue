@@ -7,25 +7,7 @@
       :componentProps="item.props"
       :key="item.name"
     >
-      <template v-for="c in item.children">
-        <form-group
-          v-if="c.children"
-          :label="c.label"
-          :component="c.component"
-          :key="c.name"
-          :componentProps="c.props"
-        >
-          <FormRender v-model="form" :formItems="c.children" :key="c.label" />
-        </form-group>
-
-        <form-item
-          v-else
-          v-model="formValues[c.name]"
-          v-bind="c"
-          :componentProps="c.props"
-          :key="c.label"
-        />
-      </template>
+      <FormRender v-model="form" :formItems="item.children" />
     </form-group>
 
     <form-item
