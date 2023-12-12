@@ -1,28 +1,9 @@
 <template>
-  <div>
-    <h4 class="type-title">基础字段</h4>
+  <div v-for="{ title, children } in components" :key="title">
+    <h4 class="type-title">{{ title }}</h4>
     <draggable
       class="list"
-      :list="basic"
-      :group="{ name: 'form', pull: 'clone', put: false }"
-      :sort="false"
-      ghost-class="ghost"
-      drag-class="drag"
-      fallback-class="fallback"
-    >
-      <template #item="{ element }">
-        <li class="form-item-btn">
-          <div class="ico"><svg-icon :name="element.component" /></div>
-
-          <div class="name">{{ element.label }}</div>
-        </li>
-      </template>
-    </draggable>
-
-    <h4 class="type-title">布局字段</h4>
-    <draggable
-      class="list"
-      :list="layout"
+      :list="children"
       :group="{ name: 'form', pull: 'clone', put: false }"
       :sort="false"
       ghost-class="ghost"
@@ -41,12 +22,8 @@
 </template>
 
 <script setup lang="jsx">
-import { ref } from "vue";
 import draggable from "vuedraggable";
 import components from "./components";
-
-const basic = components.filter((item) => item.type === "basic");
-const layout = components.filter((item) => item.type === "layout");
 </script>
 
 <style scoped lang="less">

@@ -1,38 +1,54 @@
 export default [
-  { label: "单行文本", component: "input", props: {}, type: "basic" },
   {
-    label: "下拉选择框",
-    component: "select",
-    props: {
-      mode: "static",
-      options: [
-        { label: "选项1", value: "value1" },
-        { label: "选项2", value: "value2" },
-        { label: "选项3", value: "value3" },
-      ],
-    },
-    type: "basic",
+    title: "基础字段",
+    children: [
+      { label: "单行文本", component: "input", props: {} },
+      {
+        label: "下拉选择框",
+        component: "select",
+        props: {
+          mode: "static",
+          options: [
+            { label: "选项1", value: "value1" },
+            { label: "选项2", value: "value2" },
+            { label: "选项3", value: "value3" },
+          ],
+        },
+      },
+      {
+        label: "单选框",
+        component: "radio",
+        props: {
+          mode: "static",
+          options: [
+            { label: "选项1", value: "value1" },
+            { label: "选项2", value: "value2" },
+            { label: "选项3", value: "value3" },
+          ],
+        },
+      },
+      { label: "计数器", component: "inputNumber" },
+      { label: "开关", component: "switch" },
+    ],
   },
   {
-    label: "单选框",
-    component: "radio",
-    props: {
-      mode: "static",
-      options: [
-        { label: "选项1", value: "value1" },
-        { label: "选项2", value: "value2" },
-        { label: "选项3", value: "value3" },
-      ],
-    },
-    type: "basic",
+    title: "高级字段",
+    children: [
+      {
+        label: "自增容器",
+        component: "formList",
+      },
+    ],
   },
-  { label: "计数器", component: "inputNumber", type: "basic" },
-  { label: "开关", component: "switch", type: "basic" },
   {
-    label: "卡片",
-    component: "card",
-    children: [],
-    header: "卡片",
-    type: "layout",
+    title: "布局字段",
+    children: [
+      {
+        label: "卡片",
+        component: "card",
+        children: [],
+        header: "卡片",
+      },
+    ],
   },
 ];
