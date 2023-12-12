@@ -27,6 +27,7 @@ export default [
     type: "basic",
   },
   { label: "计数器", component: "inputNumber", type: "basic" },
+  { label: "开关", component: "switch", type: "basic" },
   {
     label: "卡片",
     component: "card",

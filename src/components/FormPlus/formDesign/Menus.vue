@@ -12,7 +12,9 @@
     >
       <template #item="{ element }">
         <li class="form-item-btn">
-          <svg-icon :name="element.component" /> {{ element.label }}
+          <div class="ico"><svg-icon :name="element.component" /></div>
+
+          <div class="name">{{ element.label }}</div>
         </li>
       </template>
     </draggable>
@@ -29,7 +31,9 @@
     >
       <template #item="{ element }">
         <li class="form-item-btn">
-          <svg-icon :name="element.component" /> {{ element.label }}
+          <div class="ico"><svg-icon :name="element.component" /></div>
+
+          <div class="name">{{ element.label }}</div>
         </li>
       </template>
     </draggable>
@@ -62,7 +66,6 @@ const layout = components.filter((item) => item.type === "layout");
   justify-content: space-between;
   padding-left: 0;
   flex-wrap: wrap;
-  font-size: 14px;
   .form-item-btn {
     list-style: none;
     padding: 5px 0px;
@@ -75,7 +78,18 @@ const layout = components.filter((item) => item.type === "layout");
     }
     background-color: aliceblue;
     width: 45%;
-    text-align: center;
+    display: flex;
+    .ico {
+      width: 40px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .name {
+      flex: 1;
+      font-size: 14px;
+    }
   }
 }
 </style>
