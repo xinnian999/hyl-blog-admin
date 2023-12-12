@@ -2,9 +2,9 @@
   <template v-for="item in formItems">
     <form-group
       v-if="item.children"
-      :label="item.label"
-      :component="item.component"
+      v-bind="item"
       :componentProps="item.props"
+      v-model="formValues[item.name]"
       :key="item.name"
     >
       <FormRender v-model="form" :formItems="item.children" />

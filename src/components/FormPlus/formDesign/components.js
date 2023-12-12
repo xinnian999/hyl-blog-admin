@@ -37,6 +37,7 @@ export default [
       {
         label: "自增容器",
         component: "formList",
+        children:[]
       },
     ],
   },

@@ -22,19 +22,44 @@
     >
       <slot />
     </el-form-item>
+    <el-form-item
+      id="form-item"
+      :label-width="labelWidth"
+      :label="label"
+      v-if="component === 'formList'"
+    >
+      <form-list v-model="value" v-bind="componentProps" :fields="children" />
+    </el-form-item>
   </div>
 </template>
 
 <script setup lang="jsx">
-import { defineProps, inject } from "vue";
+import { defineProps, inject, computed, defineEmits } from "vue";
+import FormList from "./components/FormList.vue";
 
-defineProps({
-  component: String,
+const props = defineProps({
   label: String,
+  name: String,
+  component: String,
+  required: Boolean,
   componentProps: Object,
+  modelValue: null,
+  initialValue: null,
+  children: Array,
 });
 
+const emit = defineEmits(["update:modelValue"]);
+
 const labelWidth = inject("labelWidth");
+
+const value = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(val) {
+    emit("update:modelValue", val);
+  },
+});
 </script>
 
 <style lang="less" scoped>
