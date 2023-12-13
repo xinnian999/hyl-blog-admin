@@ -43,8 +43,6 @@ const list = computed({
   },
 });
 
-const current = inject("$current");
-
 const handleAdd = () => {
   const setNameId = (items) => {
     return items.map((item) => {

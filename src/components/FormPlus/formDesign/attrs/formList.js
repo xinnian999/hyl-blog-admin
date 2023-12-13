@@ -8,7 +8,22 @@ export default {
       component: "itemGroup",
       name: "props",
       props: {
-        fields: [],
+        items: [
+          {
+            label: "显示模式",
+            component: "radio",
+            name: "mode",
+            props: {
+              mode: "static",
+              options: [
+                { label: "表格", value: "table" },
+                { label: "卡片", value: "card" },
+                { label: "行内", value: "inline" },
+              ],
+            },
+            initialValue: "table",
+          },
+        ],
       },
     },
   ],
