@@ -1,7 +1,7 @@
 <template>
   <div
     :class="['canvas-item', element.id === current.id && 'active']"
-    @click="handleSelect(element)"
+    @click.stop="handleSelect(element)"
   >
     <div class="actions" v-if="element.id === current.id">
       <el-button
@@ -12,7 +12,7 @@
       ></el-button>
     </div>
 
-    <form-group v-if="element.children" v-bind="element">
+    <canvas-group v-if="element.children" v-bind="element">
       <draggable
         :list="element.children"
         group="form"
@@ -32,7 +32,7 @@
           />
         </template>
       </draggable>
-    </form-group>
+    </canvas-group>
 
     <form-item
       v-else
@@ -51,7 +51,7 @@ import { defineProps, defineEmits, inject } from "vue";
 import draggable from "vuedraggable";
 import { omit, pick } from "lodash";
 import { Delete } from "@element-plus/icons-vue";
-import FormGroup from "../FormGroup.vue";
+import CanvasGroup from "./CanvasGroup.vue";
 import FormItem from "../FormItem.vue";
 
 defineProps({
@@ -82,6 +82,6 @@ const checkProps = (props) => {
 
 <style lang="less">
 .childContainer {
-  min-height: 100px;
+  min-height: 150px;
 }
 </style>

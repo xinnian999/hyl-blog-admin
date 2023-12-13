@@ -4,3 +4,4 @@ export { default as radio } from "./radio";
 export { default as card } from "./card";
 export { default as inputNumber } from "./inputNumber";
 export { default as switch } from "./switch";
+export { default as formList } from "./formList";

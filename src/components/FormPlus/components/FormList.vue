@@ -9,6 +9,7 @@
             v-bind="field"
             :componentProps="field.props"
             :key="field.label"
+            label=""
           />
         </el-space>
         <el-button

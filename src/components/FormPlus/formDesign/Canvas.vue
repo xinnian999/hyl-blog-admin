@@ -25,7 +25,6 @@
 <script setup lang="jsx">
 import { defineProps, defineEmits, computed, inject } from "vue";
 import draggable from "vuedraggable";
-import { Delete } from "@element-plus/icons-vue";
 import { getRandomId } from "../utils";
 import CanvasRender from "./CanvasRender.vue";
 
@@ -96,7 +95,7 @@ const handleSelect = (element) => {
   border: 1px dashed #999;
   .canvas-item {
     border: 2px solid transparent;
-
+    margin-bottom: 5px;
     padding: 10px;
     position: relative;
     #form-item {
@@ -107,6 +106,10 @@ const handleSelect = (element) => {
       right: 0;
       bottom: 0;
       z-index: 20;
+    }
+
+    &:hover {
+      border: 2px solid var(--el-color-primary) !important;
     }
   }
 
