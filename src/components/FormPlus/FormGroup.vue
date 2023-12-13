@@ -28,7 +28,12 @@
       :label="label"
       v-if="component === 'formList'"
     >
-      <form-list v-model="value" v-bind="componentProps" :fields="children" />
+      <form-list
+        v-model="value"
+        v-bind="componentProps"
+        :fields="children"
+        :title="label"
+      />
     </el-form-item>
   </div>
 </template>

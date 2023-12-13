@@ -26,9 +26,42 @@
       </el-form-item>
     </template>
 
-    <template v-if="mode === 'card'"> </template>
+    <template v-if="mode === 'card'">
+      <el-card
+        v-for="(item, index) in list"
+        :key="item.key"
+        v-bind="componentProps"
+        class="list-card"
+      >
+        <template #header>
+          <div class="card-header">
+            <span>{{ title + index }}</span>
+            <el-button
+              v-if="allowReduce"
+              @click="reduce(item)"
+              :icon="Minus"
+              circle
+              type="primary"
+              class="list-btn"
+            ></el-button>
+          </div>
+        </template>
+        <form-item
+          v-for="field in fields"
+          v-model="item[field.name]"
+          v-bind="field"
+          :componentProps="field.props"
+          :key="field.label"
+          class="list-card-item"
+        />
+      </el-card>
+    </template>
 
-    <el-table :data="list" style="width: 100%" v-if="mode === 'table'">
+    <el-table
+      :data="list"
+      style="width: 100%"
+      v-if="mode === 'table' && list.length"
+    >
       <el-table-column
         :prop="item.name"
         :label="item.label"
@@ -92,6 +125,10 @@ const props = defineProps({
     default: "table",
     type: String,
   },
+  title: {
+    default: "卡片",
+    type: String,
+  },
 });
 
 const emit = defineEmits(["update:modelValue"]);
@@ -143,6 +180,17 @@ const formatter = (item, data) => {
     margin-bottom: 10px;
     .list-item-content {
       display: flex;
+    }
+  }
+  .list-card {
+    margin-bottom: 10px;
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .list-card-item {
+      margin-bottom: 15px;
     }
   }
   .list-btn {
