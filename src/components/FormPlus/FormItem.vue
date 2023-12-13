@@ -65,19 +65,6 @@
       v-bind="componentProps"
     />
 
-    <form-list
-      v-model="value"
-      v-if="currentComponent === 'formList'"
-      v-bind="componentProps"
-    />
-
-    <Table-plus
-      v-model="value"
-      v-if="currentComponent === 'selectTable'"
-      v-bind="componentProps"
-      :name="name"
-    />
-
     <el-switch
       v-model="value"
       v-if="currentComponent === 'switch'"
@@ -100,13 +87,7 @@
 <script setup lang="jsx">
 import { computed, defineProps, defineEmits, onMounted, inject } from "vue";
 import { isString } from "lodash";
-import {
-  ItemGroup,
-  NumberInput,
-  SelectPlus,
-  RadioPlus,
-  FormList,
-} from "./components";
+import { ItemGroup, NumberInput, SelectPlus, RadioPlus } from "./components";
 
 const props = defineProps({
   label: String,
