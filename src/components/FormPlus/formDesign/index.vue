@@ -16,14 +16,12 @@
 </template>
 
 <script setup lang="jsx">
-import { defineProps, ref, provide, reactive, onMounted } from "vue";
+import { ref, provide, reactive, onMounted } from "vue";
 import { useStore } from "vuex";
 import Menus from "./Menus.vue";
 import Canvas from "./Canvas.vue";
 import Current from "./Current.vue";
 import Actions from "./Actions.vue";
-
-const props = defineProps({});
 
 const store = useStore();
 
@@ -40,7 +38,7 @@ const setCurrent = (value) => {
 
   const set = (items) => {
     return items.map((item) => {
-      if (item.id === value.id) {
+      if (item.onlyId === value.onlyId) {
         return value;
       }
       if (item.children) {

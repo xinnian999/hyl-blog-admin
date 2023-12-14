@@ -1,9 +1,9 @@
 <template>
   <div
-    :class="['canvas-item', element.id === current.id && 'active']"
+    :class="['canvas-item', element.onlyId === current.onlyId && 'active']"
     @click.stop="handleSelect(element)"
   >
-    <div class="actions" v-if="element.id === current.id">
+    <div class="actions" v-if="element.onlyId === current.onlyId">
       <el-button
         :icon="Delete"
         size="small"
@@ -36,11 +36,8 @@
 
     <form-item
       v-else
-      :label="element.label"
-      labelWidth="120px"
-      :component="element.component"
+      v-bind="element"
       :componentProps="checkProps(element.props)"
-      :required="element.required"
       class="form-item-btn"
     />
   </div>

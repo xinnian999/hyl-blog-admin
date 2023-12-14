@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="jsx">
-import { defineProps, defineEmits, computed } from "vue";
+import { defineProps, defineEmits, computed, provide } from "vue";
 import draggable from "vuedraggable";
 import { getRandomId } from "../utils";
 import CanvasRender from "./CanvasRender.vue";
@@ -43,12 +43,14 @@ const list = computed({
   },
 });
 
+provide("labelWidth", "120px");
+
 const handleAdd = () => {
   const setNameId = (items) => {
     return items.map((item) => {
       const data = {
         ...item,
-        id: item.id || `form-${getRandomId(4)}`,
+        onlyId: item.onlyId || `form-${getRandomId(4)}`,
         name: item.name || getRandomId(6),
       };
       if (item.children) {
@@ -63,7 +65,7 @@ const handleAdd = () => {
 
 const filterId = (items, elementId) => {
   const data = items.filter((item) => {
-    return item.id !== elementId;
+    return item.onlyId !== elementId;
   });
 
   return data.map((item) => {
@@ -78,7 +80,7 @@ const filterId = (items, elementId) => {
 };
 
 const handleDelete = (element) => {
-  list.value = filterId(list.value, element.id);
+  list.value = filterId(list.value, element.onlyId);
 };
 
 const handleSelect = (element) => {
