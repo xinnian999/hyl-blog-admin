@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="jsx">
-import { defineProps, defineEmits, computed, inject } from "vue";
+import { defineProps, defineEmits, computed } from "vue";
 import draggable from "vuedraggable";
 import { getRandomId } from "../utils";
 import CanvasRender from "./CanvasRender.vue";
@@ -107,7 +107,7 @@ const handleSelect = (element) => {
     }
 
     &:hover {
-      border: 2px solid var(--el-color-primary) !important;
+      border: 2px solid var(--el-color-primary-light-5);
     }
   }
 
@@ -117,6 +117,9 @@ const handleSelect = (element) => {
   }
   .active {
     border: 2px solid var(--el-color-primary) !important;
+    &:hover {
+      border: 2px solid var(--el-color-primary) !important;
+    }
   }
 }
 </style>

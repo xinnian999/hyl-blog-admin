@@ -30,7 +30,7 @@
       destroy-on-close
       center
     >
-      <form-plus v-model="form" :schema="schema" />
+      <form-plus v-model="form" :schema="schema" ref="formRef" />
       <div>
         <el-button @click="handlePush">模拟提交</el-button>
       </div>
@@ -60,6 +60,8 @@ const json = computed({
   },
 });
 
+const formRef = ref(null);
+
 const form = ref({});
 
 const execVisible = ref(false);
@@ -84,7 +86,8 @@ const onBlur = async (editor) => {
   }
 };
 
-const handlePush = () => {
+const handlePush = async () => {
+  await formRef.value.submit();
   ElMessageBox.alert(JSON.stringify(form.value), "模拟提交");
 };
 </script>

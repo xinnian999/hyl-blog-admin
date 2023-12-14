@@ -69,7 +69,7 @@
         v-for="item in fields"
         :formatter="($event) => formatter(item, $event)"
       />
-      <el-table-column fixed="right" width="150">
+      <el-table-column fixed="right" min-width="60">
         <template #default="record">
           <el-button
             v-if="allowReduce"
@@ -130,7 +130,6 @@ const props = defineProps({
     type: String,
   },
 });
-
 const emit = defineEmits(["update:modelValue"]);
 
 const list = computed({
@@ -167,12 +166,13 @@ const formatter = (item, data) => {
       componentProps={item.props}
       modelValue={data[item.name]} // 设置 value 属性
       onUpdate:modelValue={(newValue) => (data[item.name] = newValue)}
+      style={{ marginBottom: 0 }}
     />
   );
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 #formList {
   position: relative;
   width: 100%;

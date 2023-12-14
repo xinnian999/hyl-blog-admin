@@ -1,6 +1,7 @@
 <template>
   <el-form-item
     id="form-item"
+    :style="style"
     :key="name"
     :prop="name"
     :label="label"
@@ -74,7 +75,6 @@
     <item-group
       v-model="value"
       v-if="currentComponent === 'itemGroup'"
-      :labelWidth="labelWidth"
       v-bind="componentProps"
     />
 
@@ -97,6 +97,7 @@ const props = defineProps({
   componentProps: Object,
   modelValue: null,
   initialValue: null,
+  style: Object,
 });
 
 const emit = defineEmits(["update:modelValue"]);

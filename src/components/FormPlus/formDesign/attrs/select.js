@@ -57,32 +57,30 @@ export default {
             },
           },
           {
-            label: " ",
+            label: "静态选项",
             name: "options",
             component: "formList",
-            hide: '{{$form.props.mode!=="static"}}',
-            props: {
-              fields: [
-                {
-                  label: "",
-                  name: "label",
-                  component: "input",
-                  props: {},
-                },
-                {
-                  label: "",
-                  name: "value",
-                  component: "input",
-                  props: {},
-                },
-              ],
-            },
+            hidden: '{{$form.props.mode!=="static"}}',
+            children: [
+              {
+                label: "",
+                name: "label",
+                component: "input",
+                props: {},
+              },
+              {
+                label: "",
+                name: "value",
+                component: "input",
+                props: {},
+              },
+            ],
           },
           {
             label: "",
             component: "itemGroup",
             name: "api",
-            hide: '{{$form.props.mode==="static"}}',
+            hidden: '{{$form.props.mode==="static"}}',
             props: {
               items: [
                 {

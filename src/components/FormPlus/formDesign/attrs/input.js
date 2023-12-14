@@ -20,6 +20,7 @@ export default {
         ],
       },
     },
+    { label: "隐藏条件", component: "input", name: "hidden" },
     {
       label: "联动值",
       name: "linkage",
