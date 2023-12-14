@@ -1,36 +1,28 @@
 <template>
   <div id="formGroup">
-    <el-card
-      v-if="component === 'card'"
-      v-bind="componentProps"
-      :header="label"
-    >
+    <el-card v-if="component === 'card'" v-bind="props" :header="label">
       <slot />
     </el-card>
 
-    <div v-if="component === 'divider'" style="margin-bottom: 60px">
-      <el-divider style="margin-bottom: 40px">{{ label }}</el-divider>
-      <slot />
-    </div>
-
     <el-form-item
+      v-if="component === 'inline'"
       id="form-item"
       :label-width="labelWidth"
       :label="label"
-      v-if="component === 'inline'"
       class="inline"
     >
       <slot />
     </el-form-item>
+
     <el-form-item
+      v-if="component === 'formList'"
       id="form-item"
       :label-width="labelWidth"
       :label="label"
-      v-if="component === 'formList'"
     >
       <form-list
         v-model="value"
-        v-bind="componentProps"
+        v-bind="props"
         :fields="children"
         :title="label"
       />
@@ -42,12 +34,12 @@
 import { defineProps, inject, computed, defineEmits } from "vue";
 import FormList from "./components/FormList.vue";
 
-const props = defineProps({
+const thisProps = defineProps({
   label: String,
   name: String,
   component: String,
   required: Boolean,
-  componentProps: Object,
+  props: Object,
   modelValue: null,
   initialValue: null,
   children: Array,
@@ -59,7 +51,7 @@ const labelWidth = inject("labelWidth");
 
 const value = computed({
   get() {
-    return props.modelValue;
+    return thisProps.modelValue;
   },
   set(val) {
     emit("update:modelValue", val);
@@ -70,9 +62,5 @@ const value = computed({
 <style lang="less" scoped>
 #formGroup {
   margin-bottom: 10px;
-}
-.inline {
-  display: flex;
-  width: 100%;
 }
 </style>

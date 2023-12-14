@@ -1,11 +1,9 @@
 <template>
-  <template v-for="item in formItems">
+  <template v-for="item in formItems" :key="item.name">
     <form-group
       v-if="item.children"
       v-bind="item"
-      :componentProps="item.props"
       v-model="formValues[item.name]"
-      :key="item.name"
     >
       <FormRender v-model="form" :formItems="item.children" />
     </form-group>
@@ -15,7 +13,6 @@
       v-model="formValues[item.name]"
       v-bind="item"
       :componentProps="item.props"
-      :key="item.label"
     />
   </template>
 </template>

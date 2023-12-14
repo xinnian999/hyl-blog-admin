@@ -9,7 +9,6 @@ import { defineProps, computed, defineEmits } from "vue";
 import FormRender from "../FormRender.vue";
 
 const props = defineProps({
-  labelWidth: String,
   modelValue: { default: () => ({}), type: Object },
   items: Array,
 });
