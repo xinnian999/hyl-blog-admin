@@ -8,26 +8,24 @@ export default {
       label: "",
       component: "itemGroup",
       name: "props",
-      props: {
-        items: [
-          { label: "是否禁用", component: "switch", name: "disabled" },
-          { label: "打开时描述", component: "input", name: "active-text" },
-          { label: "关闭时描述", component: "input", name: "inactive-text" },
-          {
-            label: "描述显示位置",
-            component: "radio",
-            name: "inline-prompt",
-            props: {
-              mode: "static",
-              options: [
-                { label: "外部", value: 0 },
-                { label: "内部", value: 1 },
-              ],
-            },
-            initialValue: 0,
+      children: [
+        { label: "是否禁用", component: "switch", name: "disabled" },
+        { label: "打开时描述", component: "input", name: "active-text" },
+        { label: "关闭时描述", component: "input", name: "inactive-text" },
+        {
+          label: "描述显示位置",
+          component: "radio",
+          name: "inline-prompt",
+          props: {
+            mode: "static",
+            options: [
+              { label: "外部", value: 0 },
+              { label: "内部", value: 1 },
+            ],
           },
-        ],
-      },
+          initialValue: 0,
+        },
+      ],
     },
   ],
 };

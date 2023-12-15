@@ -27,12 +27,21 @@
         :title="label"
       />
     </el-form-item>
+
+    <item-group
+      v-model="value"
+      :items="children"
+      v-if="component === 'itemGroup'"
+    >
+      <slot />
+    </item-group>
   </div>
 </template>
 
 <script setup lang="jsx">
 import { defineProps, inject, computed, defineEmits } from "vue";
 import FormList from "./group/FormList.vue";
+import ItemGroup from "./group/ItemGroup.vue";
 
 const thisProps = defineProps({
   label: String,

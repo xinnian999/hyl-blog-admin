@@ -8,18 +8,17 @@ export default {
       label: "",
       component: "itemGroup",
       name: "props",
-      props: {
-        items: [
-          { label: "是否禁用", component: "switch", name: "disabled" },
-          {
-            label: "占位提示",
-            component: "input",
-            name: "placeholder",
-            initialValue: "请输入...",
-          },
-        ],
-      },
+      children: [
+        { label: "是否禁用", component: "switch", name: "disabled" },
+        {
+          label: "占位提示",
+          component: "input",
+          name: "placeholder",
+          initialValue: "请输入...",
+        },
+      ],
     },
+
     { label: "隐藏条件", component: "input", name: "hidden" },
     {
       label: "联动值",

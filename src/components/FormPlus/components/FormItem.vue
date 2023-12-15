@@ -72,12 +72,6 @@
       v-bind="props"
     />
 
-    <item-group
-      v-model="value"
-      v-if="currentComponent === 'itemGroup'"
-      v-bind="props"
-    />
-
     <div v-if="currentComponent === 'text'">
       {{ props.formatter || value }}
     </div>
