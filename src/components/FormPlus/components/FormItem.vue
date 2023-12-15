@@ -13,17 +13,17 @@
     "
   >
     <el-input
+      v-if="currentComponent === 'input'"
       v-model="value"
       autocomplete="off"
-      v-if="currentComponent === 'input'"
       v-bind="props"
       class="form-item-input"
     />
 
     <el-input
+      v-if="currentComponent === 'password'"
       v-model="value"
       autocomplete="off"
-      v-if="currentComponent === 'password'"
       show-password
       v-bind="props"
       type="password"
@@ -31,12 +31,12 @@
     />
 
     <el-input
+      v-if="currentComponent === 'textarea'"
       v-model="value"
       autocomplete="off"
       v-bind="props"
       :autosize="{ minRows: 4, maxRows: 999 }"
       type="textarea"
-      v-if="currentComponent === 'textarea'"
       class="form-item-input"
     />
 
@@ -47,9 +47,9 @@
     />
 
     <select-plus
+      v-if="currentComponent === 'select'"
       v-model="value"
       v-bind="props"
-      v-if="currentComponent === 'select'"
       :name="name"
     />
 
@@ -61,15 +61,23 @@
     />
 
     <el-color-picker
-      v-model="value"
       v-if="currentComponent === 'colorPicker'"
+      v-model="value"
       v-bind="props"
     />
 
     <el-switch
-      v-model="value"
       v-if="currentComponent === 'switch'"
+      v-model="value"
       v-bind="props"
+    />
+
+    <form-list
+      v-if="component === 'formList'"
+      v-model="value"
+      v-bind="props"
+      :children="children"
+      :title="label"
     />
 
     <div v-if="currentComponent === 'text'">
@@ -85,6 +93,7 @@ import SelectPlus from "./basic/SelectPlus.vue";
 import RadioPlus from "./basic/RadioPlus.vue";
 import NumberInput from "./basic/NumberInput.vue";
 import ItemGroup from "./group/ItemGroup.vue";
+import FormList from "./group/FormList.vue";
 
 const formItemProps = defineProps({
   label: String,
@@ -95,6 +104,7 @@ const formItemProps = defineProps({
   modelValue: null,
   initialValue: null,
   style: Object,
+  children: Array,
 });
 
 const emit = defineEmits(["update:modelValue"]);

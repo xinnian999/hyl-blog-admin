@@ -1,18 +1,8 @@
 <template>
   <div id="formGroup">
     <el-card v-if="component === 'card'" v-bind="props" :header="label">
-      <slot />
+      <form-render v-model="form" :formItems="children" />
     </el-card>
-
-    <el-form-item
-      v-if="component === 'inline'"
-      id="form-item"
-      :label-width="labelWidth"
-      :label="label"
-      class="inline"
-    >
-      <slot />
-    </el-form-item>
 
     <el-form-item
       v-if="component === 'formList'"
@@ -23,7 +13,7 @@
       :required="required"
     >
       <form-list
-        v-model="value"
+        v-model="formValues[name]"
         v-bind="props"
         :children="children"
         :title="label"
@@ -32,10 +22,9 @@
 
     <item-group
       v-if="component === 'itemGroup'"
-      v-model="value"
+      v-model="formValues[name]"
       :children="children"
     >
-      <slot />
     </item-group>
   </div>
 </template>
@@ -44,6 +33,7 @@
 import { defineProps, inject, computed, defineEmits } from "vue";
 import FormList from "./group/FormList.vue";
 import ItemGroup from "./group/ItemGroup.vue";
+import FormRender from "./FormRender.vue";
 
 const thisProps = defineProps({
   label: String,
@@ -60,13 +50,24 @@ const emit = defineEmits(["update:modelValue"]);
 
 const labelWidth = inject("labelWidth");
 
-const value = computed({
+const form = computed({
   get() {
     return thisProps.modelValue;
   },
   set(val) {
     emit("update:modelValue", val);
   },
+});
+
+// 通过Proxy接管的数据源，某项属性被修改会立刻通知父组件，遵守单项数据流原则
+const formValues = computed(() => {
+  return new Proxy(thisProps.modelValue, {
+    set(target, key, value) {
+      // console.log(target, key, value);
+      emit("update:modelValue", { ...target, [key]: value });
+      return true;
+    },
+  });
 });
 </script>
 
