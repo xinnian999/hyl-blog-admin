@@ -30,7 +30,7 @@
       destroy-on-close
       center
     >
-      <form-plus v-model="form" :schema="schema" ref="formRef" />
+      <schema-form v-model="form" :schema="schema" ref="formRef" />
       <div>
         <el-button @click="handlePush">模拟提交</el-button>
       </div>
@@ -42,6 +42,7 @@
 import { ref, defineProps, computed, defineEmits } from "vue";
 import JsonEditorVue from "json-editor-vue3";
 import { ElMessageBox } from "element-plus";
+import { SchemaForm } from "../components";
 
 const props = defineProps({
   schema: Object,

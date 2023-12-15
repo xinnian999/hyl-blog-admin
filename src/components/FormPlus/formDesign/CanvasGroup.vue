@@ -1,10 +1,6 @@
 <template>
   <div class="CanvasGroup">
-    <el-card
-      v-if="component === 'card'"
-      v-bind="componentProps"
-      :header="label"
-    >
+    <el-card v-if="component === 'card'" :header="label">
       <slot />
     </el-card>
 
@@ -28,10 +24,8 @@ defineProps({
   name: String,
   component: String,
   required: Boolean,
-  componentProps: Object,
   modelValue: null,
   initialValue: null,
-  children: Array,
 });
 </script>
 

@@ -8,7 +8,6 @@
               v-for="field in fields"
               v-model="item[field.name]"
               v-bind="field"
-              :componentProps="field.props"
               :key="field.label"
               label=""
             />
@@ -27,12 +26,7 @@
     </template>
 
     <template v-if="mode === 'card'">
-      <el-card
-        v-for="(item, index) in list"
-        :key="item.key"
-        v-bind="componentProps"
-        class="list-card"
-      >
+      <el-card v-for="(item, index) in list" :key="item.key" class="list-card">
         <template #header>
           <div class="card-header">
             <span>{{ title + index }}</span>
@@ -50,7 +44,6 @@
           v-for="field in fields"
           v-model="item[field.name]"
           v-bind="field"
-          :componentProps="field.props"
           :key="field.label"
           class="list-card-item"
         />
@@ -99,7 +92,7 @@
 <script setup lang="jsx">
 import { computed, defineProps, defineEmits } from "vue";
 import { Plus, Minus } from "@element-plus/icons-vue";
-import { getRandomId } from "../utils";
+import { getRandomId } from "../../utils";
 import FormItem from "../FormItem.vue";
 
 const props = defineProps({
@@ -163,7 +156,6 @@ const formatter = (item, data) => {
     <FormItem
       {...item}
       label=""
-      componentProps={item.props}
       modelValue={data[item.name]} // 设置 value 属性
       onUpdate:modelValue={(newValue) => (data[item.name] = newValue)}
       style={{ marginBottom: 0 }}

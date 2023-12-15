@@ -22,7 +22,7 @@ import {
 } from "vue";
 import { ElMessage } from "element-plus";
 import { useStore } from "vuex";
-import { handleLinkages, deepParse } from "./utils";
+import { handleLinkages, deepParse } from "../utils";
 import FormRender from "./FormRender.vue";
 
 const formRef = ref(null);

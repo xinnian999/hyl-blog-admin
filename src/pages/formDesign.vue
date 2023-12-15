@@ -3,5 +3,5 @@
 </template>
 
 <script setup lang="jsx">
-import formDesign from "@/components/FormPlus/formDesign";
+import { FormDesign } from "@/components/FormPlus";
 </script>

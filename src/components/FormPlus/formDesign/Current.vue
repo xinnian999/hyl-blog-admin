@@ -1,7 +1,10 @@
 <template>
   <div class="attrForm">
     <h3>字段属性</h3>
-    <form-plus v-model="form" :schema="attrs[current.component]"></form-plus>
+    <schema-form
+      v-model="form"
+      :schema="attrs[current.component]"
+    ></schema-form>
 
     <div>
       <el-button @click="handleEdit">编辑配置文本</el-button>
@@ -24,7 +27,7 @@
 import { computed, inject, ref } from "vue";
 import JsonEditorVue from "json-editor-vue3";
 import * as attrs from "./attrs";
-import FormPlus from "../index.vue";
+import { SchemaForm } from "../components";
 
 const current = inject("$current");
 const setCurrent = inject("$setCurrent");

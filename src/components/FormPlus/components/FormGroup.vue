@@ -32,7 +32,7 @@
 
 <script setup lang="jsx">
 import { defineProps, inject, computed, defineEmits } from "vue";
-import FormList from "./components/FormList.vue";
+import FormList from "./group/FormList.vue";
 
 const thisProps = defineProps({
   label: String,

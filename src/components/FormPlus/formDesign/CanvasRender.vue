@@ -37,7 +37,7 @@
     <form-item
       v-else
       v-bind="element"
-      :componentProps="checkProps(element.props)"
+      :props="checkProps(element.props)"
       class="form-item-btn"
     />
   </div>
@@ -46,10 +46,10 @@
 <script setup lang="jsx">
 import { defineProps, defineEmits, inject } from "vue";
 import draggable from "vuedraggable";
-import { omit, pick } from "lodash";
+import { omit } from "lodash";
 import { Delete } from "@element-plus/icons-vue";
 import CanvasGroup from "./CanvasGroup.vue";
-import FormItem from "../FormItem.vue";
+import { FormItem } from "../components";
 
 defineProps({
   element: Object,

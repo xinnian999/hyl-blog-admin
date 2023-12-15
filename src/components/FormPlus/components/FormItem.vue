@@ -16,7 +16,7 @@
       v-model="value"
       autocomplete="off"
       v-if="currentComponent === 'input'"
-      v-bind="componentProps"
+      v-bind="props"
       class="form-item-input"
     />
 
@@ -25,7 +25,7 @@
       autocomplete="off"
       v-if="currentComponent === 'password'"
       show-password
-      v-bind="componentProps"
+      v-bind="props"
       type="password"
       class="form-item-input"
     />
@@ -33,7 +33,7 @@
     <el-input
       v-model="value"
       autocomplete="off"
-      v-bind="componentProps"
+      v-bind="props"
       :autosize="{ minRows: 4, maxRows: 999 }"
       type="textarea"
       v-if="currentComponent === 'textarea'"
@@ -42,20 +42,20 @@
 
     <number-input
       v-model="value"
-      v-bind="componentProps"
+      v-bind="props"
       v-if="currentComponent === 'inputNumber'"
     />
 
     <select-plus
       v-model="value"
-      v-bind="componentProps"
+      v-bind="props"
       v-if="currentComponent === 'select'"
       :name="name"
     />
 
     <radio-plus
       v-model="value"
-      v-bind="componentProps"
+      v-bind="props"
       v-if="currentComponent === 'radio'"
       :name="name"
     />
@@ -63,23 +63,23 @@
     <el-color-picker
       v-model="value"
       v-if="currentComponent === 'colorPicker'"
-      v-bind="componentProps"
+      v-bind="props"
     />
 
     <el-switch
       v-model="value"
       v-if="currentComponent === 'switch'"
-      v-bind="componentProps"
+      v-bind="props"
     />
 
     <item-group
       v-model="value"
       v-if="currentComponent === 'itemGroup'"
-      v-bind="componentProps"
+      v-bind="props"
     />
 
     <div v-if="currentComponent === 'text'">
-      {{ componentProps.formatter || value }}
+      {{ props.formatter || value }}
     </div>
   </el-form-item>
 </template>
@@ -87,14 +87,17 @@
 <script setup lang="jsx">
 import { computed, defineProps, defineEmits, onMounted, inject } from "vue";
 import { isString } from "lodash";
-import { ItemGroup, NumberInput, SelectPlus, RadioPlus } from "./components";
+import SelectPlus from "./basic/SelectPlus.vue";
+import RadioPlus from "./basic/RadioPlus.vue";
+import NumberInput from "./basic/NumberInput.vue";
+import ItemGroup from "./group/ItemGroup.vue";
 
-const props = defineProps({
+const formItemProps = defineProps({
   label: String,
   name: String,
   component: String,
   required: Boolean,
-  componentProps: Object,
+  props: Object,
   modelValue: null,
   initialValue: null,
   style: Object,
@@ -106,7 +109,7 @@ const labelWidth = inject("labelWidth");
 
 const value = computed({
   get() {
-    return props.modelValue;
+    return formItemProps.modelValue;
   },
   set(val) {
     emit("update:modelValue", val);
@@ -118,14 +121,17 @@ const currentComponent = computed(() => {
     return "input";
   }
 
-  return props.component;
+  return formItemProps.component;
 });
 
 onMounted(() => {
   //TODO：初始值：这里由于onMounted时v-model还没有挂载完成，所以转为异步更新暂时解决
   setTimeout(() => {
-    if (!value.value && (props.initialValue || props.initialValue === 0)) {
-      emit("update:modelValue", props.initialValue);
+    if (
+      !value.value &&
+      (formItemProps.initialValue || formItemProps.initialValue === 0)
+    ) {
+      emit("update:modelValue", formItemProps.initialValue);
     }
   });
 });

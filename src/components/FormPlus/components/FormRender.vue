@@ -8,12 +8,7 @@
       <FormRender v-model="form" :formItems="item.children" />
     </form-group>
 
-    <form-item
-      v-else
-      v-model="formValues[item.name]"
-      v-bind="item"
-      :componentProps="item.props"
-    />
+    <form-item v-else v-model="formValues[item.name]" v-bind="item" />
   </template>
 </template>
 
