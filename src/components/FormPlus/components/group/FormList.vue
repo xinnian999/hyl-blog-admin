@@ -5,7 +5,7 @@
         <div class="list-item-content">
           <el-space>
             <form-item
-              v-for="field in fields"
+              v-for="field in children"
               v-model="item[field.name]"
               v-bind="field"
               :key="field.label"
@@ -41,7 +41,7 @@
           </div>
         </template>
         <form-item
-          v-for="field in fields"
+          v-for="field in children"
           v-model="item[field.name]"
           v-bind="field"
           :key="field.label"
@@ -59,7 +59,7 @@
         :prop="item.name"
         :label="item.label"
         :key="item.name"
-        v-for="item in fields"
+        v-for="item in children"
         :formatter="($event) => formatter(item, $event)"
       />
       <el-table-column fixed="right" min-width="60">
@@ -97,7 +97,7 @@ import FormItem from "../FormItem.vue";
 
 const props = defineProps({
   modelValue: Array,
-  fields: Array,
+  children: Array,
   allowAdd: {
     default: true,
     type: Boolean,

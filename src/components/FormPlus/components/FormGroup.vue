@@ -19,19 +19,21 @@
       id="form-item"
       :label-width="labelWidth"
       :label="label"
+      :prop="name"
+      :required="required"
     >
       <form-list
         v-model="value"
         v-bind="props"
-        :fields="children"
+        :children="children"
         :title="label"
       />
     </el-form-item>
 
     <item-group
-      v-model="value"
-      :items="children"
       v-if="component === 'itemGroup'"
+      v-model="value"
+      :children="children"
     >
       <slot />
     </item-group>

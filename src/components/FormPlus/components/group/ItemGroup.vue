@@ -1,6 +1,6 @@
 <template>
   <div id="itemGroup">
-    <FormRender v-model="form" :formItems="items" />
+    <FormRender v-model="form" :formItems="children" />
   </div>
 </template>
 
@@ -10,7 +10,7 @@ import FormRender from "../FormRender.vue";
 
 const props = defineProps({
   modelValue: { default: () => ({}), type: Object },
-  items: Array,
+  children: Array,
 });
 
 const emit = defineEmits(["update:modelValue"]);
@@ -28,8 +28,5 @@ const form = computed({
 <style lang="less">
 #itemGroup {
   width: 100%;
-  .el-form-item {
-    margin-bottom: 18px;
-  }
 }
 </style>
