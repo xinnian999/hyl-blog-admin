@@ -27,7 +27,7 @@
 import { computed, inject, ref } from "vue";
 import JsonEditorVue from "json-editor-vue3";
 import * as attrs from "./attrs";
-import { SchemaForm } from "../components";
+import { SchemaForm } from "../../components";
 
 const current = inject("$current");
 const setCurrent = inject("$setCurrent");

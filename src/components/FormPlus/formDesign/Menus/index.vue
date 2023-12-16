@@ -1,5 +1,5 @@
 <template>
-  <div v-for="{ title, children } in components" :key="title">
+  <div v-for="{ title, children } in menus" :key="title">
     <h4 class="type-title">{{ title }}</h4>
     <draggable
       class="list"
@@ -23,7 +23,7 @@
 
 <script setup lang="jsx">
 import draggable from "vuedraggable";
-import components from "./components";
+import menus from "./menus";
 </script>
 
 <style scoped lang="less">

@@ -18,9 +18,9 @@
 <script setup lang="jsx">
 import { ref, provide, reactive, onMounted } from "vue";
 import { useStore } from "vuex";
-import Menus from "./Menus.vue";
+import Menus from "./Menus";
 import Canvas from "./Canvas.vue";
-import Current from "./Current.vue";
+import Current from "./Current";
 import Actions from "./Actions.vue";
 
 const store = useStore();
@@ -53,6 +53,7 @@ const setCurrent = (value) => {
 
 provide("$current", current);
 provide("$setCurrent", setCurrent);
+provide("$schema", schema);
 
 onMounted(() => {
   store.commit("closeSidebar");
