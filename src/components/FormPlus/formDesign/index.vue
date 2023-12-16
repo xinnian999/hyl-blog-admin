@@ -6,7 +6,7 @@
 
     <div class="formRender">
       <Actions v-model:schema="schema" />
-      <Canvas v-model="schema.items" v-model:current="current" />
+      <Canvas v-model="schema.items" />
     </div>
 
     <div class="formItemOptions">

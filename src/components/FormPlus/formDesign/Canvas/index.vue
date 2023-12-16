@@ -1,23 +1,29 @@
 <template>
-  <draggable
+  <el-form
     class="canvas"
-    :list="list"
-    :group="{ name: 'form', pull: true, put: true }"
-    itemKey="name"
-    chooseClass="choose"
-    ghost-class="ghost"
-    @add="handleAdd"
-    drag-class="drag"
-    fallback-class="fallback"
+    :style="`max-width: ${schema.formWidth}`"
+    :label-position="schema.labelAlign"
   >
-    <template #item="{ element, index }">
-      <CanvasRender :element="element" :index="index" />
-    </template>
-  </draggable>
+    <draggable
+      style="height: 100%"
+      :list="list"
+      :group="{ name: 'form', pull: true, put: true }"
+      itemKey="name"
+      chooseClass="choose"
+      ghost-class="ghost"
+      @add="handleAdd"
+      drag-class="drag"
+      fallback-class="fallback"
+    >
+      <template #item="{ element, index }">
+        <CanvasRender :element="element" :index="index" />
+      </template>
+    </draggable>
+  </el-form>
 </template>
 
 <script setup lang="jsx">
-import { defineProps, defineEmits, computed, provide } from "vue";
+import { defineProps, defineEmits, computed, provide, inject } from "vue";
 import draggable from "vuedraggable";
 import { getRandomId } from "../../utils";
 import CanvasRender from "./CanvasRender.vue";
@@ -27,6 +33,8 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["update:modelValue", "update:current"]);
+
+const schema = inject("$schema");
 
 const list = computed({
   get() {
