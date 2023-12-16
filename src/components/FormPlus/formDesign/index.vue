@@ -19,7 +19,7 @@
 import { ref, provide, reactive, onMounted } from "vue";
 import { useStore } from "vuex";
 import Menus from "./Menus";
-import Canvas from "./Canvas.vue";
+import Canvas from "./Canvas";
 import Current from "./Current";
 import Actions from "./Actions.vue";
 

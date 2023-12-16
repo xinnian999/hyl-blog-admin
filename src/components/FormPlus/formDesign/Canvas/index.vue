@@ -19,7 +19,7 @@
 <script setup lang="jsx">
 import { defineProps, defineEmits, computed, provide } from "vue";
 import draggable from "vuedraggable";
-import { getRandomId } from "../utils";
+import { getRandomId } from "../../utils";
 import CanvasRender from "./CanvasRender.vue";
 
 const props = defineProps({

@@ -28,7 +28,7 @@ import { defineProps, inject } from "vue";
 import { omit } from "lodash";
 import { Delete } from "@element-plus/icons-vue";
 import CanvasGroup from "./CanvasGroup.vue";
-import { FormItem } from "../components";
+import { FormItem } from "../../components";
 
 defineProps({
   element: Object,
