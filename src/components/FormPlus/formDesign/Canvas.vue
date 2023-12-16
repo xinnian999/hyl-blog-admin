@@ -11,13 +11,7 @@
     fallback-class="fallback"
   >
     <template #item="{ element, index }">
-      <CanvasRender
-        :element="element"
-        @handleAdd="handleAdd"
-        @handleSelect="handleSelect"
-        @handleDelete="handleDelete"
-        :index="index"
-      />
+      <CanvasRender :element="element" :index="index" />
     </template>
   </draggable>
 </template>
@@ -43,8 +37,6 @@ const list = computed({
   },
 });
 
-provide("labelWidth", "120px");
-
 const handleAdd = () => {
   const setNameId = (items) => {
     return items.map((item) => {
@@ -56,7 +48,7 @@ const handleAdd = () => {
       if (item.children) {
         data.children = setNameId(item.children);
       }
-      delete data.type;
+      // delete data.type;
       return data;
     });
   };
@@ -86,6 +78,11 @@ const handleDelete = (element) => {
 const handleSelect = (element) => {
   emit("update:current", element);
 };
+
+provide("labelWidth", "120px");
+provide("handleAdd", handleAdd);
+provide("handleSelect", handleSelect);
+provide("handleDelete", handleDelete);
 </script>
 
 <style lang="less">

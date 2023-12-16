@@ -37,7 +37,7 @@ export default [
       {
         label: "自增容器",
         component: "formList",
-        children:[]
+        children: [],
       },
     ],
   },
@@ -48,7 +48,6 @@ export default [
         label: "卡片",
         component: "card",
         children: [],
-        header: "卡片",
       },
     ],
   },

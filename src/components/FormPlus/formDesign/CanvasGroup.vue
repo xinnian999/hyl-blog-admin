@@ -1,23 +1,44 @@
 <template>
   <div class="CanvasGroup">
     <el-card v-if="component === 'card'" :header="label">
-      <slot />
+      <draggable
+        :list="children"
+        group="form"
+        itemKey="name"
+        chosenClass="active"
+        ghost-class="ghost"
+        class="childContainer"
+        @add="handleAdd"
+      >
+        <template #item="{ element: child, index }">
+          <CanvasRender :element="child" :index="index" />
+        </template>
+      </draggable>
     </el-card>
-
-    <div v-if="component === 'divider'" style="margin-bottom: 60px">
-      <el-divider style="margin-bottom: 40px">{{ label }}</el-divider>
-      <slot />
-    </div>
 
     <div v-if="['formList'].includes(component)" class="default">
       <div class="title">{{ label }}</div>
-      <slot />
+      <draggable
+        :list="children"
+        group="form"
+        itemKey="name"
+        chosenClass="active"
+        ghost-class="ghost"
+        class="childContainer"
+        @add="handleAdd"
+      >
+        <template #item="{ element: child, index }">
+          <CanvasRender :element="child" :index="index" />
+        </template>
+      </draggable>
     </div>
   </div>
 </template>
 
 <script setup lang="jsx">
-import { defineProps } from "vue";
+import { defineProps, inject } from "vue";
+import draggable from "vuedraggable";
+import CanvasRender from "./CanvasRender.vue";
 
 defineProps({
   label: String,
@@ -26,10 +47,16 @@ defineProps({
   required: Boolean,
   modelValue: null,
   initialValue: null,
+  children: Array,
 });
+
+const handleAdd = inject("handleAdd");
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
+.childContainer {
+  min-height: 150px;
+}
 .CanvasGroup {
   margin-bottom: 10px;
   .default {

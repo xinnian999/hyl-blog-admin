@@ -12,27 +12,7 @@
       ></el-button>
     </div>
 
-    <canvas-group v-if="element.children" v-bind="element">
-      <draggable
-        :list="element.children"
-        group="form"
-        itemKey="name"
-        chosenClass="active"
-        ghost-class="ghost"
-        class="childContainer"
-        @add="handleAdd"
-      >
-        <template #item="{ element: child, index }">
-          <CanvasRender
-            :element="child"
-            @handleAdd="handleAdd"
-            @handleSelect="handleSelect"
-            @handleDelete="handleDelete"
-            :index="index"
-          />
-        </template>
-      </draggable>
-    </canvas-group>
+    <canvas-group v-if="element.children" v-bind="element" />
 
     <form-item
       v-else
@@ -44,8 +24,7 @@
 </template>
 
 <script setup lang="jsx">
-import { defineProps, defineEmits, inject } from "vue";
-import draggable from "vuedraggable";
+import { defineProps, inject } from "vue";
 import { omit } from "lodash";
 import { Delete } from "@element-plus/icons-vue";
 import CanvasGroup from "./CanvasGroup.vue";
@@ -56,21 +35,11 @@ defineProps({
   index: null,
 });
 
-const emit = defineEmits(["handleAdd", "handleSelect", "handleDelete"]);
-
 const current = inject("$current");
 
-const handleAdd = () => {
-  emit("handleAdd");
-};
+const handleSelect = inject("handleSelect");
 
-const handleSelect = (element) => {
-  emit("handleSelect", element);
-};
-
-const handleDelete = (element) => {
-  emit("handleDelete", element);
-};
+const handleDelete = inject("handleDelete");
 
 const checkProps = (props) => {
   return omit(props, ["multiple", "autoSelectedFirst"]);
