@@ -39,25 +39,19 @@
 </template>
 
 <script setup lang="jsx">
-import { ref, defineProps, computed, defineEmits } from "vue";
+import { ref, computed, inject } from "vue";
 import JsonEditorVue from "json-editor-vue3";
 import { ElMessageBox } from "element-plus";
 import { SchemaForm } from "../components";
 
-const props = defineProps({
-  schema: Object,
-});
-
-const emit = defineEmits(["update:schema"]);
+const schema = inject("$schema");
 
 const json = computed({
   get() {
-    console.log(props.schema);
-    return props.schema;
+    return schema;
   },
   set(value) {
-    Object.assign(props.schema, value);
-    emit("update:schema", props.schema);
+    Object.assign(schema, value);
   },
 });
 
@@ -97,8 +91,5 @@ const handlePush = async () => {
 .formDesign-actions {
   padding: 10px;
   text-align: right;
-}
-.dialog {
-  /* top: 8vh; */
 }
 </style>

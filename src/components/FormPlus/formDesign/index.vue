@@ -5,25 +5,22 @@
     </div>
 
     <div class="formRender">
-      <Actions v-model:schema="schema" />
-      <Canvas v-model="schema.items" />
+      <Actions />
+      <Canvas />
     </div>
 
     <div class="formItemOptions">
-      <Current :current="current" />
+      <Current />
     </div>
   </div>
 </template>
 
 <script setup lang="jsx">
-import { ref, provide, reactive, onMounted } from "vue";
-import { useStore } from "vuex";
+import { ref, provide, reactive } from "vue";
 import Menus from "./Menus";
 import Canvas from "./Canvas";
 import Current from "./Current";
 import Actions from "./Actions.vue";
-
-const store = useStore();
 
 const current = ref({});
 
@@ -54,10 +51,6 @@ const setCurrent = (value) => {
 provide("$current", current);
 provide("$setCurrent", setCurrent);
 provide("$schema", schema);
-
-onMounted(() => {
-  store.commit("closeSidebar");
-});
 </script>
 
 <style lang="less">

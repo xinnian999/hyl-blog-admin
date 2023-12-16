@@ -23,25 +23,21 @@
 </template>
 
 <script setup lang="jsx">
-import { defineProps, defineEmits, computed, provide, inject } from "vue";
+import { computed, provide, inject } from "vue";
 import draggable from "vuedraggable";
 import { getRandomId } from "../../utils";
 import CanvasRender from "./CanvasRender.vue";
 
-const props = defineProps({
-  modelValue: Array,
-});
-
-const emit = defineEmits(["update:modelValue", "update:current"]);
-
 const schema = inject("$schema");
+
+const current = inject("$current");
 
 const list = computed({
   get() {
-    return props.modelValue;
+    return schema.items;
   },
-  set(e) {
-    emit("update:modelValue", e);
+  set(value) {
+    Object.assign(schema, { items: value });
   },
 });
 
@@ -56,7 +52,6 @@ const handleAdd = () => {
       if (item.children) {
         data.children = setNameId(item.children);
       }
-      // delete data.type;
       return data;
     });
   };
@@ -84,7 +79,7 @@ const handleDelete = (element) => {
 };
 
 const handleSelect = (element) => {
-  emit("update:current", element);
+  current.value = element;
 };
 
 provide("labelWidth", "120px");

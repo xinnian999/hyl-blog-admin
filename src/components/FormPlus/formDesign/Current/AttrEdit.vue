@@ -39,7 +39,6 @@ const form = computed({
     return current.value;
   },
   set(e) {
-    // console.log(e);
     setCurrent(e);
   },
 });
