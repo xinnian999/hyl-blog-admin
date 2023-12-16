@@ -4,21 +4,14 @@
       <form-render v-model="form" :formItems="children" />
     </el-card>
 
-    <el-form-item
-      v-if="component === 'formList'"
-      id="form-item"
-      :label-width="labelWidth"
-      :label="label"
-      :prop="name"
-      :required="required"
-    >
+    <form-item v-if="component === 'formList'" v-bind="thisProps">
       <form-list
         v-model="formValues[name]"
         v-bind="props"
         :children="children"
         :title="label"
       />
-    </el-form-item>
+    </form-item>
 
     <item-group
       v-if="component === 'itemGroup'"
@@ -34,6 +27,7 @@ import { defineProps, inject, computed, defineEmits } from "vue";
 import FormList from "./group/FormList.vue";
 import ItemGroup from "./group/ItemGroup.vue";
 import FormRender from "./FormRender.vue";
+import FormItem from "./FormItem.vue";
 
 const thisProps = defineProps({
   label: String,
@@ -73,6 +67,6 @@ const formValues = computed(() => {
 
 <style lang="less" scoped>
 #formGroup {
-  margin-bottom: 10px;
+  margin-bottom: 18px;
 }
 </style>

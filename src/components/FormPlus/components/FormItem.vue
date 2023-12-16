@@ -72,17 +72,11 @@
       v-bind="props"
     />
 
-    <form-list
-      v-if="component === 'formList'"
-      v-model="value"
-      v-bind="props"
-      :children="children"
-      :title="label"
-    />
-
     <div v-if="currentComponent === 'text'">
       {{ props.formatter || value }}
     </div>
+
+    <slot />
   </el-form-item>
 </template>
 
@@ -92,10 +86,8 @@ import { isString } from "lodash";
 import SelectPlus from "./basic/SelectPlus.vue";
 import RadioPlus from "./basic/RadioPlus.vue";
 import NumberInput from "./basic/NumberInput.vue";
-import ItemGroup from "./group/ItemGroup.vue";
-import FormList from "./group/FormList.vue";
 
-const formItemProps = defineProps({
+const thisProps = defineProps({
   label: String,
   name: String,
   component: String,
@@ -113,7 +105,7 @@ const labelWidth = inject("labelWidth");
 
 const value = computed({
   get() {
-    return formItemProps.modelValue;
+    return thisProps.modelValue;
   },
   set(val) {
     emit("update:modelValue", val);
@@ -125,7 +117,7 @@ const currentComponent = computed(() => {
     return "input";
   }
 
-  return formItemProps.component;
+  return thisProps.component;
 });
 
 onMounted(() => {
@@ -133,9 +125,9 @@ onMounted(() => {
   setTimeout(() => {
     if (
       !value.value &&
-      (formItemProps.initialValue || formItemProps.initialValue === 0)
+      (thisProps.initialValue || thisProps.initialValue === 0)
     ) {
-      emit("update:modelValue", formItemProps.initialValue);
+      emit("update:modelValue", thisProps.initialValue);
     }
   });
 });
