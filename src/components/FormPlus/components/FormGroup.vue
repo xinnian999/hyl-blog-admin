@@ -42,8 +42,6 @@ const thisProps = defineProps({
 
 const emit = defineEmits(["update:modelValue"]);
 
-const labelWidth = inject("labelWidth");
-
 const form = computed({
   get() {
     return thisProps.modelValue;

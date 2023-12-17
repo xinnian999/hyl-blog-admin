@@ -3,6 +3,7 @@
     class="canvas"
     :style="`max-width: ${schema.formWidth}`"
     :label-position="schema.labelAlign"
+    :size="schema.size"
   >
     <draggable
       style="height: 100%"
@@ -82,7 +83,6 @@ const handleSelect = (element) => {
   current.value = element;
 };
 
-provide("labelWidth", "120px");
 provide("handleAdd", handleAdd);
 provide("handleSelect", handleSelect);
 provide("handleDelete", handleDelete);

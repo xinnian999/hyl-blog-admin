@@ -5,7 +5,7 @@
     :key="name"
     :prop="name"
     :label="label"
-    :label-width="label ? labelWidth : '0'"
+    :label-width="label ? schema.labelWidth : '0'"
     :rules="
       required
         ? { required: true, message: `请输入${label}`, trigger: 'blur' }
@@ -101,7 +101,7 @@ const thisProps = defineProps({
 
 const emit = defineEmits(["update:modelValue"]);
 
-const labelWidth = inject("labelWidth");
+const schema = inject("$schema");
 
 const value = computed({
   get() {

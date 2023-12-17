@@ -31,6 +31,12 @@ export default {
           component: "input",
           name: "unit",
         },
+        {
+          label: "步长",
+          component: "inputNumber",
+          name: "step",
+          initialValue: 1,
+        },
       ],
     },
   ],

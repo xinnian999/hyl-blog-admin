@@ -17,6 +17,7 @@ const props = defineProps({
   min: { type: Number, default: 0 },
   max: Number,
   disabled: Boolean,
+  step: { type: Number, default: 1 },
 });
 
 const emits = defineEmits(["update:modelValue"]);

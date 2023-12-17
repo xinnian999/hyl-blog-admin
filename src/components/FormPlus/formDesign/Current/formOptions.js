@@ -1,6 +1,16 @@
 export default {
   items: [
-    { label: "label宽度", component: "input", name: "labelWidth" },
+    {
+      label: "label宽度",
+      component: "inputNumber",
+      name: "labelWidth",
+      props: {
+        min: 60,
+        unit: "px",
+        step: 10,
+      },
+      initialValue: 150,
+    },
     {
       label: "label对齐方式",
       component: "radio",
@@ -14,6 +24,20 @@ export default {
         ],
       },
       initialValue: "right",
+    },
+    {
+      label: "表单组件尺寸",
+      component: "radio",
+      name: "size",
+      props: {
+        mode: "static",
+        options: [
+          { label: "默认", value: "default" },
+          { label: "较小", value: "small" },
+          { label: "较大", value: "large" },
+        ],
+      },
+      initialValue: "default",
     },
   ],
 };

@@ -1,8 +1,8 @@
 <template>
   <el-form
     :model="form"
-    :style="`max-width: ${schema.formWidth}`"
     :label-position="props.schema?.labelAlign"
+    :size="props.schema?.size"
     ref="formRef"
   >
     <FormRender v-model="form" :formItems="formItems" />
@@ -85,7 +85,7 @@ watch(
   { deep: true }
 );
 
-provide("labelWidth", props.schema?.labelWidth);
+provide("$schema", props.schema);
 provide("$selectData", selectData);
 
 defineExpose({ submit, selectData });
