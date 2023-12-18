@@ -1,7 +1,7 @@
 <template>
   <div class="attrForm">
     <schema-form
-      v-model="form"
+      v-model="current"
       :schema="attrs[current.component]"
     ></schema-form>
 
@@ -23,24 +23,14 @@
 </template>
 
 <script setup lang="jsx">
-import { computed, inject, ref } from "vue";
+import { inject, ref } from "vue";
 import JsonEditorVue from "json-editor-vue3";
 import * as attrs from "./attrs";
 import { SchemaForm } from "../../components";
 
 const current = inject("$current");
-const setCurrent = inject("$setCurrent");
 
 const editVisible = ref(false);
-
-const form = computed({
-  get() {
-    return current.value;
-  },
-  set(e) {
-    setCurrent(e);
-  },
-});
 
 const handleEdit = () => {
   editVisible.value = true;

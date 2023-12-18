@@ -16,13 +16,11 @@
 </template>
 
 <script setup lang="jsx">
-import { ref, provide, reactive } from "vue";
+import { ref, provide, reactive, computed } from "vue";
 import Menus from "./Menus";
 import Canvas from "./Canvas";
 import Current from "./Current";
 import Actions from "./Actions.vue";
-
-const current = ref({});
 
 const schema = reactive({
   labelWidth: "150px",
@@ -31,26 +29,47 @@ const schema = reactive({
   items: [],
 });
 
-const setCurrent = (value) => {
-  current.value = value;
+const currentId = ref("");
 
-  const set = (items) => {
-    return items.map((item) => {
-      if (item.onlyId === value.onlyId) {
-        return value;
-      }
-      if (item.children) {
-        return { ...item, children: set(item.children) };
-      }
-      return item;
-    });
-  };
+const current = computed({
+  get() {
+    const findItem = (items) => {
+      return items.reduce((all, item) => {
+        if (item.onlyId === currentId.value) {
+          return item;
+        }
+        if (item.children) {
+          return findItem(item.children);
+        }
 
-  schema.items = set(schema.items);
-};
+        return all;
+      }, {});
+    };
+    const c = findItem(schema.items);
+    console.log(c, currentId.value);
+    return c;
+  },
+  set(element) {
+    console.log(element);
+    currentId.value = element.onlyId;
+
+    const set = (items) => {
+      return items.map((item) => {
+        if (item.onlyId === element.onlyId) {
+          return element;
+        }
+        if (item.children) {
+          return { ...item, children: set(item.children) };
+        }
+        return item;
+      });
+    };
+
+    schema.items = set(schema.items);
+  },
+});
 
 provide("$current", current);
-provide("$setCurrent", setCurrent);
 provide("$schema", schema);
 </script>
 
