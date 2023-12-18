@@ -16,7 +16,7 @@
       </draggable>
     </el-card>
 
-    <div v-if="['formList'].includes(component)" class="default">
+    <div v-if="['formList', 'itemGroup'].includes(component)" class="default">
       <div class="title">{{ label }}</div>
       <draggable
         :list="children"

@@ -5,7 +5,7 @@ export default {
     { label: "默认值", component: "input", name: "initialValue" },
     { label: "是否必填", component: "switch", name: "required" },
     {
-      label: "",
+      label: "props",
       component: "itemGroup",
       name: "props",
       children: [
@@ -21,8 +21,8 @@ export default {
           component: "switch",
           name: "multiple",
           props: {
-            activeText: "多选",
-            inactiveText: "单选",
+            "active-text": "多选",
+            "inactive-text": "单选",
           },
         },
 

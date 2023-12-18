@@ -99,3 +99,17 @@ export const getRandomId = (length) => {
 
   return randomId;
 };
+
+export const setNameId = (items) => {
+  return items.map((item) => {
+    const data = {
+      ...item,
+      onlyId: item.onlyId || `form-${getRandomId(4)}`,
+      name: item.name || getRandomId(6),
+    };
+    if (item.children) {
+      data.children = setNameId(item.children);
+    }
+    return data;
+  });
+};

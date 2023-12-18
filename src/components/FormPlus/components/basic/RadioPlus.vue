@@ -10,7 +10,6 @@
         v-for="item in selectOptions"
         :key="item[valueKey]"
         :label="item[valueKey]"
-        size="large"
         :border="optionType === 'border'"
         >{{ item[labelKey] }}</el-radio
       >

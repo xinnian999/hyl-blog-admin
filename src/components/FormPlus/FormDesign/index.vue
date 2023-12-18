@@ -76,6 +76,7 @@ provide("$schema", schema);
   }
   .formItemOptions {
     width: 400px;
+    overflow: auto;
     padding: 20px;
     background-color: #fff;
   }

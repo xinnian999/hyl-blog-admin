@@ -26,7 +26,7 @@
 <script setup lang="jsx">
 import { computed, provide, inject } from "vue";
 import draggable from "vuedraggable";
-import { getRandomId } from "../../utils";
+import { setNameId } from "../../utils";
 import CanvasRender from "./CanvasRender.vue";
 
 const schema = inject("$schema");
@@ -43,20 +43,7 @@ const list = computed({
 });
 
 const handleAdd = () => {
-  const setNameId = (items) => {
-    return items.map((item) => {
-      const data = {
-        ...item,
-        onlyId: item.onlyId || `form-${getRandomId(4)}`,
-        name: item.name || getRandomId(6),
-      };
-      if (item.children) {
-        data.children = setNameId(item.children);
-      }
-      return data;
-    });
-  };
-  list.value = setNameId(list.value, 0);
+  list.value = setNameId(list.value);
 };
 
 const filterId = (items, elementId) => {

@@ -5,7 +5,7 @@ export default {
     { label: "默认值", component: "input", name: "initialValue" },
     { label: "是否必填", component: "switch", name: "required" },
     {
-      label: "",
+      label: "props",
       component: "itemGroup",
       name: "props",
       children: [
