@@ -26,7 +26,7 @@
 <script setup lang="jsx">
 import { computed, provide, inject } from "vue";
 import draggable from "vuedraggable";
-import { setNameId } from "../../utils";
+import { changeItems } from "../../utils";
 import CanvasRender from "./CanvasRender.vue";
 
 const schema = inject("$schema");
@@ -43,7 +43,7 @@ const list = computed({
 });
 
 const handleAdd = () => {
-  list.value = setNameId(list.value);
+  list.value = changeItems(list.value);
 };
 
 const filterId = (items, elementId) => {

@@ -100,7 +100,7 @@ export const getRandomId = (length) => {
   return randomId;
 };
 
-export const setNameId = (items) => {
+export const changeItems = (items) => {
   return items.map((item) => {
     const data = {
       ...item,
@@ -108,8 +108,13 @@ export const setNameId = (items) => {
       name: item.name || getRandomId(6),
     };
     if (item.children) {
-      data.children = setNameId(item.children);
+      data.children = changeItems(item.children);
     }
     return data;
   });
+};
+
+export const componentNames = {
+  formList: "自增组件",
+  itemGroup: "字段组",
 };

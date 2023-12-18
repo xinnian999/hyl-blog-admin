@@ -39,6 +39,11 @@ export default [
         component: "formList",
         children: [],
       },
+      {
+        label: "字段组",
+        component: "itemGroup",
+        children: [],
+      },
     ],
   },
   {

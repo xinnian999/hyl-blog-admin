@@ -4,7 +4,7 @@ export default {
     { label: "字段name", component: "input", name: "name" },
     { label: "是否必填", component: "switch", name: "required" },
     {
-      label: "",
+      label: "props",
       component: "itemGroup",
       name: "props",
       children: [

@@ -9,7 +9,7 @@ export default {
       initialValue: 1,
     },
     {
-      label: "",
+      label: "props",
       component: "itemGroup",
       name: "props",
       children: [

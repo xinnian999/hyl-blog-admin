@@ -12,7 +12,7 @@
       ></el-button>
     </div>
 
-    <canvas-group v-if="element.children" v-bind="element" />
+    <canvas-group v-if="element.children" v-bind="element" :hidden="false" />
 
     <form-item
       v-else

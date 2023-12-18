@@ -17,7 +17,7 @@
     </el-card>
 
     <div v-if="['formList', 'itemGroup'].includes(component)" class="default">
-      <div class="title">{{ label }}</div>
+      <div class="title">【{{ componentNames[component] }}】 {{ label }}</div>
       <draggable
         :list="children"
         group="form"
@@ -39,6 +39,7 @@
 import { defineProps, inject } from "vue";
 import draggable from "vuedraggable";
 import CanvasRender from "./CanvasRender.vue";
+import { componentNames } from "../../utils";
 
 defineProps({
   label: String,
@@ -48,6 +49,7 @@ defineProps({
   modelValue: null,
   initialValue: null,
   children: Array,
+  componentName: String,
 });
 
 const handleAdd = inject("handleAdd");
