@@ -5,7 +5,15 @@
     @mousemove.stop="handleHoverEnter"
     @mouseleave.stop="handleHoverLeave"
   >
-    <div class="actions" v-if="element.onlyId === current.onlyId">
+    <div class="actions-left-top" v-if="element.onlyId === current.onlyId">
+      <el-button
+        class="canvas-move"
+        :icon="Pointer"
+        size="small"
+        type="primary"
+      ></el-button>
+    </div>
+    <div class="actions-right-bottom" v-if="element.onlyId === current.onlyId">
       <el-button
         :icon="Delete"
         size="small"
@@ -26,9 +34,9 @@
 </template>
 
 <script setup lang="jsx">
-import { defineProps, inject, computed, ref } from "vue";
+import { defineProps, inject, computed } from "vue";
 import { omit } from "lodash";
-import { Delete } from "@element-plus/icons-vue";
+import { Delete, Pointer } from "@element-plus/icons-vue";
 import CanvasGroup from "./CanvasGroup.vue";
 import { FormItem } from "../../components";
 
@@ -74,11 +82,20 @@ const checkProps = (props) => {
   #form-item {
     margin-bottom: 0;
   }
-  .actions {
+
+  .actions-left-top {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 20;
+    background-color: var(--el-color-primary);
+  }
+  .actions-right-bottom {
     position: absolute;
     right: 0;
     bottom: 0;
     z-index: 20;
+    background-color: var(--el-color-primary);
   }
 }
 

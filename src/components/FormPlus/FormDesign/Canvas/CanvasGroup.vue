@@ -18,7 +18,7 @@
 
     <div v-if="['formList', 'itemGroup'].includes(component)" class="default">
       <div class="title">
-        【{{ componentNames[component] }}】 {{ label || name }}
+        【{{ componentNames[component] }}】 {{ label }} {{ name }}
       </div>
       <draggable
         :list="children"

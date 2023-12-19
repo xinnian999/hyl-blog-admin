@@ -115,6 +115,6 @@ export const changeItems = (items) => {
 };
 
 export const componentNames = {
-  formList: "自增组件",
+  formList: "自增容器",
   itemGroup: "字段组",
 };

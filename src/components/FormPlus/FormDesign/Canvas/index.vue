@@ -24,6 +24,7 @@
       @add="handleAdd"
       drag-class="drag"
       fallback-class="fallback"
+      handle=".canvas-move"
     >
       <template #item="{ element, index }">
         <CanvasRender :element="element" :index="index" />
