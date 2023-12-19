@@ -5,6 +5,15 @@
     :label-position="schema.labelAlign"
     :size="schema.size"
   >
+    <div class="tip" v-if="!list.length">
+      <div class="ico">
+        <el-icon>
+          <Plus />
+        </el-icon>
+      </div>
+      <div class="text">请从左侧拖拽字段来组成表单</div>
+    </div>
+
     <draggable
       style="height: 100%"
       :list="list"
@@ -24,14 +33,19 @@
 </template>
 
 <script setup lang="jsx">
-import { computed, provide, inject } from "vue";
+import { computed, provide, inject, ref } from "vue";
 import draggable from "vuedraggable";
+import { Plus } from "@element-plus/icons-vue";
 import { changeItems } from "../../utils";
 import CanvasRender from "./CanvasRender.vue";
 
 const schema = inject("$schema");
 
 const current = inject("$current");
+
+const hoverId = ref("");
+
+provide("hoverId", hoverId);
 
 const list = computed({
   get() {
@@ -80,35 +94,25 @@ provide("handleDelete", handleDelete);
   flex: 1;
   padding: 20px;
   border: 1px dashed #999;
-  .canvas-item {
-    border: 2px solid transparent;
-    margin-bottom: 5px;
-    padding: 10px;
-    position: relative;
-    #form-item {
-      margin-bottom: 0;
-    }
-    .actions {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      z-index: 20;
-    }
-
-    &:hover {
-      border: 2px solid var(--el-color-primary-light-5);
+  position: relative;
+  .tip {
+    color: #999;
+    font-size: 18px;
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    left: 0;
+    top: 40%;
+    transform: translateY(-50%);
+    .ico {
+      font-size: 30px;
+      margin-bottom: 15px;
     }
   }
 
   .ghost {
     border-top: 2px solid var(--el-color-primary);
     list-style: none;
-  }
-  .active {
-    border: 2px solid var(--el-color-primary) !important;
-    &:hover {
-      border: 2px solid var(--el-color-primary) !important;
-    }
   }
 }
 </style>

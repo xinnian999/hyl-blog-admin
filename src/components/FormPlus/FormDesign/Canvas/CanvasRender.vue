@@ -1,7 +1,9 @@
 <template>
   <div
-    :class="['canvas-item', element.onlyId === current.onlyId && 'active']"
+    :class="canvasItemClass"
     @click.stop="handleSelect(element)"
+    @mousemove.stop="handleHoverEnter"
+    @mouseleave.stop="handleHoverLeave"
   >
     <div class="actions" v-if="element.onlyId === current.onlyId">
       <el-button
@@ -24,13 +26,13 @@
 </template>
 
 <script setup lang="jsx">
-import { defineProps, inject } from "vue";
+import { defineProps, inject, computed, ref } from "vue";
 import { omit } from "lodash";
 import { Delete } from "@element-plus/icons-vue";
 import CanvasGroup from "./CanvasGroup.vue";
 import { FormItem } from "../../components";
 
-defineProps({
+const props = defineProps({
   element: Object,
   index: null,
 });
@@ -41,13 +43,53 @@ const handleSelect = inject("handleSelect");
 
 const handleDelete = inject("handleDelete");
 
+const hoverId = inject("hoverId");
+
+const canvasItemClass = computed(() => ({
+  "canvas-item": true,
+  active: props.element.onlyId === current.value.onlyId,
+  hover: props.element.onlyId === hoverId.value,
+}));
+
+const handleHoverEnter = () => {
+  hoverId.value = props.element.onlyId;
+};
+
+const handleHoverLeave = () => {
+  hoverId.value = "";
+};
+
 const checkProps = (props) => {
   return omit(props, ["multiple", "autoSelectedFirst"]);
 };
 </script>
 
 <style lang="less">
-.childContainer {
-  min-height: 150px;
+.canvas-item {
+  border: 2px solid transparent;
+  margin-bottom: 5px;
+  padding: 10px;
+  position: relative;
+
+  #form-item {
+    margin-bottom: 0;
+  }
+  .actions {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+  }
+}
+
+.hover {
+  border: 2px solid var(--el-color-primary-light-5);
+}
+
+.active {
+  border: 2px solid var(--el-color-primary) !important;
+  &:hover {
+    border: 2px solid var(--el-color-primary) !important;
+  }
 }
 </style>
