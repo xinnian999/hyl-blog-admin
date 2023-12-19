@@ -39,18 +39,16 @@ const current = computed({
           return item;
         }
         if (item.children) {
-          return findItem(item.children);
+          const res = findItem(item.children);
+          if (res) return res;
         }
 
         return all;
-      }, {});
+      }, null);
     };
-    const c = findItem(schema.items);
-    console.log(c, currentId.value);
-    return c;
+    return findItem(schema.items) || {};
   },
   set(element) {
-    console.log(element);
     currentId.value = element.onlyId;
 
     const set = (items) => {

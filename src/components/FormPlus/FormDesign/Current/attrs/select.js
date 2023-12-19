@@ -27,7 +27,6 @@ export default {
       onlyId: "form-iXcI",
     },
     {
-      label: "props",
       component: "itemGroup",
       name: "props",
       children: [

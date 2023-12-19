@@ -9,10 +9,10 @@
       <el-button @click="handleEdit">编辑配置文本</el-button>
     </div>
 
-    <el-drawer v-model="editVisible">
+    <el-drawer destroy-on-close v-model="editVisible">
       <json-editor-vue
         class="editor"
-        v-model="form"
+        v-model="current"
         currentMode="code"
         :modeList="['text', 'view', 'tree', 'code', 'form']"
         :options="{ search: true, history: true }"
