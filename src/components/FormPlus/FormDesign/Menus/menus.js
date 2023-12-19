@@ -3,6 +3,7 @@ export default [
     title: "基础字段",
     children: [
       { label: "单行文本", component: "input", props: {} },
+      { label: "密码输入框", component: "password", props: {} },
       {
         label: "下拉选择框",
         component: "select",
