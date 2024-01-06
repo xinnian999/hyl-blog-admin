@@ -138,7 +138,12 @@ export default [
       },
     ],
   },
-
+  {
+    title: "表单管理",
+    path: "/form",
+    icon: MapLocation,
+    component: () => import("../pages/Form.vue"),
+  },
   {
     title: "表单设计器",
     path: "/formDesign",
