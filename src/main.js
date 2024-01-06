@@ -6,7 +6,8 @@ import router from "./router";
 import components from "./components";
 import store from "@/store";
 import App from "./App.vue";
-
+import vueFormCraft from "vue-form-craft";
+import { request } from "@/utils";
 // morkDown
 import VMdEditor from "@kangc/v-md-editor";
 import createEmojiPlugin from "@kangc/v-md-editor/lib/plugins/emoji/index";
@@ -29,5 +30,6 @@ app.use(ElementPlus);
 app.use(less);
 app.use(components);
 app.use(VMdEditor);
+app.use(vueFormCraft, { request });
 
 app.mount("#app");

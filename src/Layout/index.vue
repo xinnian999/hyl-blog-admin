@@ -48,7 +48,7 @@
     </el-aside>
 
     <el-container>
-      <!-- <el-header id="header">
+      <el-header id="header">
         <h2 id="title">{{ title }}</h2>
         <el-space class="headToolbar" :size="20">
           <el-tooltip
@@ -64,7 +64,7 @@
             </span>
           </el-tooltip>
         </el-space>
-      </el-header> -->
+      </el-header>
       <el-main id="main">
         <router-view></router-view>
       </el-main>
