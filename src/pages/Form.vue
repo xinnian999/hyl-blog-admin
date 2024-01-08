@@ -15,6 +15,10 @@ const router = useRouter();
 
 const columns = [
   {
+    title: "表单id",
+    dataIndex: "id",
+  },
+  {
     title: "表单名称",
     dataIndex: "name",
   },

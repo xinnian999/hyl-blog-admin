@@ -30,6 +30,19 @@ app.use(ElementPlus);
 app.use(less);
 app.use(components);
 app.use(VMdEditor);
-app.use(vueFormCraft, { request });
+app.use(vueFormCraft, {
+  request,
+  getSchema: async (schemaId) => {
+    const { data } = await request({
+      url: "/current/query/form",
+      params: {
+        filters: {
+          id: schemaId,
+        },
+      },
+    });
+    return JSON.parse(data[0].formSchema);
+  },
+});
 
 app.mount("#app");

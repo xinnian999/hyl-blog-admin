@@ -5,14 +5,14 @@
         <span class="title">心 念 Blog 后 台 管 理</span>
       </template>
       <div class="form">
-        <schema-form :schema="schema" @onSubmit="onSubmit" />
+        <schema-form schemaId="3" @onSubmit="onSubmit" />
       </div>
     </el-card>
   </div>
 </template>
 
 <script setup lang="jsx">
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { ElMessage } from "element-plus";
 import { request } from "@/utils";
 import { useRouter, useRoute } from "vue-router";
@@ -21,8 +21,6 @@ import md5 from "js-md5";
 const router = useRouter();
 const route = useRoute();
 const loading = ref(false);
-
-const schema = ref();
 
 const onSubmit = (values) => {
   loading.value = true;
@@ -58,19 +56,6 @@ const visitor = () => {
       }
     });
 };
-
-onMounted(async () => {
-  const { data } = await request({
-    url: "/current/query/form",
-    params: {
-      filters: {
-        id: 3,
-      },
-    },
-  });
-
-  schema.value = JSON.parse(data[0].formSchema);
-});
 </script>
 
 <style lang="less">

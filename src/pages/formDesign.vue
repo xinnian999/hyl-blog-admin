@@ -1,32 +1,15 @@
 <template>
-  <form-design v-model="schema" @onSave="onSave" />
+  <form-design :schemaId="route.query.formId" @onSave="onSave" />
 </template>
 
 <script setup lang="jsx">
 import { useRoute } from "vue-router";
-import { ref, onMounted } from "vue";
 import { request } from "@/utils";
 import { ElMessage } from "element-plus";
 
 const route = useRoute();
 
-const schema = ref();
-
-onMounted(async () => {
-  if (route.query.formId) {
-    const { data } = await request({
-      url: "/current/query/form",
-      params: {
-        filters: {
-          id: +route.query.formId,
-        },
-      },
-    });
-    schema.value = JSON.parse(data[0].formSchema);
-  }
-});
-
-const onSave = async () => {
+const onSave = async (schema) => {
   if (!route.query.formId) {
     return ElMessage.error(`未指定表单id`);
   }
@@ -35,8 +18,8 @@ const onSave = async () => {
     url: "/current/update/form",
     method: "put",
     data: {
-      id: +route.query.formId,
-      formSchema: JSON.stringify(schema.value),
+      id: route.query.formId,
+      formSchema: JSON.stringify(schema),
     },
   });
 
