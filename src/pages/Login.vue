@@ -5,7 +5,11 @@
         <span class="title">心 念 Blog 后 台 管 理</span>
       </template>
       <div class="form">
-        <schema-form schemaId="3" @onSubmit="onSubmit" />
+        <schema-form
+          schemaId="3"
+          :schemaContext="{ visitor }"
+          @onSubmit="onSubmit"
+        />
       </div>
     </el-card>
   </div>
