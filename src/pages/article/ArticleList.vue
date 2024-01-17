@@ -1,5 +1,5 @@
 <template>
-  <TablePlus table="article" :columns="columns" :formData="formData" />
+  <TablePlus table="article" :columns="columns" schemaId="4" />
 </template>
 
 <script setup lang="jsx">
@@ -85,63 +85,6 @@ const columns = [
     dataIndex: "topping",
     fixed: "right",
     switchable: true,
-  },
-];
-
-const formData = [
-  {
-    label: "文章标题",
-    value: "title",
-    component: "input",
-    required: true,
-  },
-  {
-    label: "文章简介",
-    value: "introduce",
-    component: "textarea",
-    required: true,
-  },
-  {
-    label: "标签",
-    value: "tag",
-    component: "select",
-    required: true,
-    multiple: true,
-    config: {
-      mode: "remote",
-      url: "/current/query/tag",
-      method: "get",
-      label: "name",
-      value: "name",
-    },
-  },
-  {
-    label: "文章类型",
-    value: "type",
-    component: "radio",
-    required: true,
-    defaultValue: 1,
-    selectData: [
-      { name: "原创", value: 1 },
-      { name: "转载", value: 2 },
-    ],
-    config: {
-      mode: "static",
-      label: "name",
-      value: "value",
-    },
-  },
-  {
-    label: "文章海报",
-    value: "picture",
-    component: "uploadPicture",
-    uploadName: "image",
-  },
-  {
-    label: "文章内容",
-    value: "content",
-    component: "markdown",
-    required: true,
   },
 ];
 </script>

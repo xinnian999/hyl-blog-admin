@@ -127,31 +127,34 @@
         :filter-multiple="false"
       />
 
-      <el-table-column fixed="right" label="操作" width="150">
+      <el-table-column fixed="right" label="操作" min-width="150">
         <template #default="record">
           <el-space>
             <el-button
               type="warning"
-              circle
               :icon="Edit"
+              size="small"
               :disabled="disabled.includes('edit')"
               @click="handleUpdate(record.row)"
-            ></el-button>
+              >修改</el-button
+            >
             <el-button
               type="danger"
-              circle
+              size="small"
               :icon="Delete"
               :disabled="disabled.includes('delete')"
               @click="handleDelete(record.row.id)"
-            ></el-button>
+              >删除</el-button
+            >
             <el-button
               v-for="{ title, type, icon, onClick } in rowAction"
               :key="title"
               :type="type"
-              circle
+              size="small"
               :icon="icon"
               @click="onClick(record.row)"
-            ></el-button>
+              >{{ title }}</el-button
+            >
           </el-space>
         </template>
       </el-table-column>
@@ -170,12 +173,15 @@
 
     <FormModal
       :title="data.editId ? '修改' : '新增'"
-      width="60%"
+      width="80%"
       :visible="formVisible"
       @close="closeFormModal"
       :formData="formData"
       :ok="handleOk"
       ref="formModalRef"
+      :schemaId="schemaId"
+      v-model="formValues"
+      :schema="schema"
     />
   </div>
 </template>
@@ -192,7 +198,7 @@ import {
 import { ElMessage, ElMessageBox } from "element-plus";
 import { request, formatTime } from "@/utils";
 import { Plus, Refresh, Edit, Delete } from "@element-plus/icons-vue";
-import { pick, debounce } from "lodash";
+import { omit, debounce, mapValues } from "lodash";
 
 const props = defineProps({
   rowAction: {
@@ -217,6 +223,8 @@ const props = defineProps({
     default: () => [],
     type: Array,
   },
+  schemaId: String,
+  schema: Object,
 });
 
 const formModalRef = ref(null);
@@ -224,6 +232,8 @@ const formModalRef = ref(null);
 const tableRef = ref(null);
 
 const formVisible = ref(false);
+
+const formValues = ref({});
 
 const data = reactive({
   isLoading: false,
@@ -309,31 +319,25 @@ const onClearSearch = () => {
 
 const handleAdd = () => {
   formVisible.value = true;
-  formModalRef.value.reset();
+  formValues.value = {};
 };
 
 const handleUpdate = (rowData) => {
   formVisible.value = true;
   data.editId = rowData.id;
 
-  //数据回显
-  props.formData.forEach((item) => {
-    let val = rowData[item.value];
-    // 回显格式化处理
-    if (item.multiple) {
-      val = rowData[item.value].split(",");
+  formValues.value = mapValues(rowData, (value, key) => {
+    if (key === "tag") {
+      return value.split(",");
     }
-    Object.assign(formModalRef.value.form, { [item.value]: val });
+    return value;
   });
 };
 
 const handleOk = async (values) => {
-  if (data.editId) {
-    Object.assign(values, { id: data.editId });
-  }
   const { status } = await request[data.editId ? "put" : "post"](
     `/current/${data.editId ? "update" : "add"}/${props.table}`,
-    values
+    omit(values, ["createTime", "updateTime"])
   );
 
   if (status === 0) {

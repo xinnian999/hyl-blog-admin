@@ -159,11 +159,11 @@ watch(
     display: flex;
     flex-direction: column;
     transition: width 0.5s;
-
+    // background-color: #545c64;
     .menu {
       height: 100%;
       padding-top: 10px;
-
+      overflow: auto;
       .back {
         color: #fff;
         cursor: pointer;

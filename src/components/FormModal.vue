@@ -8,140 +8,15 @@
     top="5vh"
     custom-class="dialogForm"
     :append-to-body="true"
+    destroy-on-close
   >
-    <el-form :model="form" ref="formRef">
-      <el-form-item
-        v-for="{
-          label,
-          value,
-          component,
-          selectData,
-          uploadName,
-          config,
-          required,
-          multiple,
-          placeholder,
-          blur,
-        } in formData"
-        :key="value"
-        :prop="value"
-        :label="label"
-        label-width="80px"
-        :rules="
-          required
-            ? { required: true, message: `请输入${label}`, trigger: 'blur' }
-            : null
-        "
-      >
-        <el-input
-          v-model="form[value]"
-          autocomplete="off"
-          v-if="component === 'input'"
-        />
+    <schema-form
+      v-model="formValues"
+      :schemaId="schemaId"
+      ref="formRef"
+      :schema="schema"
+    />
 
-        <el-input
-          v-model="form[value]"
-          autocomplete="off"
-          v-if="component === 'password'"
-          show-password
-          type="password"
-        />
-
-        <el-input
-          v-model="form[value]"
-          autocomplete="off"
-          :placeholder="placeholder"
-          :autosize="{ minRows: 4, maxRows: 999 }"
-          type="textarea"
-          v-if="component === 'textarea'"
-          @blur="blur"
-        />
-
-        <el-radio-group v-model="form[value]" v-if="component === 'radio'">
-          <el-radio
-            :label="item[config.value]"
-            :key="item[config.value]"
-            size="large"
-            v-for="item in config.mode === 'static' ? selectData : data[value]"
-            >{{ item[config.label] }}</el-radio
-          >
-        </el-radio-group>
-
-        <el-select
-          v-model="form[value]"
-          :placeholder="`请选择${label}`"
-          v-if="component === 'select'"
-          :multiple="multiple"
-        >
-          <el-option
-            :key="item[config.value]"
-            :label="item[config.label]"
-            :value="item[config.value]"
-            v-for="item in config.mode === 'static'
-              ? selectData.value || selectData
-              : data[value]"
-          />
-        </el-select>
-
-        <el-upload
-          v-model="form[value]"
-          class="avatar-uploader"
-          :action="`/api/upload/${uploadName}`"
-          :name="uploadName"
-          :show-file-list="false"
-          :on-success="
-            (res) => {
-              form.picture = res.filename;
-            }
-          "
-          v-if="component === 'uploadPicture'"
-        >
-          <img
-            v-if="form[value]"
-            :src="`${globalConfig.remoteStaticUrl}/image/${form[value]}`"
-            class="avatar"
-          />
-          <el-icon v-else class="avatar-uploader-icon">
-            <Plus />
-          </el-icon>
-        </el-upload>
-
-        <el-upload
-          v-model="form[value]"
-          action="api/upload/music"
-          name="music"
-          :show-file-list="false"
-          :on-success="(res) => (form[value] = `${res.filename}`)"
-          v-if="component === 'uploadMusic'"
-        >
-          <audio
-            v-if="form[value]"
-            :src="`${globalConfig.remoteStaticUrl}/music/${form[value]}`"
-            controls
-          />
-
-          <el-button v-else>
-            <el-icon> <Plus /> </el-icon>点击上传
-          </el-button>
-        </el-upload>
-
-        <v-md-editor
-          v-model="form[value]"
-          left-toolbar="undo redo clear | h bold italic strikethrough quote | ul ol table  hr | link image code | save "
-          height="400px"
-          v-if="component === 'markdown'"
-          :disabled-menus="[]"
-          @upload-image="handleUploadImage"
-          @save="onSave"
-          @fullscreen-change="onFullscreen"
-        />
-
-        <el-color-picker
-          v-model="form[value]"
-          v-if="component === 'colorPicker'"
-        />
-      </el-form-item>
-    </el-form>
     <template #footer>
       <span class="dialog-footer">
         <el-button type="primary" @click="handleOk">提交</el-button>
@@ -151,10 +26,14 @@
 </template>
 
 <script setup lang="jsx">
-import { reactive, ref, defineProps, defineExpose, onMounted } from "vue";
-import { Plus } from "@element-plus/icons-vue";
-import { ElMessageBox } from "element-plus";
-import { request, globalConfig } from "@/utils";
+import {
+  reactive,
+  ref,
+  defineProps,
+  defineExpose,
+  computed,
+  defineEmits,
+} from "vue";
 
 const formRef = ref();
 
@@ -167,23 +46,22 @@ const props = defineProps({
   visible: {},
   close: {},
   initialValues: {},
+  schemaId: String,
+  modelValue: Object,
+  schema: Object,
 });
 
 const form = reactive({});
-const data = reactive({});
 
-onMounted(() => {
-  // 初始化v-model，不写会导致数据回显失败
-  props.formData.forEach((item) => {
-    form[item.value] = "";
-    if (item.config?.mode === "remote") {
-      request(item.config).then((res) => {
-        if (res.status === 0) {
-          data[item.value] = res.data;
-        }
-      });
-    }
-  });
+const emit = defineEmits(["update:modelValue"]);
+
+const formValues = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(values) {
+    emit("update:modelValue", values);
+  },
 });
 
 const reset = () => {
@@ -196,72 +74,65 @@ const reset = () => {
   });
 };
 
-const handleUploadImage = (event, insertImage, files) => {
-  const formData = new FormData();
-  formData.append("image", files[0], files[0].name);
-  request
-    .post("/upload/image", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data;boundary=" + new Date().getTime(),
-      },
-    })
-    .then((res) => {
-      insertImage({
-        url: `/cdn/image/${res.filename}`,
-        desc: "图片已失效",
-        // width: 'auto',
-        // height: 'auto',
-      });
-    });
-};
+// const handleUploadImage = (event, insertImage, files) => {
+//   const formData = new FormData();
+//   formData.append("image", files[0], files[0].name);
+//   request
+//     .post("/upload/image", formData, {
+//       headers: {
+//         "Content-Type": "multipart/form-data;boundary=" + new Date().getTime(),
+//       },
+//     })
+//     .then((res) => {
+//       insertImage({
+//         url: `/cdn/image/${res.filename}`,
+//         desc: "图片已失效",
+//         // width: 'auto',
+//         // height: 'auto',
+//       });
+//     });
+// };
 
-const onSave = () => {
-  new Promise((resolve) => {
-    if (form.content.length < props.currentRecord.content.length) {
-      ElMessageBox.confirm("此次保存内容少于之前内容，继续保存吗？", "删除", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      }).then(() => resolve());
-    } else {
-      resolve();
-    }
-  }).then(() => {
-    props.ok(false);
-  });
-};
+// const onSave = () => {
+//   new Promise((resolve) => {
+//     if (form.content.length < props.currentRecord.content.length) {
+//       ElMessageBox.confirm("此次保存内容少于之前内容，继续保存吗？", "删除", {
+//         confirmButtonText: "确定",
+//         cancelButtonText: "取消",
+//         type: "warning",
+//       }).then(() => resolve());
+//     } else {
+//       resolve();
+//     }
+//   }).then(() => {
+//     props.ok(false);
+//   });
+// };
 
-const onFullscreen = (isFullscreen) => {
-  const el = document.querySelector(".v-md-editor__toolbar");
-  let titleEl = document.querySelector(".md-title");
+// const onFullscreen = (isFullscreen) => {
+//   const el = document.querySelector(".v-md-editor__toolbar");
+//   let titleEl = document.querySelector(".md-title");
 
-  if (!titleEl) {
-    const newNode = document.createElement("div");
-    newNode.className = "md-title";
-    const reforeNode = document.querySelector(".v-md-editor__toolbar-right");
+//   if (!titleEl) {
+//     const newNode = document.createElement("div");
+//     newNode.className = "md-title";
+//     const reforeNode = document.querySelector(".v-md-editor__toolbar-right");
 
-    el.insertBefore(newNode, reforeNode);
+//     el.insertBefore(newNode, reforeNode);
 
-    titleEl = document.querySelector(".md-title");
-  }
+//     titleEl = document.querySelector(".md-title");
+//   }
 
-  if (isFullscreen) {
-    titleEl.innerHTML = `编辑文章：${props.currentRecord.title}`;
-  } else {
-    titleEl.innerHTML = "";
-  }
-};
+//   if (isFullscreen) {
+//     titleEl.innerHTML = `编辑文章：${props.currentRecord.title}`;
+//   } else {
+//     titleEl.innerHTML = "";
+//   }
+// };
 
 const handleOk = async () => {
-  const { validate } = formRef.value;
-  console.log(props);
-  try {
-    await validate();
-    props.ok(form);
-  } catch (e) {
-    console.log(e);
-    console.log("error submit!");
-  }
+  const values = await formRef.value.submit();
+  props.ok(values);
 };
 
 defineExpose({ reset, form, formRef });

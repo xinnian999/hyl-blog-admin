@@ -2,8 +2,8 @@
   <TablePlus
     table="form"
     :columns="columns"
-    :formData="formData"
     :rowAction="rowAction"
+    :schema="schema"
   />
 </template>
 
@@ -35,14 +35,23 @@ const columns = [
   },
 ];
 
-const formData = [
-  {
-    label: "表单名称",
-    value: "name",
-    component: "input",
-    required: true,
-  },
-];
+const schema = {
+  labelWidth: 150,
+  labelAlign: "right",
+  size: "default",
+  items: [
+    {
+      label: "表单名称",
+      component: "input",
+      props: {
+        placeholder: "请输入...",
+      },
+      onlyId: "form-RD3J",
+      name: "name",
+      required: true,
+    },
+  ],
+};
 
 const rowAction = [
   {
