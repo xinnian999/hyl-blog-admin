@@ -320,6 +320,7 @@ const onClearSearch = () => {
 const handleAdd = () => {
   formVisible.value = true;
   formValues.value = {};
+  data.editId = null;
 };
 
 const handleUpdate = (rowData) => {
@@ -343,7 +344,6 @@ const handleOk = async (values) => {
   if (status === 0) {
     ElMessage.success(`${data.editId ? "更新" : "新增"}成功`);
     closeFormModal();
-    formModalRef.value.reset();
     fetchData();
   }
 };

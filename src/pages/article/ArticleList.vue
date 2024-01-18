@@ -11,7 +11,7 @@ const columns = [
     dataIndex: "picture",
     width: 200,
     render: (record) => {
-      const src = `https://cdn.hyl999.co/public/image/${record.picture}`;
+      const src = record.picture;
       return (
         <ElImage
           preview-src-list={[src]}
