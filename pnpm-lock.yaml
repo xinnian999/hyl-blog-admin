@@ -54,8 +54,8 @@ dependencies:
     specifier: ^3.2.13
     version: 3.3.11
   vue-form-craft:
-    specifier: ^2.0.19
-    version: 2.0.19(@codemirror/state@6.4.0)(@codemirror/view@6.23.0)(@lezer/common@1.2.0)
+    specifier: ^2.0.21
+    version: 2.0.21(@codemirror/state@6.4.0)(@codemirror/view@6.23.0)(@lezer/common@1.2.0)(diff-match-patch@1.0.5)
   vue-router:
     specifier: ^4.0.14
     version: 4.2.5(vue@3.3.11)
@@ -3677,6 +3677,18 @@ packages:
     engines: {node: '>=0.8'}
     dev: false
 
+  /codemirror-editor-vue3@2.4.1(codemirror@5.65.16)(diff-match-patch@1.0.5)(vue@3.3.11):
+    resolution: {integrity: sha512-XcyLUShIq22D05ySLfXGwLZqYt/HDJk11z1aAc3N/J76dEcXPd1xrUrw+v3pl+fjc8QfTjBzMSU8nKTVccJnUQ==}
+    peerDependencies:
+      codemirror: ^5.x
+      diff-match-patch: ^1.0.5
+      vue: ^3.x
+    dependencies:
+      codemirror: 5.65.16
+      diff-match-patch: 1.0.5
+      vue: 3.3.11
+    dev: false
+
   /codemirror@5.65.16:
     resolution: {integrity: sha512-br21LjYmSlVL0vFCPWPfhzUCT34FM/pAdK7rRIZwa0rrtrIdotvP4Oh4GUHsu2E3IrQMCfRkL/fN3ytMNxVQvg==}
     dev: false
@@ -4697,6 +4709,10 @@ packages:
   /detect-node@2.1.0:
     resolution: {integrity: sha512-T0NIuQpnTvFDATNuHN5roPwSBG83rFsuO+MXXH9/3N1eFbn4wcPjttvjMLEPWJ0RGUYgQE7cGgS3tNxbqCGM7g==}
     dev: true
+
+  /diff-match-patch@1.0.5:
+    resolution: {integrity: sha512-IayShXAgj/QMXgB0IWmKx+rOPuGMhqm5w6jvFxmVenXKIzRqTAAsbBPT3kWQeGANj3jGgvcvv4yK6SxqYmikgw==}
+    dev: false
 
   /diff@5.1.0:
     resolution: {integrity: sha512-D+mk+qE8VC/PAUrlAU34N+VfXev0ghe5ywmpqrawphmVZc1bEfn56uo9qpyGp1p4xpzOHkSW4ztBd6L7Xx4ACw==}
@@ -9706,11 +9722,13 @@ packages:
       - supports-color
     dev: true
 
-  /vue-form-craft@2.0.19(@codemirror/state@6.4.0)(@codemirror/view@6.23.0)(@lezer/common@1.2.0):
-    resolution: {integrity: sha512-0tqDFVWXJqxgJJXvxeC7url/5/QeV41X0QLVL4Hx5zk12exZhuKofPc3OX2J3LzPW0iUZYiQQ7IQ4pkqi+NH7g==}
+  /vue-form-craft@2.0.21(@codemirror/state@6.4.0)(@codemirror/view@6.23.0)(@lezer/common@1.2.0)(diff-match-patch@1.0.5):
+    resolution: {integrity: sha512-0mDTuwRzGsjYfuOTzjgV0rgsjaJXpnBHiNNs66kboJULOoKuFCYwk69DUiT8eq5iTspxmt9iT4cV55NbxzrYwA==}
     dependencies:
       '@originjs/vite-plugin-commonjs': 1.0.3
       axios: 1.6.5
+      codemirror: 5.65.16
+      codemirror-editor-vue3: 2.4.1(codemirror@5.65.16)(diff-match-patch@1.0.5)(vue@3.3.11)
       element-plus: 2.4.4(vue@3.3.11)
       json-editor-vue3: 1.0.9
       less: 4.2.0
@@ -9725,6 +9743,7 @@ packages:
       - '@lezer/common'
       - '@vue/composition-api'
       - debug
+      - diff-match-patch
       - supports-color
       - typescript
     dev: false

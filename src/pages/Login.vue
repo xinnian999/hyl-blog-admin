@@ -5,7 +5,8 @@
         <span class="title">心 念 Blog 后 台 管 理</span>
       </template>
       <div class="form">
-        <schema-form
+        <remote-schema-form
+          v-model="formValues"
           schemaId="3"
           :schemaContext="{ visitor }"
           @onSubmit="onSubmit"
@@ -25,6 +26,8 @@ import md5 from "js-md5";
 const router = useRouter();
 const route = useRoute();
 const loading = ref(false);
+
+const formValues = ref({});
 
 const onSubmit = (values) => {
   loading.value = true;

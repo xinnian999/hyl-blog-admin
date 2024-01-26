@@ -11,10 +11,17 @@
     destroy-on-close
   >
     <schema-form
+      v-if="schema"
+      v-model="formValues"
+      :schema="schema"
+      ref="formRef"
+    />
+
+    <remote-schema-form
+      v-else
       v-model="formValues"
       :schemaId="schemaId"
       ref="formRef"
-      :schema="schema"
     />
 
     <template #footer>

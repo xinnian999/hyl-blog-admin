@@ -1,5 +1,5 @@
 <template>
-  <form-design :schemaId="route.query.formId" @onSave="onSave" />
+  <remote-form-design :schemaId="route.query.formId" @onSave="onSave" />
 </template>
 
 <script setup lang="jsx">

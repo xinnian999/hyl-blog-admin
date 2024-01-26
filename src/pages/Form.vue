@@ -42,7 +42,7 @@ const schema = {
   items: [
     {
       label: "表单名称",
-      component: "input",
+      component: "Input",
       props: {
         placeholder: "请输入...",
       },
