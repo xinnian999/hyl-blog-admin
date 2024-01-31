@@ -2,7 +2,7 @@
   <div class="login">
     <el-card class="login-form">
       <template #header>
-        <span class="title">心 念 Blog 后 台 管 理</span>
+        <div class="title">心 念 Blog 后 台 管 理</div>
       </template>
       <div class="form">
         <remote-schema-form
@@ -77,13 +77,13 @@ const visitor = () => {
     width: 500px;
     height: 300px;
     margin: auto;
-    text-align: center;
+
     .title {
       font-size: 20px;
-      padding: 10px;
       font-weight: bold;
       font-family: "Microsoft YaHei";
       color: brown;
+      text-align: center;
     }
     .form {
       padding: 20px;

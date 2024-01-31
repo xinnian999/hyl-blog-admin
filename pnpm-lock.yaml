@@ -54,8 +54,8 @@ dependencies:
     specifier: ^3.2.13
     version: 3.3.11
   vue-form-craft:
-    specifier: ^2.0.21
-    version: 2.0.21(@codemirror/state@6.4.0)(@codemirror/view@6.23.0)(@lezer/common@1.2.0)(diff-match-patch@1.0.5)
+    specifier: ^2.0.30
+    version: 2.0.30(@codemirror/state@6.4.0)(@codemirror/view@6.23.0)(@lezer/common@1.2.0)(diff-match-patch@1.0.5)
   vue-router:
     specifier: ^4.0.14
     version: 4.2.5(vue@3.3.11)
@@ -9722,8 +9722,8 @@ packages:
       - supports-color
     dev: true
 
-  /vue-form-craft@2.0.21(@codemirror/state@6.4.0)(@codemirror/view@6.23.0)(@lezer/common@1.2.0)(diff-match-patch@1.0.5):
-    resolution: {integrity: sha512-0mDTuwRzGsjYfuOTzjgV0rgsjaJXpnBHiNNs66kboJULOoKuFCYwk69DUiT8eq5iTspxmt9iT4cV55NbxzrYwA==}
+  /vue-form-craft@2.0.30(@codemirror/state@6.4.0)(@codemirror/view@6.23.0)(@lezer/common@1.2.0)(diff-match-patch@1.0.5):
+    resolution: {integrity: sha512-p0S5MXArUbIrXvzAFFZ+bTeqNi1ZgGeihpId9+uEl5ZTzE1pam4nMb3+2wjHsA5FkhaV0SXHENT0/SWk5Sjukw==}
     dependencies:
       '@originjs/vite-plugin-commonjs': 1.0.3
       axios: 1.6.5

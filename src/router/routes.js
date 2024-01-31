@@ -150,4 +150,10 @@ export default [
     icon: MapLocation,
     component: () => import("../pages/formDesign"),
   },
+  {
+    title: "菜单管理",
+    path: "/menu",
+    icon: MapLocation,
+    component: () => import("../pages/Menu.vue"),
+  },
 ];
