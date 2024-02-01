@@ -77,7 +77,7 @@ const formRef = ref();
 const isEdit = ref(false);
 
 const getMenuListData = async () => {
-  const data = await request({ url: "/menu/query" });
+  const { data } = await request({ url: "/menu/query" });
   MenuListData.value = data;
 };
 
