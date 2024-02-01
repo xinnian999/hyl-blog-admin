@@ -11,6 +11,7 @@
         :data="MenuListData"
         :props="defaultProps"
         @node-click="handleNodeClick"
+        :render-content="renderContent"
       />
     </div>
 
@@ -40,9 +41,7 @@
         <div class="children" v-if="!currentMenuData.parentId">
           <h4 class="title">子菜单</h4>
           <div>
-            <el-button type="primary" @click="handleAddChild"
-              >新增子菜单</el-button
-            >
+            <el-button type="primary" @click="handleAddChild">新增</el-button>
           </div>
         </div>
       </template>
@@ -58,7 +57,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="jsx">
 import { ref, onBeforeMount, reactive } from "vue";
 import { ElMessage } from "element-plus";
 import { request } from "@/utils";
@@ -150,9 +149,17 @@ const defaultProps = {
   children: "children",
   label: "title",
 };
+
+const renderContent = (h, { node, data, store }) => {
+  return (
+    <div class="list-item">
+      <svg-icon name={data.icon} /> {data.title}
+    </div>
+  );
+};
 </script>
 
-<style scoped lang="less">
+<style lang="less">
 #Menu {
   display: flex;
   background-color: #fff;
@@ -166,6 +173,10 @@ const defaultProps = {
     }
     width: 30vw;
     border-right: 1px solid #eee;
+
+    .list-item {
+      padding: 15px 0;
+    }
   }
 
   .detail {
