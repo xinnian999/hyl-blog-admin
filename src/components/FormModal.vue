@@ -1,8 +1,7 @@
 <template>
   <el-dialog
     :center="true"
-    :model-value="visible"
-    @close="close"
+    v-model="modelVisible"
     :title="title"
     :width="width"
     top="5vh"
@@ -33,34 +32,21 @@
 </template>
 
 <script setup lang="jsx">
-import {
-  reactive,
-  ref,
-  defineProps,
-  defineExpose,
-  computed,
-  defineEmits,
-} from "vue";
+import { ref, defineProps, computed, defineEmits } from "vue";
 
 const formRef = ref();
 
 const props = defineProps({
-  formData: {},
-  ok: {},
   width: {},
   title: {},
   currentRecord: {},
   visible: {},
-  close: {},
-  initialValues: {},
   schemaId: String,
   modelValue: Object,
   schema: Object,
 });
 
-const form = reactive({});
-
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue", "onSave", "update:visible"]);
 
 const formValues = computed({
   get() {
@@ -71,78 +57,20 @@ const formValues = computed({
   },
 });
 
-const reset = () => {
-  props.formData.forEach(({ defaultValue, value }) => {
-    if (defaultValue) {
-      form[value] = defaultValue;
-    } else {
-      form[value] = "";
-    }
-  });
-};
-
-// const handleUploadImage = (event, insertImage, files) => {
-//   const formData = new FormData();
-//   formData.append("image", files[0], files[0].name);
-//   request
-//     .post("/upload/image", formData, {
-//       headers: {
-//         "Content-Type": "multipart/form-data;boundary=" + new Date().getTime(),
-//       },
-//     })
-//     .then((res) => {
-//       insertImage({
-//         url: `/cdn/image/${res.filename}`,
-//         desc: "图片已失效",
-//         // width: 'auto',
-//         // height: 'auto',
-//       });
-//     });
-// };
-
-// const onSave = () => {
-//   new Promise((resolve) => {
-//     if (form.content.length < props.currentRecord.content.length) {
-//       ElMessageBox.confirm("此次保存内容少于之前内容，继续保存吗？", "删除", {
-//         confirmButtonText: "确定",
-//         cancelButtonText: "取消",
-//         type: "warning",
-//       }).then(() => resolve());
-//     } else {
-//       resolve();
-//     }
-//   }).then(() => {
-//     props.ok(false);
-//   });
-// };
-
-// const onFullscreen = (isFullscreen) => {
-//   const el = document.querySelector(".v-md-editor__toolbar");
-//   let titleEl = document.querySelector(".md-title");
-
-//   if (!titleEl) {
-//     const newNode = document.createElement("div");
-//     newNode.className = "md-title";
-//     const reforeNode = document.querySelector(".v-md-editor__toolbar-right");
-
-//     el.insertBefore(newNode, reforeNode);
-
-//     titleEl = document.querySelector(".md-title");
-//   }
-
-//   if (isFullscreen) {
-//     titleEl.innerHTML = `编辑文章：${props.currentRecord.title}`;
-//   } else {
-//     titleEl.innerHTML = "";
-//   }
-// };
+const modelVisible = computed({
+  get() {
+    return props.visible;
+  },
+  set(val) {
+    emit("update:visible", val);
+  },
+});
 
 const handleOk = async () => {
   const values = await formRef.value.submit();
-  props.ok(values);
-};
 
-defineExpose({ reset, form, formRef });
+  emit("onSave", values);
+};
 </script>
 
 <style lang="less">
