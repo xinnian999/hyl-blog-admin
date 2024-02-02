@@ -174,11 +174,8 @@
     <FormModal
       :title="data.editId ? '修改' : '新增'"
       width="80%"
-      :visible="formVisible"
-      @close="closeFormModal"
-      :formData="formData"
-      :ok="handleOk"
-      ref="formModalRef"
+      v-model:visible="formVisible"
+      @onSave="handleOk"
       :schemaId="schemaId"
       v-model="formValues"
       :schema="schema"
@@ -226,8 +223,6 @@ const props = defineProps({
   schemaId: String,
   schema: Object,
 });
-
-const formModalRef = ref(null);
 
 const tableRef = ref(null);
 
