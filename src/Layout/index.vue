@@ -21,27 +21,35 @@
             </el-icon>
           </div>
         </div>
-        <template v-for="item in routesList">
-          <el-sub-menu :key="item.path" :index="item.path" v-if="item.children">
+        <template v-for="item in MenuListData">
+          <el-sub-menu
+            :key="item.path"
+            :index="item.path"
+            v-if="item.children.length"
+          >
             <template #title>
-              <el-icon>
-                <VNode :content="item.icon" />
-              </el-icon>
+              <div class="menu-icon"><svg-icon :name="item.icon" /></div>
 
-              <span>{{ item.title }}</span>
+              <span class="menu-title">{{ item.title }}</span>
             </template>
+
             <div v-for="v in item.children" :key="v.path">
-              <el-menu-item :index="`${item.path}/${v.path}`">{{
-                v.title
-              }}</el-menu-item>
+              <el-menu-item :index="v.path">
+                <div class="menu-child">
+                  <span class="menu-child-icon"
+                    ><svg-icon :name="v.icon"
+                  /></span>
+                  <span class="menu-child-title" style="margin-left: 5px">{{
+                    v.title
+                  }}</span>
+                </div>
+              </el-menu-item>
             </div>
           </el-sub-menu>
 
-          <el-menu-item :key="item.path" :index="item.path" v-else>
-            <el-icon>
-              <VNode :content="item.icon" />
-            </el-icon>
-            <template #title>{{ item.title }}</template>
+          <el-menu-item :key="item.title" :index="item.path" v-else>
+            <div class="menu-icon"><svg-icon :name="item.icon" /></div>
+            <span class="menu-title">{{ item.title }}</span>
           </el-menu-item>
         </template>
       </el-menu>
@@ -76,7 +84,7 @@
 </template>
 
 <script setup lang="jsx">
-import { ref, watch } from "vue";
+import { ref, watch, onBeforeMount } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import cookie from "cookies-js";
 import { useStore } from "vuex";
@@ -85,13 +93,22 @@ import { Back, Right } from "@element-plus/icons-vue";
 import routes from "@/router/routes";
 import { request } from "@/utils";
 
-const routesList = routes.filter((item) => item.title);
 const route = useRoute();
 const router = useRouter();
 const store = useStore();
 
+const MenuListData = ref([]);
 const isCollapse = ref(true);
 const title = ref("名称");
+
+const getMenuListData = async () => {
+  const { data } = await request({ url: "/menu/query" });
+  MenuListData.value = data;
+};
+
+onBeforeMount(() => {
+  getMenuListData();
+});
 
 const exec = (url) => {
   ElMessage({
@@ -164,6 +181,7 @@ watch(
       height: 100%;
       padding-top: 10px;
       overflow: auto;
+      color: #fff;
       .back {
         color: #fff;
         cursor: pointer;
@@ -192,6 +210,19 @@ watch(
           margin-top: -8px;
           right: 18px;
         }
+      }
+
+      .menu-icon {
+        font-size: 18px;
+        // margin-right: 15px;
+      }
+      .menu-title {
+        margin-left: 10px;
+      }
+
+      .menu-child-title {
+        margin-left: 5px;
+        font-size: 13px;
       }
 
       .signOut {

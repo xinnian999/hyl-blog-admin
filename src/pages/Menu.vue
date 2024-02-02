@@ -2,27 +2,30 @@
   <div id="Menu">
     <div class="list">
       <div class="topBar">
-        <el-input placeholder="搜索菜单" />
+        <el-input v-model="q" placeholder="搜索菜单" @change="handleSearch" />
         <el-button type="primary" @click="handleAddFirst"
           >新增一级菜单</el-button
         >
       </div>
       <el-tree
         :data="MenuListData"
-        :props="defaultProps"
         @node-click="handleNodeClick"
         :render-content="renderContent"
+        :props="{ class: 'menu-item', label: 'title' }"
+        node-key="title"
+        ref="treeRef"
+        highlight-current
       />
     </div>
 
     <div class="detail">
-      <template v-if="Object.keys(currentMenuData).length">
+      <template v-if="Object.keys(currentData).length">
         <div class="info">
           <h4 class="title">基本信息</h4>
 
           <remote-schema-form
             schemaId="5"
-            v-model="currentMenuData"
+            v-model="currentFormValues"
             :disabled="!isEdit"
             ref="formRef"
             style="width: 600px"
@@ -31,18 +34,30 @@
           <el-button v-if="!isEdit" type="primary" @click="isEdit = true"
             >编辑</el-button
           >
-          <el-button v-if="isEdit" @click="isEdit = false">取消</el-button>
+          <el-button v-if="isEdit" @click="handleCancel">取消</el-button>
           <el-button v-if="isEdit" type="primary" @click="handleEditSave"
             >保存</el-button
           >
           <el-button type="danger" @click="handleDelete">删除</el-button>
         </div>
 
-        <div class="children" v-if="!currentMenuData.parentId">
+        <div class="children" v-if="!currentData.parentId">
           <h4 class="title">子菜单</h4>
-          <div>
-            <el-button type="primary" @click="handleAddChild">新增</el-button>
-          </div>
+          <ul class="childMenus">
+            <li
+              v-for="child in currentData.children"
+              class="child"
+              @click="handleNodeClick(child)"
+            >
+              <svg-icon :name="child.icon" /> {{ child.title }}
+            </li>
+            <li>
+              <el-button type="primary" @click="handleAddChild"
+                ><template #icon><svg-icon name="add" /></template>
+                新增</el-button
+              >
+            </li>
+          </ul>
         </div>
       </template>
     </div>
@@ -69,9 +84,15 @@ const MenuListData = ref([]);
 
 const addFormValues = ref({});
 
-const currentMenuData = ref({});
+const currentData = ref({});
+
+const currentFormValues = ref({});
 
 const formRef = ref();
+
+const treeRef = ref();
+
+const q = ref("");
 
 const isEdit = ref(false);
 
@@ -85,7 +106,9 @@ onBeforeMount(() => {
 });
 
 const handleNodeClick = (data) => {
-  currentMenuData.value = { ...data };
+  currentData.value = data;
+  currentFormValues.value = { ...data };
+  treeRef.value.setCurrentKey(data.title, true);
 };
 
 const handleAddFirst = () => {
@@ -95,15 +118,15 @@ const handleAddFirst = () => {
 
 const handleAddChild = () => {
   modalState.visible = true;
-  modalState.title = `新增【${currentMenuData.value.title}】的子菜单`;
-  addFormValues.value = { path: currentMenuData.value.path };
+  modalState.title = `新增【${currentData.value.title}】的子菜单`;
+  addFormValues.value = { path: currentData.value.path };
 };
 
 const onAddSave = async (values) => {
   const data = pickBy(values, Boolean);
 
-  if (currentMenuData.value.id) {
-    data.parentId = currentMenuData.value.id;
+  if (currentData.value.id) {
+    data.parentId = currentData.value.id;
   }
 
   const { status } = await request({
@@ -117,6 +140,11 @@ const onAddSave = async (values) => {
   }
 };
 
+const handleCancel = () => {
+  currentFormValues.value = { ...currentData.value };
+  isEdit.value = false;
+};
+
 const handleEditSave = async () => {
   const values = await formRef.value.submit();
   const { status } = await request({
@@ -126,6 +154,7 @@ const handleEditSave = async () => {
   });
   if (status === 0) {
     getMenuListData();
+    currentData.value = values;
     isEdit.value = false;
     ElMessage.success("修改成功");
   }
@@ -135,19 +164,14 @@ const handleDelete = async () => {
   const { status } = await request({
     url: "/current/delete/menu",
     method: "DELETE",
-    params: { id: currentMenuData.value.id },
+    params: { id: currentData.value.id },
   });
   if (status === 0) {
     getMenuListData();
     isEdit.value = false;
-    currentMenuData.value = {};
+    currentData.value = {};
     ElMessage.success("删除成功");
   }
-};
-
-const defaultProps = {
-  children: "children",
-  label: "title",
 };
 
 const renderContent = (h, { node, data, store }) => {
@@ -157,6 +181,16 @@ const renderContent = (h, { node, data, store }) => {
     </div>
   );
 };
+
+const handleSearch = () => {
+  if (q.value) {
+    const data = treeRef.value.getNode(q.value)?.data;
+    if (data) {
+      treeRef.value.setCurrentKey(q.value, true);
+      currentData.value = { ...data };
+    }
+  }
+};
 </script>
 
 <style lang="less">
@@ -164,6 +198,14 @@ const renderContent = (h, { node, data, store }) => {
   display: flex;
   background-color: #fff;
   height: 100%;
+
+  .menu-item {
+    --el-tree-node-hover-bg-color: #eee;
+
+    .el-tree-node__content {
+      height: 40px;
+    }
+  }
 
   .list {
     .topBar {
@@ -190,6 +232,24 @@ const renderContent = (h, { node, data, store }) => {
 
     .children {
       margin-top: 30px;
+      .childMenus {
+        list-style: none;
+        display: flex;
+        vertical-align: middle;
+        gap: 20px;
+        .child {
+          line-height: 32px;
+          padding: 0 15px;
+          font-size: 12px;
+          border: 1px solid #b7b2b2;
+          border-radius: 5px;
+          cursor: pointer;
+          &:hover {
+            border-color: var(--el-color-primary);
+            color: var(--el-color-primary);
+          }
+        }
+      }
     }
   }
 }
