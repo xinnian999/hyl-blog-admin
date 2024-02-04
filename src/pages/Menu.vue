@@ -180,10 +180,17 @@ const getIndex = (id, list) => list.findIndex((item) => item.id === id);
 const handleMove = async (type) => {
   const sourceId = currentData.value.id;
 
-  const index = getIndex(sourceId, MenuListData.value);
+  let list = MenuListData.value;
 
-  const targetId =
-    MenuListData.value[type === "top" ? index - 1 : index + 1]?.id;
+  if (currentData.value.parentId) {
+    list = MenuListData.value.find(
+      (item) => item.id === currentData.value.parentId
+    )?.children;
+  }
+
+  const index = getIndex(sourceId, list);
+
+  const targetId = list[type === "top" ? index - 1 : index + 1]?.id;
 
   if (!targetId) return;
 
@@ -199,7 +206,15 @@ const handleMove = async (type) => {
 };
 
 const renderContent = (h, { node, data }) => {
-  const index = getIndex(data.id, MenuListData.value);
+  let list = MenuListData.value;
+
+  if (currentData.value.parentId) {
+    list = MenuListData.value.find(
+      (item) => item.id === currentData.value.parentId
+    )?.children;
+  }
+
+  const index = getIndex(data.id, list);
 
   return (
     <div class="list-item">
@@ -219,7 +234,7 @@ const renderContent = (h, { node, data }) => {
           <div
             class="list-item-ico"
             style={{
-              display: index === MenuListData.value.length - 1 ? "none" : "",
+              display: index === list.length - 1 ? "none" : "",
             }}
             onClick={() => handleMove("down")}
           >
