@@ -15,6 +15,7 @@
         node-key="title"
         ref="treeRef"
         highlight-current
+        :current-node-key="currentData.title"
       />
     </div>
 
@@ -174,10 +175,58 @@ const handleDelete = async () => {
   }
 };
 
-const renderContent = (h, { node, data, store }) => {
+const getIndex = (id, list) => list.findIndex((item) => item.id === id);
+
+const handleMove = async (type) => {
+  const sourceId = currentData.value.id;
+
+  const index = getIndex(sourceId, MenuListData.value);
+
+  const targetId =
+    MenuListData.value[type === "top" ? index - 1 : index + 1]?.id;
+
+  if (!targetId) return;
+
+  const { status } = await request({
+    url: "/menu/sort",
+    method: "PUT",
+    data: { sourceId, targetId },
+  });
+
+  if (status === 0) {
+    getMenuListData();
+  }
+};
+
+const renderContent = (h, { node, data }) => {
+  const index = getIndex(data.id, MenuListData.value);
+
   return (
     <div class="list-item">
-      <svg-icon name={data.icon} /> {data.title}
+      <div class="list-item-ico">
+        <svg-icon name={data.icon} />{" "}
+      </div>
+      <span>{data.title}</span>
+      {currentData.value.title === data.title && (
+        <div class="move">
+          <div
+            class="list-item-ico"
+            style={{ display: index === 0 ? "none" : "" }}
+            onClick={() => handleMove("top")}
+          >
+            <svg-icon name="上移" />
+          </div>
+          <div
+            class="list-item-ico"
+            style={{
+              display: index === MenuListData.value.length - 1 ? "none" : "",
+            }}
+            onClick={() => handleMove("down")}
+          >
+            <svg-icon name="下移" />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -218,6 +267,25 @@ const handleSearch = () => {
 
     .list-item {
       padding: 15px 0;
+      display: flex;
+      width: 100%;
+      .list-item-ico {
+        display: flex;
+        align-items: center;
+        margin-right: 3px;
+      }
+      .move {
+        margin-left: auto;
+        margin-right: 15px;
+        display: flex;
+        gap: 20px;
+        .list-item-ico {
+          padding: 0 3px;
+          &:hover {
+            color: var(--el-color-primary);
+          }
+        }
+      }
     }
   }
 
