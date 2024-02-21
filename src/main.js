@@ -6,8 +6,8 @@ import router from "./router";
 import components from "./components";
 import store from "@/store";
 import App from "./App.vue";
-// import vueFormCraft from "vue-form-craft";
-import vueFormCraft from "./dist/vue-form-craft.mjs";
+import vueFormCraft from "vue-form-craft";
+// import vueFormCraft from "./dist/vue-form-craft.mjs";
 import { request } from "@/utils";
 // morkDown
 import VMdEditor from "@kangc/v-md-editor";
@@ -52,7 +52,7 @@ vue.use(vueFormCraft, {
     });
     return JSON.parse(data[0].formSchema);
   },
-  icon: { component: SvgIcon, propKey: "name", iconList },
+  iconSelectConfig: { component: SvgIcon, propKey: "name", iconList },
 });
 
 vue.mount("#app");
