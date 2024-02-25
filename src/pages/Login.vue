@@ -9,7 +9,7 @@
           v-model="formValues"
           schemaId="3"
           :schemaContext="{ visitor }"
-          @onSubmit="onSubmit"
+          @onFinish="onFinish"
         />
       </div>
     </el-card>
@@ -29,7 +29,7 @@ const loading = ref(false);
 
 const formValues = ref({});
 
-const onSubmit = (values) => {
+const onFinish = (values) => {
   loading.value = true;
   request
     .post("/user/loginAdmin", { ...values, password: md5(values.password) })
