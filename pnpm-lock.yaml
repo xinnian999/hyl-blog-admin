@@ -54,8 +54,8 @@ dependencies:
     specifier: ^3.2.13
     version: 3.3.11
   vue-form-craft:
-    specifier: ^2.3.1
-    version: 2.3.1(@codemirror/state@6.4.0)(@codemirror/view@6.23.0)(@lezer/common@1.2.0)(diff-match-patch@1.0.5)
+    specifier: ^2.4.2
+    version: 2.4.2(@codemirror/state@6.4.0)(@codemirror/view@6.23.0)(@lezer/common@1.2.0)(diff-match-patch@1.0.5)
   vue-router:
     specifier: ^4.0.14
     version: 4.2.5(vue@3.3.11)
@@ -10220,8 +10220,8 @@ packages:
       - supports-color
     dev: true
 
-  /vue-form-craft@2.3.1(@codemirror/state@6.4.0)(@codemirror/view@6.23.0)(@lezer/common@1.2.0)(diff-match-patch@1.0.5):
-    resolution: {integrity: sha512-9Qo21d8loETGjYwCAqsKBVj5DEgnelZO5dn1WZ+DkeJn0W9lPlLUbtituSaM1vltjs2s1uNQ9foXSNfZjVgVaQ==}
+  /vue-form-craft@2.4.2(@codemirror/state@6.4.0)(@codemirror/view@6.23.0)(@lezer/common@1.2.0)(diff-match-patch@1.0.5):
+    resolution: {integrity: sha512-nxzTrQLTP+B7C4OuNivzoUTK0yXP6riHKYRLGE248HwDd45y3Ui+3oJQIlON3h55nH8Fkl3/Ccm3d9d3etmpvQ==}
     dependencies:
       '@originjs/vite-plugin-commonjs': 1.0.3
       '@wangeditor/editor': 5.1.23
